@@ -7,8 +7,10 @@
         <TableRow
             android:id="@+id/tableRow3"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-            <ListView android:id="@android:id/list" android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+            <ListView android:id="@android:id/list" 
+                      android:layout_width="fill_parent" 
+                      android:layout_height="wrap_content"/>
         </TableRow>
 
         <TableRow
@@ -29,7 +31,7 @@
         </TableRow>
 	
         <TableRow
-            android:id="@+id/tableRow1"
+            android:id="@+id/tableRow2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
             <Button  
@@ -37,6 +39,24 @@
 		    android:layout_height="wrap_content" 
 		    android:text="Add Farmer"
 		    android:id="@+id/addFarmerButton"
+		    />
+        </TableRow>
+        
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+            <Button  
+		     android:layout_width="0dip" 
+		     android:layout_weight="1"
+		    android:text="Back"
+		    android:id="@+id/back_find_farmers"
+		    />
+		    <Button  
+		     android:layout_width="0dip" 
+		     android:layout_weight="1"
+		    android:text="Next"
+		    android:id="@+id/next_market_prices"
 		    />
         </TableRow>
         
