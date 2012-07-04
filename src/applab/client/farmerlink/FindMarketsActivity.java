@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class FindMarketsActivity extends ListActivity {
@@ -40,6 +42,15 @@ public class FindMarketsActivity extends ListActivity {
         
         TextView commodityTextView = (TextView) findViewById(R.id.commodity_name);
         commodityTextView.setText(commodityName);
+    }
+    
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+    	
+        MarketPrices market = marketPrices.get(position);
+        Intent intent = new Intent(getApplicationContext(), TransportEstimatorActivity.class);
+        intent.putExtra("market", market.getMarketName());
+        intent.putExtra("crop", "sorghum");
+        startActivity(intent);
     }
     
     class PricesAdapter extends ArrayAdapter<MarketPrices> {

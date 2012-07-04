@@ -19,5 +19,11 @@
         <activity android:name=".FindMarketsActivity"
                   android:label="@string/app_name">
         </activity>
+        <activity android:name=".TransportEstimatorActivity"
+                  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".ProjectedSalesActivity"
+                  android:label="@string/app_name">
+        </activity>
     </application>
 </manifest>
