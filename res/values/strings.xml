@@ -9,4 +9,5 @@
     <string name="district">District</string>
     <string name="crop">Crop</string>
     <string name="server">http://test.applab.org</string>
+    <string name="hello">hello world</string>
 </resources>

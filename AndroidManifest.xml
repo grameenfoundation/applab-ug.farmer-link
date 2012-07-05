@@ -13,7 +13,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="FindFarmersActivity"></activity>
-
+        <activity android:name="FindFarmersActivity"
+             	  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".AddFarmersActivity"
+        		  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".FindMarketsActivity"
+                  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".TransportEstimatorActivity"
+                  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".ProjectedSalesActivity"
+                  android:label="@string/app_name">
+        </activity>
     </application>
 </manifest>

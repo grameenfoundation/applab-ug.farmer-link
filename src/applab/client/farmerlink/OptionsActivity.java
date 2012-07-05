@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.RadioButton;
 
 public class OptionsActivity extends Activity {
-	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

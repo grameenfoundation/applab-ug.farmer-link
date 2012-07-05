@@ -1,10 +1,5 @@
 package applab.client.farmerlink;
 
-import java.util.ArrayList;
-
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,13 +38,13 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	    	String [] crops = new String[] {"Select Crop", "Cotton", "Beans", "Bananas"};
 	    	
 	    	Spinner districtSpinner = (Spinner) findViewById(R.id.district_spinner);
-	    	ArrayAdapter districtAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, districts);
+	    	ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, districts);
 	    	districtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    	districtSpinner.setAdapter(districtAdapter);
 	    	districtSpinner.setOnItemSelectedListener(this);
 	    	
 	    	Spinner cropSpinner = (Spinner) findViewById(R.id.crop_spinner);
-	    	ArrayAdapter cropAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, crops);
+	    	ArrayAdapter<String> cropAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, crops);
 	    	cropAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    	cropSpinner.setAdapter(cropAdapter);
 	    	cropSpinner.setOnItemSelectedListener(this);
