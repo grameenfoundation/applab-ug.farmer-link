@@ -8,32 +8,49 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
 public class AddFarmersActivity extends ListActivity {
 	ArrayList<String> listItems = new ArrayList<String>();
-	ArrayAdapter<String> adapter;
+	ArrayList<String> farmers  = new ArrayList<String>();
+	ArrayAdapter<String> addedFarmersAdapter;
 	private Button addFarmerButton;
 	private Button nextButton;
-	private Button backButton;
-	
-	
+	private Button backButton;	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_farmers);
-        adapter = new ArrayAdapter<String>(this, R.layout.simple_list, R.id.sampletext, listItems);
-        setListAdapter(adapter);
-       
+        
+        // Pick data from intent
+        Intent intent = getIntent();
+        String district = intent.getStringExtra("district");
+        String crop  = intent.getStringExtra("crop");
+        
+        addedFarmersAdapter = new ArrayAdapter<String>(this, R.layout.simple_list, R.id.sampletext, listItems);
+        setListAdapter(addedFarmersAdapter);   
+
+        farmers = Repository.getFarmersByDistrictAndCrop(district, crop);
+        // Add adapter for getting farmers
+        // TODO: Change this to cursorAdapter
+        AutoCompleteTextView farmerName = (AutoCompleteTextView) findViewById(R.id.farmer);
+        ArrayAdapter<String> farmerAdapter = 
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, farmers);
+        farmerName.setAdapter(farmerAdapter);
+        
         addFarmerButton = (Button) findViewById(R.id.addFarmerButton);
         addFarmerButton.setOnClickListener(new OnClickListener(){
         	@Override
 			public void onClick(View arg0) {
-				EditText farmerName = (EditText) findViewById(R.id.farmer);
+        	    AutoCompleteTextView farmerName = (AutoCompleteTextView) findViewById(R.id.farmer);
 				EditText quantity = (EditText) findViewById(R.id.quantity);
 				listItems.add(farmerName.getText().toString() + ", " + quantity.getText().toString());
-				adapter.notifyDataSetChanged();
+				farmerName.setText("");
+				quantity.setText("");
+				addedFarmersAdapter.notifyDataSetChanged();
 			}
         });
         
@@ -59,10 +76,4 @@ public class AddFarmersActivity extends ListActivity {
             }
         });
     }
-	
-	/*class FarmerAdapter extends ArrayAdapter<String> {
-		FarmerAdapter() {
-			super(AddFarmersActivity.this, R.layout.simple_list, R.id.sampletext, listItems);
-		}
-	}*/
 }

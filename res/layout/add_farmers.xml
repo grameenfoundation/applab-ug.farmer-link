@@ -1,63 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:stretchColumns="1">
+        android:layout_height="fill_parent">
         
-        <TableRow
-            android:id="@+id/tableRow3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <ListView android:id="@android:id/list" 
-                      android:layout_width="fill_parent" 
-                      android:layout_height="wrap_content"/>
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-            <TextView android:text="Farmer" android:layout_width="0dip" android:layout_weight="1"/>
-            <EditText android:layout_width="0dip" android:layout_weight="2" android:id="@+id/farmer"/>
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/add_farmers_container"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-             >
-            <TextView android:text="Quantity (kg) " android:layout_width="0dip" android:layout_weight="1"/>
-            <EditText android:layout_width="0dip" android:layout_weight="2" android:id="@+id/quantity"/>
-        </TableRow>
-	
-        <TableRow
-            android:id="@+id/tableRow2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-            <Button  
-		    android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content" 
+         <ListView android:id="@android:id/list" 
+                   android:layout_width="fill_parent" 
+                   android:layout_height="wrap_content"                   
+          />
+         
+         <TextView android:text="Farmer" 
+                   android:layout_width="60dip"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@android:id/list"
+                   android:id="@+id/farmerText"
+         /> 
+                   
+        <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android" 
+                  android:layout_width="180dip"
+                  android:layout_height="wrap_content"
+                  android:layout_toRightOf="@+id/farmerText"
+                  android:layout_alignParentRight="true"
+                  android:id="@+id/farmer"
+                  android:layout_below="@android:id/list"
+                  android:textColor="#000000"
+                  />
+            
+        <TextView android:text="Quantity (kg) "
+                   android:layout_width="60dip"                   
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/farmer"                   
+                   android:id="@+id/quantityText"                   
+                   />
+                  
+        <EditText android:layout_width="180dip"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/farmer"
+                   android:layout_toRightOf="@+id/quantityText"
+                   android:layout_alignParentRight="true"
+                   android:inputType="phone"
+                  android:id="@+id/quantity"/>
+                  
+        <Button  
+		    android:layout_width="140dip" 
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
 		    android:text="Add Farmer"
+		    android:layout_below="@+id/quantity"
 		    android:id="@+id/addFarmerButton"
 		    />
-        </TableRow>
-        
-        <TableRow
-            android:id="@+id/tableRow2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-            <Button  
-		     android:layout_width="0dip" 
-		     android:layout_weight="1"
+		    
+		 <Button  
+		    android:layout_width="160dip" 
+		    android:layout_height="wrap_content" 
+		    android:layout_alignParentBottom="true"
+		    android:layout_alignParentLeft="true"
 		    android:text="Back"
 		    android:id="@+id/back_find_farmers"
 		    />
 		    <Button  
-		     android:layout_width="0dip" 
-		     android:layout_weight="1"
+		     android:layout_width="160dip" 
+		    android:layout_height="wrap_content" 
+		    android:layout_alignParentBottom="true"
+		     android:layout_alignParentRight="true"
 		    android:text="Next"
 		    android:id="@+id/next_market_prices"
-		    />
-        </TableRow>
-        
-    </TableLayout>
+		    />        
+     </RelativeLayout>
