@@ -41,7 +41,7 @@ public class MarketPricesParser {
 
     }
     
-    private void saveFarmers() {
+    private void saveFarmer() {
         
     }
 
