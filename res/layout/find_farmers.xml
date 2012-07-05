@@ -1,0 +1,61 @@
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <TextView
+            android:id="@+id/district"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="37dp"
+            android:text="@string/district"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Spinner
+            android:id="@+id/district_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/district"
+            android:layout_alignBottom="@+id/district"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/crop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/district_spinner"
+            android:layout_marginTop="30dp"
+            android:text="@string/crop"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Spinner
+            android:id="@+id/crop_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/district_spinner"
+            android:layout_alignTop="@+id/crop" />
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crop_spinner"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="62dp"
+            android:layout_toLeftOf="@+id/crop_spinner"
+            android:text="@string/back_button"
+            android:onClick="buttonClicked" />
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/back_button"
+            android:layout_alignBottom="@+id/back_button"
+            android:layout_centerHorizontal="true"
+            android:text="@string/next_button" />
+
+    </RelativeLayout>

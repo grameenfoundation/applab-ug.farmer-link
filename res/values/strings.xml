@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, OptionsActivity!</string>
+    <string name="select_option">Select an option:</string>
     <string name="app_name">FarmerLink</string>
+    <string name="selling">Selling</string>
+    <string name="buying">Buying</string>
+    <string name="back_button">Back</string>
+    <string name="next_button">Next</string>
+    <string name="district">District</string>
+    <string name="crop">Crop</string>
+    <string name="server">http://test.applab.org</string>
 </resources>
