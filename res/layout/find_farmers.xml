@@ -15,10 +15,11 @@
 
         <Spinner
             android:id="@+id/district_spinner"
-            android:layout_width="wrap_content"
+            android:layout_width="180dip"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/district"
             android:layout_alignBottom="@+id/district"
+            android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true" />
 
         <TextView
@@ -33,29 +34,29 @@
 
         <Spinner
             android:id="@+id/crop_spinner"
-            android:layout_width="wrap_content"
+            android:layout_width="180dip"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/district_spinner"
+            android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/crop" />
 
         <Button
             android:id="@+id/back_button"
-            android:layout_width="wrap_content"
+            android:layout_width="150dip"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/crop_spinner"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="62dp"
-            android:layout_toLeftOf="@+id/crop_spinner"
+            android:layout_margin="6dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
             android:text="@string/back_button"
             android:onClick="buttonClicked" />
 
         <Button
             android:id="@+id/next_button"
-            android:layout_width="wrap_content"
+            android:layout_width="150dip"
+            android:layout_margin="6dp"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/back_button"
-            android:layout_alignBottom="@+id/back_button"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             android:text="@string/next_button" />
 
     </RelativeLayout>

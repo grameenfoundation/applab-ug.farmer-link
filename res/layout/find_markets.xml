@@ -19,7 +19,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
                         android:text="Back"
-                        android:id = "@+id/back_find_markets"/>
+                        android:id = "@+id/back_add_farmers"/>
                        
                  <Button android:layout_height="wrap_content"
                  		android:layout_toRightOf="@+id/back_find_markets"
@@ -27,6 +27,6 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:text="Find Buyer"
-                        android:id = "@+id/next_transport_estimate"/>
+                        android:id = "@+id/next_find_buyer"/>
 
 </RelativeLayout>

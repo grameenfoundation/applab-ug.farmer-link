@@ -28,5 +28,15 @@
         <activity android:name=".ProjectedSalesActivity"
                   android:label="@string/app_name">
         </activity>
+        <activity android:name=".TransportEstimatorBuyerActivity"
+                  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".PotentialBuyersActivity"
+                  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".FinishSellActivity"
+                  android:label="@string/app_name">
+        </activity>
+        
     </application>
 </manifest>

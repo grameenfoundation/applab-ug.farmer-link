@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,39 +18,48 @@ public class FindMarketsActivity extends ListActivity {
     
     List<MarketPrices> marketPrices;
     private String commodityName = "Commodity Price for ";
+    String crop;
+    String district;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
+                
+        // Get data from intent
+        /*Bundle bundle = getIntent().getExtras();
+        crop = bundle.getString(GlobalConstants.CROP);
+        district = bundle.getString(GlobalConstants.DISTRICT); */
+        district = MarketSaleObject.getMarketObject().getDistrictName();
+        crop = MarketSaleObject.getMarketObject().getCropName();
+            
+        commodityName += crop;
         
-        marketPrices = new ArrayList<MarketPrices>();
-        
-        marketPrices.add(new MarketPrices("First Market", "6000 Shs", "4000 Shs"));
-        marketPrices.add(new MarketPrices("Second Market", "6000 Shs", "4000 Shs"));
-        marketPrices.add(new MarketPrices("Third Market", "6000 Shs", "2000 Shs"));
-        marketPrices.add(new MarketPrices("Fourth Market", "5000 Shs", "4000 Shs"));
-        marketPrices.add(new MarketPrices("Fifth Market", "7000 Shs", "4000 Shs"));
-        marketPrices.add(new MarketPrices("First Market", "6000 Shs", "4000 Shs"));
-        marketPrices.add(new MarketPrices("Second Market", "6000 Shs", "4000 Shs"));
-        marketPrices.add(new MarketPrices("Third Market", "6000 Shs", "2000 Shs"));
-        marketPrices.add(new MarketPrices("Fourth Market", "5000 Shs", "4000 Shs"));
-        marketPrices.add(new MarketPrices("Fifth Market", "7000 Shs", "4000 Shs"));
-        
-        commodityName += "Sorghum";
-        
+        marketPrices = Repository.getMarketPricesByDistrictAndCrop(crop, district); 
+                
         super.onCreate(savedInstanceState);
         setContentView(R.layout.find_markets);
         setListAdapter(new PricesAdapter());
         
         TextView commodityTextView = (TextView) findViewById(R.id.commodity_name);
         commodityTextView.setText(commodityName);
+        
+        Button findBuyersButton = (Button) findViewById(R.id.next_find_buyer);
+        findBuyersButton.setOnClickListener(new Button.OnClickListener() {
+            
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PotentialBuyersActivity.class);
+                startActivity(intent);
+                
+            }
+        });
     }
     
     protected void onListItemClick(ListView l, View v, int position, long id) {
     	
         MarketPrices market = marketPrices.get(position);
         Intent intent = new Intent(getApplicationContext(), TransportEstimatorActivity.class);
-        intent.putExtra("market", market.getMarketName());
-        intent.putExtra("crop", "sorghum");
+        MarketSaleObject.getMarketObject().setMarketPrices(market);
+        //intent.putExtra(GlobalConstants.CROP, crop);
         startActivity(intent);
     }
     

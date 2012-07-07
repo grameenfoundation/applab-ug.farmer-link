@@ -1,0 +1,81 @@
+package applab.client.farmerlink;
+
+import java.util.ArrayList;
+
+public class MarketSaleObject {
+    
+    private static MarketSaleObject marketSaleObject = null;  
+    private String cropName;
+    private String districtName;
+    private double transportCost;
+    private ArrayList<Farmer> farmers;
+    private MarketPrices marketPrices;
+    
+    private MarketSaleObject() {
+        
+    }
+    
+    public static MarketSaleObject getMarketObject() {
+        if (null == marketSaleObject) {
+            marketSaleObject = new MarketSaleObject();
+        }
+        return marketSaleObject;
+    }
+    
+    public ArrayList<Farmer> getFarmers() {
+        return farmers;
+    }
+
+    public void setFarmers(ArrayList<Farmer> farmers) {
+        this.farmers = farmers;
+    }
+
+    public String getCropName() {
+        return cropName;
+    }
+
+    public void setCropName(String cropName) {
+        this.cropName = cropName;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public MarketPrices getMarketPrices() {
+        return marketPrices;
+    }
+
+    public void setMarketPrices(MarketPrices marketPrices) {
+        this.marketPrices = marketPrices;
+    }
+    
+    public double getTotalQuantity() {
+        double totalQuantity = 0;
+        for (Farmer farmer : farmers) {
+            totalQuantity += farmer.getQuantity();
+        }
+        return totalQuantity;
+    }
+    
+    public double getTotalValue() {
+        return getTotalQuantity() * marketPrices.getRetailPriceValue();
+    }
+    
+    public double getTotalTransactionFee() {
+        return 0.1 * getTotalValue();
+    }
+
+    public double getTransportCost() {
+        return transportCost;
+    }
+
+    public void setTransportCost(double transportCost) {
+        this.transportCost = transportCost;
+    }
+
+}

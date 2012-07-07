@@ -7,18 +7,34 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class FindFarmersActivity extends Activity implements OnItemSelectedListener {
 	
 	private String selectedDistrict;
 	private String selectedCrop;
+	private Button nextButton;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.find_farmers);
 	    String selectedOption = getIntent().getStringExtra("selectedOption");
+	    
+	    // Initialize Strings fro district and crops
+	    selectedDistrict = "";
+	    selectedCrop = "";
+	    
+	    nextButton = (Button) findViewById(R.id.next_button);
+	    nextButton.setOnClickListener(new Button.OnClickListener() {
+            
+	        @Override
+            public void onClick(View view) {
+                buttonClicked(view);                
+            }
+        });
 	    if (selectedOption.equalsIgnoreCase("selling")) {
 	    	//Assume that we query the URL which will return the districts and crops
 	    	//in JSON format (array of arrays)
@@ -62,10 +78,20 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 				startActivity(intent);
 			break;
 		case R.id.next_button:
-			Intent nextIntent = new Intent(this, AddFarmersActivity.class);
-			nextIntent.putExtra("district", selectedDistrict);
-			nextIntent.putExtra("crop", selectedCrop);
-			startActivity(nextIntent);
+		    //if (!selectedDistrict.equals("") && !selectedCrop.equals("")) {
+		        Intent nextIntent = new Intent(this, AddFarmersActivity.class);
+		       /* Bundle bundle  = new Bundle();
+	            bundle.putString(GlobalConstants.DISTRICT, selectedDistrict);
+		        bundle.putString(GlobalConstants.CROP, selectedCrop);
+		        //nextIntent.putExtras(bundle);
+		        */
+		        MarketSaleObject.getMarketObject().setCropName(selectedCrop);
+		        MarketSaleObject.getMarketObject().setDistrictName(selectedDistrict);
+	            startActivity(nextIntent);
+		//    }
+		//    else {
+	    //      Toast.makeText(getApplicationContext(), "Please select a district and a crop", Toast.LENGTH_LONG);
+	    //   }			
 			break;
 		
 		}
@@ -74,7 +100,7 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
-		switch (view.getId()) {
+		switch (parent.getId()) {
 		case R.id.district_spinner:
 			selectedDistrict = (String) parent.getItemAtPosition(position);
 			break;

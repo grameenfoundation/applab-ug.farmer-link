@@ -19,13 +19,22 @@ public class MarketPrices {
         this.marketName = marketName;
     }
     public String getRetailPrice() {
-        return retailPrice;
+        return retailPrice + " Shs";
     }
+    
+    /**
+     * Used to compute total costs
+     * @return
+     */
+    public double getRetailPriceValue() {
+        return Double.parseDouble(retailPrice);
+    }
+    
     public void setRetailPrice(String retailPrice) {
         this.retailPrice = retailPrice;
     }
     public String getWholesalePrice() {
-        return wholesalePrice;
+        return wholesalePrice + " Shs";
     }
     public void setWholesalePrice(String wholesalePrice) {
         this.wholesalePrice = wholesalePrice;
