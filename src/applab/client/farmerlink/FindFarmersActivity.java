@@ -16,12 +16,14 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	private String selectedDistrict;
 	private String selectedCrop;
 	private Button nextButton;
+	private String selectedOption;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.find_farmers);
-	    String selectedOption = getIntent().getStringExtra("selectedOption");
+	    selectedOption = getIntent().getStringExtra("selectedOption");
+        MarketSaleObject.getMarketObject().setSelectedOption(selectedOption);
 	    
 	    // Initialize Strings fro district and crops
 	    selectedDistrict = "";
@@ -66,6 +68,20 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	    	cropSpinner.setOnItemSelectedListener(this);
 	    	
 	    } else if (selectedOption.equalsIgnoreCase("buying")) {
+	    	String [] districts = new String[] {"Select District", "Abim", "Pader", "Kitgum", "Nwoya"};
+	    	String [] crops = new String[] {"Select Crop", "Cotton", "Beans", "Bananas"};
+	    	
+	    	Spinner districtSpinner = (Spinner) findViewById(R.id.district_spinner);
+	    	ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, districts);
+	    	districtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    	districtSpinner.setAdapter(districtAdapter);
+	    	districtSpinner.setOnItemSelectedListener(this);
+	    	
+	    	Spinner cropSpinner = (Spinner) findViewById(R.id.crop_spinner);
+	    	ArrayAdapter<String> cropAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, crops);
+	    	cropAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    	cropSpinner.setAdapter(cropAdapter);
+	    	cropSpinner.setOnItemSelectedListener(this);
 	    	
 	    }
 	}
@@ -78,6 +94,7 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 				startActivity(intent);
 			break;
 		case R.id.next_button:
+			if (selectedOption.equalsIgnoreCase("selling")) {
 		    //if (!selectedDistrict.equals("") && !selectedCrop.equals("")) {
 		        Intent nextIntent = new Intent(this, AddFarmersActivity.class);
 		       /* Bundle bundle  = new Bundle();
@@ -91,7 +108,13 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 		//    }
 		//    else {
 	    //      Toast.makeText(getApplicationContext(), "Please select a district and a crop", Toast.LENGTH_LONG);
-	    //   }			
+	    //   }	
+			} else if (selectedOption.equalsIgnoreCase("buying")) {
+				Intent buyingIntent = new Intent(this, FindSuppliersActivity.class);
+		        MarketSaleObject.getMarketObject().setCropName(selectedCrop);
+		        MarketSaleObject.getMarketObject().setDistrictName(selectedDistrict);
+				startActivity(buyingIntent);
+			}
 			break;
 		
 		}

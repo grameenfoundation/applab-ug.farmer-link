@@ -67,7 +67,12 @@ public class AddFarmersActivity extends ListActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FindMarketsActivity.class);
+            	Intent intent;
+            	if (MarketSaleObject.getMarketObject().getSelectedOption().equalsIgnoreCase("buying")) {
+            		intent = new Intent(getApplicationContext(), TransportEstimatorBuyerActivity.class);
+            	} else {
+            		intent = new Intent(getApplicationContext(), FindMarketsActivity.class);
+            	}
                 // intent.putExtra(GlobalConstants.DISTRICT, district);
                 // intent.putExtra(GlobalConstants.CROP, crop);
                 MarketSaleObject.getMarketObject().setFarmers(addedFarmers);
@@ -81,7 +86,12 @@ public class AddFarmersActivity extends ListActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FindFarmersActivity.class);
+            	Intent intent;
+            	if (MarketSaleObject.getMarketObject().getSelectedOption().equalsIgnoreCase("buying")) {
+            		intent = new Intent(getApplicationContext(), FindSuppliersActivity.class);
+            	} else {
+            		intent = new Intent(getApplicationContext(), FindFarmersActivity.class);
+            	}
                 startActivity(intent);
 
             }

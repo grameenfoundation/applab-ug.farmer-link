@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                
+                <TextView android:id ="@+id/commodity_name"
+                          android:layout_height="wrap_content"
+                          android:layout_width="fill_parent"
+                          android:layout_alignParentTop="true"/>
+                          
+                <ListView android:id="@android:id/list" 
+                      android:layout_width="fill_parent" 
+                      android:layout_height="wrap_content"                     
+                      android:layout_above = "@+id/back_find_farmers"
+                      android:layout_below="@+id/commodity_name"
+                      />
+                <Button android:layout_height="wrap_content"
+                        android:layout_width="150dip"                         
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:text="@string/back_button"
+                        android:id = "@+id/back_find_farmers"
+                        android:onClick="buttonClicked"/>
+                       
+                 <Button android:layout_height="wrap_content"
+                 		android:layout_toRightOf="@+id/back_find_farmers"
+                        android:layout_width="150dip" 
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/next_button"
+                        android:id = "@+id/next_add_farmers"
+                        android:onClick = "buttonClicked"/>
+
+</RelativeLayout>

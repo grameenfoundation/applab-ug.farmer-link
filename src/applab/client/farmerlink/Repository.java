@@ -34,4 +34,14 @@ public class Repository {
         
         return marketPrices;
     }
+
+	public static List<Suppliers> getSuppliersByDistrictAndCrop(String crop,
+			String district) {
+		ArrayList<Suppliers> suppliers = new ArrayList<Suppliers>();
+		suppliers.add(new Suppliers("James Onyango", "0772712255", "Namokora"));
+		suppliers.add(new Suppliers("James Pombe", "0777777777", "Bukalango"));
+		suppliers.add(new Suppliers("Billy Blanks", "0712190999", "Chinatown"));
+		
+		return suppliers;
+	}
 }

@@ -10,6 +10,7 @@ public class MarketSaleObject {
     private double transportCost;
     private ArrayList<Farmer> farmers;
     private MarketPrices marketPrices;
+    private String selectedOption;
     
     private MarketSaleObject() {
         
@@ -77,5 +78,14 @@ public class MarketSaleObject {
     public void setTransportCost(double transportCost) {
         this.transportCost = transportCost;
     }
+
+    public String getSelectedOption() {
+    	return selectedOption;
+    }
+    
+	public void setSelectedOption(String selectedOption) {
+		this.selectedOption = selectedOption;
+		
+	}
 
 }

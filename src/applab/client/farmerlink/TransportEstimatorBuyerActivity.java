@@ -12,6 +12,7 @@ import android.widget.TextView;
 public class TransportEstimatorBuyerActivity extends Activity {
     
     private Button nextButton;
+    private Button backButton;
     private EditText buyerText;
     private TextView cropTextView;
     private TextView quantityView;  
@@ -55,6 +56,17 @@ public class TransportEstimatorBuyerActivity extends Activity {
                 startActivity(intent);
             }
             
+        });
+        
+        backButton = (Button) findViewById(R.id.back_find_markets);
+        backButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+	        		Intent intent = new Intent(getApplicationContext(), AddFarmersActivity.class);
+	        		startActivity(intent);
+			}
+        	
         });
     }
 
