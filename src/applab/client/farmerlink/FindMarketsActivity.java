@@ -1,6 +1,5 @@
 package applab.client.farmerlink;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ListActivity;

@@ -1,10 +1,10 @@
 package applab.client.farmerlink;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,9 @@ public class PotentialBuyersActivity extends ListActivity {
     
     List<Buyer> buyers;
     private TextView cropTextView;
+    String crop;
+    String district;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         
@@ -25,14 +28,13 @@ public class PotentialBuyersActivity extends ListActivity {
         setContentView(R.layout.potential_buyers);
         
         cropTextView = (TextView)findViewById(R.id.crop);
-        cropTextView.setText("Crop : Sorgham");
+	    district = MarketSaleObject.getMarketObject().getDistrictName();
+        crop = MarketSaleObject.getMarketObject().getCropName();
         
-        buyers = new ArrayList<Buyer>();
+        cropTextView.setText("Crop : " + crop);
         
-        buyers.add(new Buyer("Tom Cruise", "+5557777", "Hollywood"));
-        buyers.add(new Buyer("Lionel Messi", "+6557777", "Barcelona"));
-        buyers.add(new Buyer("Ibracadabra", "+7557777", "Milan"));
-        buyers.add(new Buyer("Super Mario", "+8557777", "Manchester"));
+        buyers = Repository.getBuyersByDistrictAndCrop(crop, district);
+
         setListAdapter(new BuyersAdapter());
         
         Button nextButton = (Button) findViewById(R.id.next_transport_estimate_buyer);
@@ -56,6 +58,10 @@ public class PotentialBuyersActivity extends ListActivity {
     }
     
     protected void onListItemClick(ListView l, View v, int position, long id) {
+        Buyer buyer = buyers.get(position);
+        String url = "tel:"+buyer.getTelephone();
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+        startActivity(intent);
         
     }
     

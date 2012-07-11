@@ -1,7 +1,5 @@
 package applab.client.farmerlink;
 
-import java.util.ArrayList;
-
 public class Farmer {
     private String name;
     private String id;

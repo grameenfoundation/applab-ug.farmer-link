@@ -9,7 +9,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 public class FindFarmersActivity extends Activity implements OnItemSelectedListener {
 	

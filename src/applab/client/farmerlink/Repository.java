@@ -44,4 +44,14 @@ public class Repository {
 		
 		return suppliers;
 	}
+
+	public static List<Buyer> getBuyersByDistrictAndCrop(String crop,
+			String district) {
+		ArrayList<Buyer> buyers = new ArrayList<Buyer>();
+        buyers.add(new Buyer("Tom Cruise", "+5557777", "Hollywood"));
+        buyers.add(new Buyer("Lionel Messi", "+6557777", "Barcelona"));
+        buyers.add(new Buyer("Ibracadabra", "+7557777", "Milan"));
+        buyers.add(new Buyer("Super Mario", "+8557777", "Manchester"));
+		return buyers;
+	}
 }

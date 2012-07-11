@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import applab.client.farmerlink.FindMarketsActivity.PricesAdapter;
 
 public class ProjectedSalesActivity extends ListActivity {
     private TextView marketTextView;

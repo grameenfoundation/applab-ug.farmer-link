@@ -3,7 +3,6 @@ package applab.client.farmerlink;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class OptionsActivity extends ListActivity {
@@ -38,7 +36,6 @@ public class OptionsActivity extends ListActivity {
     		intent.putExtra("selectedOption", "buying");
     	}
 		startActivity(intent);
-		
     }
 
     class OptionsAdapter extends ArrayAdapter<String> {
