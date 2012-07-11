@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<Button  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="NEXT"
-    android:id="@+id/nextButton"
-    />
-</LinearLayout>
+    android:layout_height="fill_parent">
+    
+                        <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="35dp"
+        android:text="@string/select_option"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+                    
+                <ListView android:id="@android:id/list" 
+                      android:layout_width="fill_parent" 
+                      android:layout_height="wrap_content"                     
+                      android:layout_below="@+id/textView1"
+                      />
+</RelativeLayout>

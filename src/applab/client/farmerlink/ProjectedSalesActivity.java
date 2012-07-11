@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,6 +22,8 @@ public class ProjectedSalesActivity extends ListActivity {
     private TextView totalValueTextView;
     private TextView transactFeeTextView;
     private TextView transportTextView;
+    private Button nextButton;
+    private Button backButton;
     
     private ArrayList<Farmer> farmers;
     private TextView marketView;
@@ -35,7 +38,7 @@ public class ProjectedSalesActivity extends ListActivity {
         farmers = MarketSaleObject.getMarketObject().getFarmers();
         setListAdapter(new FarmerAdapter());
 
-        Button nextButton = (Button)findViewById(R.id.next_finish);
+        nextButton = (Button)findViewById(R.id.next_finish);
         nextButton.setOnClickListener(new Button.OnClickListener() {
 
             @Override
@@ -44,6 +47,17 @@ public class ProjectedSalesActivity extends ListActivity {
                 Intent intent = new Intent(getApplicationContext(), FinishSellActivity.class);
                 startActivity(intent);
             }
+        });
+        
+        backButton = (Button) findViewById(R.id.back_estimate_transport);
+        backButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), TransportEstimatorBuyerActivity.class);
+				startActivity(intent);
+			}
+        	
         });
     }
 

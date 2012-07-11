@@ -19,6 +19,7 @@ public class TransportEstimatorBuyerActivity extends Activity {
     private EditText transportText;
     private EditText priceText;
     private double transportCosts;
+    private String selectedOption;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,7 @@ public class TransportEstimatorBuyerActivity extends Activity {
         cropTextView.setText(MarketSaleObject.getMarketObject().getCropName());
         quantityView = (TextView) findViewById(R.id.quantity_amount);
         quantityView.setText(String.valueOf(MarketSaleObject.getMarketObject().getTotalQuantity()));
+        selectedOption = MarketSaleObject.getMarketObject().getSelectedOption();
         
         
         nextButton = (Button) findViewById(R.id.next_projected_sales);
@@ -63,7 +65,12 @@ public class TransportEstimatorBuyerActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-	        		Intent intent = new Intent(getApplicationContext(), AddFarmersActivity.class);
+					Intent intent = null;
+					if(selectedOption.equalsIgnoreCase("buying")) {
+						intent = new Intent(getApplicationContext(), AddFarmersActivity.class);
+					} else if (selectedOption.equalsIgnoreCase("selling")) {
+						intent = new Intent(getApplicationContext(), PotentialBuyersActivity.class);
+					}
 	        		startActivity(intent);
 			}
         	

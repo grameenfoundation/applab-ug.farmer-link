@@ -25,7 +25,7 @@ public class PotentialBuyersActivity extends ListActivity {
         setContentView(R.layout.potential_buyers);
         
         cropTextView = (TextView)findViewById(R.id.crop);
-        cropTextView.setText("Crop : Sourgham");
+        cropTextView.setText("Crop : Sorgham");
         
         buyers = new ArrayList<Buyer>();
         
@@ -35,16 +35,24 @@ public class PotentialBuyersActivity extends ListActivity {
         buyers.add(new Buyer("Super Mario", "+8557777", "Manchester"));
         setListAdapter(new BuyersAdapter());
         
-        Button findBuyersButton = (Button) findViewById(R.id.next_transport_estimate_buyer);
-        findBuyersButton.setOnClickListener(new Button.OnClickListener() {
+        Button nextButton = (Button) findViewById(R.id.next_transport_estimate_buyer);
+        nextButton.setOnClickListener(new Button.OnClickListener() {
             
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), TransportEstimatorBuyerActivity.class);
                 startActivity(intent);
-                
             }
         });
+        
+        Button backButton = (Button) findViewById(R.id.back_find_markets);
+        backButton.setOnClickListener(new Button.OnClickListener() {
+        	
+        	@Override
+        	public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), FindMarketsActivity.class);
+				startActivity(intent);
+        }});
     }
     
     protected void onListItemClick(ListView l, View v, int position, long id) {

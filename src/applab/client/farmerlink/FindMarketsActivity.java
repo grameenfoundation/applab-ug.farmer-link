@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -51,6 +52,16 @@ public class FindMarketsActivity extends ListActivity {
                 startActivity(intent);
                 
             }
+        });
+        
+        Button backButton = (Button) findViewById(R.id.back_add_farmers);
+        backButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), AddFarmersActivity.class);
+				startActivity(intent);
+			}
         });
     }
     

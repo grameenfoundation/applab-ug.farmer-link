@@ -91,6 +91,7 @@ public class AddFarmersActivity extends ListActivity {
             		intent = new Intent(getApplicationContext(), FindSuppliersActivity.class);
             	} else {
             		intent = new Intent(getApplicationContext(), FindFarmersActivity.class);
+            		intent.putExtra("selectedOption", "selling");
             	}
                 startActivity(intent);
 
