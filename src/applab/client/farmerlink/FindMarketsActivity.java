@@ -30,6 +30,9 @@ public class FindMarketsActivity extends ListActivity {
         district = bundle.getString(GlobalConstants.DISTRICT); */
         district = MarketSaleObject.getMarketObject().getDistrictName();
         crop = MarketSaleObject.getMarketObject().getCropName();
+        
+        String displayTitle = this.getString(R.string.app_name) + " - " + crop;
+        setTitle(displayTitle);
             
         commodityName += crop;
         

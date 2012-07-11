@@ -2,30 +2,26 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        
-         <ListView android:id="@android:id/list" 
-                   android:layout_width="fill_parent" 
-                   android:layout_height="wrap_content"
-                   android:layout_alignParentLeft="true"
-                   android:layout_alignParentTop="true"
-                   android:layout_marginTop="37dp"                   
-          />
          
          <TextView android:text="@string/farmer" 
                    android:layout_width="60dip"
                    android:layout_height="wrap_content"
-                   android:layout_below="@android:id/list"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentTop="true"
+                   android:layout_marginTop="37dp"   
                    android:id="@+id/farmerText"
                    android:textSize="15dp"
+                   
          /> 
                    
         <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android" 
                   android:layout_width="130dip"
                   android:layout_height="wrap_content"
                   android:layout_toRightOf="@+id/farmerText"
+                  android:layout_alignParentTop="true"
                   android:layout_alignParentRight="true"
+                  android:layout_marginTop="37dp"
                   android:id="@+id/farmer"
-                  android:layout_below="@android:id/list"
                   android:textColor="#000000"
                   />
             
@@ -53,6 +49,13 @@
 		    android:layout_below="@+id/quantity"
 		    android:id="@+id/addFarmerButton"
 		    />
+        
+                 <ListView android:id="@android:id/list" 
+                   android:layout_width="fill_parent" 
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentLeft="true"
+                   android:layout_below="@+id/addFarmerButton"
+          />
 		    
 		 <Button  
 		    android:layout_width="160dip" 

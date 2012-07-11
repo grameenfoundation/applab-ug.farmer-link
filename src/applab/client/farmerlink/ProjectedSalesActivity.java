@@ -23,6 +23,7 @@ public class ProjectedSalesActivity extends ListActivity {
     private TextView transportTextView;
     private Button nextButton;
     private Button backButton;
+    private String crop;
     
     private ArrayList<Farmer> farmers;
     private TextView marketView;
@@ -33,6 +34,9 @@ public class ProjectedSalesActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.projected_sales);
         setTextViews();
+        crop = MarketSaleObject.getMarketObject().getCropName();
+        String displayTitle = this.getString(R.string.app_name) + " - " + crop;
+        setTitle(displayTitle);
         
         farmers = MarketSaleObject.getMarketObject().getFarmers();
         setListAdapter(new FarmerAdapter());

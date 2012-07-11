@@ -9,6 +9,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class FindFarmersActivity extends Activity implements OnItemSelectedListener {
 	
@@ -23,10 +24,6 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	    setContentView(R.layout.find_farmers);
 	    selectedOption = getIntent().getStringExtra("selectedOption");
         MarketSaleObject.getMarketObject().setSelectedOption(selectedOption);
-	    
-	    // Initialize Strings fro district and crops
-	    selectedDistrict = "";
-	    selectedCrop = "";
 	    
 	    nextButton = (Button) findViewById(R.id.next_button);
 	    nextButton.setOnClickListener(new Button.OnClickListener() {
@@ -94,20 +91,16 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 			break;
 		case R.id.next_button:
 			if (selectedOption.equalsIgnoreCase("selling")) {
-		    //if (!selectedDistrict.equals("") && !selectedCrop.equals("")) {
-		        Intent nextIntent = new Intent(this, AddFarmersActivity.class);
-		       /* Bundle bundle  = new Bundle();
-	            bundle.putString(GlobalConstants.DISTRICT, selectedDistrict);
-		        bundle.putString(GlobalConstants.CROP, selectedCrop);
-		        //nextIntent.putExtras(bundle);
-		        */
-		        MarketSaleObject.getMarketObject().setCropName(selectedCrop);
-		        MarketSaleObject.getMarketObject().setDistrictName(selectedDistrict);
-	            startActivity(nextIntent);
-		//    }
-		//    else {
-	    //      Toast.makeText(getApplicationContext(), "Please select a district and a crop", Toast.LENGTH_LONG);
-	    //   }	
+				if (!selectedDistrict.equalsIgnoreCase("Select District") && !selectedCrop.equalsIgnoreCase("Select Crop")) {
+					Intent nextIntent = new Intent(this, AddFarmersActivity.class);
+					MarketSaleObject.getMarketObject().setCropName(selectedCrop);
+					MarketSaleObject.getMarketObject().setDistrictName(selectedDistrict);
+					startActivity(nextIntent);
+				}
+		    else {
+	          Toast toast = Toast.makeText(getApplicationContext(), "Please select a district and a crop", Toast.LENGTH_LONG);
+	          toast.show();
+	       }	
 			} else if (selectedOption.equalsIgnoreCase("buying")) {
 				Intent buyingIntent = new Intent(this, FindSuppliersActivity.class);
 		        MarketSaleObject.getMarketObject().setCropName(selectedCrop);

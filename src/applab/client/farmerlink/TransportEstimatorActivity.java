@@ -17,12 +17,16 @@ public class TransportEstimatorActivity extends Activity{
 	 private TextView quantityView;	 
 	 private EditText transportText;
 	 private double transportCosts;
+	 private String crop;
 	 
 	 @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.transport_estimator_markets);
+	        crop = MarketSaleObject.getMarketObject().getCropName();
+	        String displayTitle = this.getString(R.string.app_name) + " - " + crop;
+	        setTitle(displayTitle);
 	        marketTextView = (TextView) findViewById(R.id.market_name);
 	        marketTextView.setText(MarketSaleObject.getMarketObject().getMarketPrices().getMarketName());
 	        cropTextView = (TextView)findViewById(R.id.commodity_name);

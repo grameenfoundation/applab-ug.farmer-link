@@ -30,6 +30,8 @@ public class PotentialBuyersActivity extends ListActivity {
         cropTextView = (TextView)findViewById(R.id.crop);
 	    district = MarketSaleObject.getMarketObject().getDistrictName();
         crop = MarketSaleObject.getMarketObject().getCropName();
+        String displayTitle = this.getString(R.string.app_name) + " - " + crop;
+        setTitle(displayTitle);
         
         cropTextView.setText("Crop : " + crop);
         

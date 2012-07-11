@@ -27,6 +27,9 @@ public class FindSuppliersActivity extends ListActivity {
 		
 	    district = MarketSaleObject.getMarketObject().getDistrictName();
         crop = MarketSaleObject.getMarketObject().getCropName();
+        String displayTitle = this.getString(R.string.app_name) + " - " + crop;
+        setTitle(displayTitle);
+        
         suppliers = Repository.getSuppliersByDistrictAndCrop(crop, district);
         setListAdapter(new SuppliersAdapter());
 	}

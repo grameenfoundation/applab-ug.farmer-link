@@ -47,5 +47,22 @@ public class Farmer {
     public String toString() {
         return "Farmer Name: " + getName() + "   Quantity (kgs): " + getQuantity();
     }
+    
+    @Override
+    public boolean equals(Object object) {
+    	if (object == null) {
+    		return false;
+    	}
+    	
+    	if (getClass() != object.getClass()) {
+    		return false;
+    	}
+    	
+    	if (getName().equalsIgnoreCase(((Farmer)object).getName())) {
+    		return true;
+    	}
+    	return false;
+    	
+    }
 
 }

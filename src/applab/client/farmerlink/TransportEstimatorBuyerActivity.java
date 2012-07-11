@@ -20,6 +20,7 @@ public class TransportEstimatorBuyerActivity extends Activity {
     private EditText priceText;
     private double transportCosts;
     private String selectedOption;
+    private String crop;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,9 @@ public class TransportEstimatorBuyerActivity extends Activity {
         quantityView.setText(String.valueOf(MarketSaleObject.getMarketObject().getTotalQuantity()));
         selectedOption = MarketSaleObject.getMarketObject().getSelectedOption();
         
+        crop = MarketSaleObject.getMarketObject().getCropName();
+        String displayTitle = this.getString(R.string.app_name) + " - " + crop;
+        setTitle(displayTitle);
         
         nextButton = (Button) findViewById(R.id.next_projected_sales);
         
