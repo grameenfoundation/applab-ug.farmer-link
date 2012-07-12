@@ -3,12 +3,17 @@ package applab.client.farmerlink;
 public class Farmer {
     private String name;
     private String id;
+    private String phoneNumber;
     private double quantity;
     
     public Farmer(String id, String name, double quantity) {
         setId(id);
         setName(name);
         setQuantity(quantity);
+    }
+    
+    public Farmer() {
+    	
     }
     
     public String getName() {
@@ -64,5 +69,13 @@ public class Farmer {
     	return false;
     	
     }
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	
+	public String getPhoneNumber() {
+		return this.phoneNumber;
+	}
 
 }

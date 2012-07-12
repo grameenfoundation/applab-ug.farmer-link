@@ -1,8 +1,12 @@
 package applab.client.farmerlink;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -10,8 +14,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+import applab.client.farmerlink.listeners.DistrictsAndCropsDownloadListener;
+import applab.client.farmerlink.parsers.DistrictsAndCropsParser;
+import applab.client.farmerlink.tasks.DistrictsAndCropsDownloadTask;
+import applab.client.farmerlink.tasks.DownloadDistrictsAndCrops;
+import applab.client.farmerlink.tasks.FarmersAndMarketPricesDownload;
+import applab.client.farmerlink.tasks.FarmersAndMarketPricesDownloadTask;
 
-public class FindFarmersActivity extends Activity implements OnItemSelectedListener {
+public class FindFarmersActivity extends Activity implements OnItemSelectedListener, DistrictsAndCropsDownloadListener {
 	
 	private String selectedDistrict;
 	private String selectedCrop;
@@ -48,7 +58,14 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	    		
 	    	}
 */	    	//At this point assume that you have an array of districts and another of crops
+	    	/*DistrictsAndCropsDownloadTask districtsAndCropsTask = new DistrictsAndCropsDownloadTask();
+	    	districtsAndCropsTask.setDownloaderListener(this);
+	    	districtsAndCropsTask.execute();*/
+	    	DownloadDistrictsAndCrops ddc = new DownloadDistrictsAndCrops();
+	    	ddc.download();
+	    	
 	    	String [] districts = new String[] {"Select District", "Abim", "Pader", "Kitgum", "Nwoya"};
+	    	districts = DistrictsAndCropsParser.getDistricts().toArray(new String[DistrictsAndCropsParser.getDistricts().size()]);
 	    	String [] crops = new String[] {"Select Crop", "Cotton", "Beans", "Bananas"};
 	    	
 	    	Spinner districtSpinner = (Spinner) findViewById(R.id.district_spinner);
@@ -92,7 +109,13 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 		case R.id.next_button:
 			if (selectedOption.equalsIgnoreCase("selling")) {
 				if (!selectedDistrict.equalsIgnoreCase("Select District") && !selectedCrop.equalsIgnoreCase("Select Crop")) {
+					FarmersAndMarketPricesDownload farmersAndMarketPricesDownload = new FarmersAndMarketPricesDownload(selectedDistrict, selectedCrop);
+					List<String> farmersAndMarketPrices = farmersAndMarketPricesDownload.downloadFarmersAndMarketPrices();
+					//MarketSaleObject.getMarketObject().setFarmers(farmersAndMarketPrices);
+					//MarketSaleObject.getMarketObject().setMarketPrices(marketPrices);
 					Intent nextIntent = new Intent(this, AddFarmersActivity.class);
+					nextIntent.putStringArrayListExtra("farmersAndMarketPrices", (ArrayList<String>) farmersAndMarketPrices);
+					
 					MarketSaleObject.getMarketObject().setCropName(selectedCrop);
 					MarketSaleObject.getMarketObject().setDistrictName(selectedDistrict);
 					startActivity(nextIntent);
@@ -128,6 +151,11 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	public void onNothingSelected(AdapterView<?> parent) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void districtsAndCropsDownloadingComplete(List<String> result) {
+		Log.i("DOWNLOAD COMPLETE", "done with download");
 	}
 
 }

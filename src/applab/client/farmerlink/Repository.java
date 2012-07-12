@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Repository {
     
+	private static ArrayList<String> districts;
+	
     public static ArrayList<String> getFarmersByDistrictAndCrop(String district, String crop) {
         ArrayList<String> farmers = new ArrayList<String>();
         
@@ -53,5 +55,12 @@ public class Repository {
         buyers.add(new Buyer("Ibracadabra", "+7557777", "Milan"));
         buyers.add(new Buyer("Super Mario", "+8557777", "Manchester"));
 		return buyers;
+	}
+	
+	public static List<String> getDistricts() {
+		if (districts == null) {
+			
+		}
+		return districts;
 	}
 }

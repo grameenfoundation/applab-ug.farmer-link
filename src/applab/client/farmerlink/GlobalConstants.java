@@ -8,5 +8,5 @@ public class GlobalConstants {
     public static final String CROP = "crop";
     public static final String MARKET = "market";
     */    
-
+	public static final String XMLNAMESPACE = "http://schemas.applab.org/2012/07/farmerLink";
 }

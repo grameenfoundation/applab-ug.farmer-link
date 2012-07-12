@@ -12,7 +12,11 @@ public class MarketPrices {
         this.wholesalePrice = wholesalePrice;
     }
     
-    public String getMarketName() {
+    public MarketPrices() {
+    	
+	}
+
+	public String getMarketName() {
         return marketName;
     }
     public void setMarketName(String marketName) {
