@@ -35,6 +35,8 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
                 buttonClicked(view);                
             }
         });
+	    DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops();
+    	downloadDistrictsAndCrops.download();
 	    if (selectedOption.equalsIgnoreCase("selling")) {
 	    	//Assume that we query the URL which will return the districts and crops
 	    	//in JSON format (array of arrays)
@@ -51,14 +53,11 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	    	}
 */	    	//At this point assume that you have an array of districts and another of crops
 	    	
-	    	DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops();
-	    	downloadDistrictsAndCrops.download();
 	    	
-	    	String [] districts = new String[] {"Select District", "Abim", "Pader", "Kitgum", "Nwoya"};
-	    	//List<String> districtList = DistrictsAndCropsParser.getDistricts();
-	    	//Log.d("DISTRICTS", districtList.get(0) + " " + districtList.get(1) + " " + districtList.get(2));
-	    	districts = DistrictsAndCropsParser.getDistricts().toArray(new String[DistrictsAndCropsParser.getDistricts().size()]);
-	    	String [] crops = new String[] {"Select Crop", "Cotton", "Beans", "Bananas"};crops = DistrictsAndCropsParser.getCrops().toArray(new String[DistrictsAndCropsParser.getCrops().size()]);
+	    	
+	    	
+	    	String [] districts = DistrictsAndCropsParser.getDistricts().toArray(new String[DistrictsAndCropsParser.getDistricts().size()]);
+	    	String [] crops = DistrictsAndCropsParser.getCrops().toArray(new String[DistrictsAndCropsParser.getCrops().size()]);
 	    	
 	    	Spinner districtSpinner = (Spinner) findViewById(R.id.district_spinner);
 	    	ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, districts);
@@ -73,8 +72,8 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	    	cropSpinner.setOnItemSelectedListener(this);
 	    	
 	    } else if (selectedOption.equalsIgnoreCase("buying")) {
-	    	String [] districts = new String[] {"Select District", "Abim", "Pader", "Kitgum", "Nwoya"};
-	    	String [] crops = new String[] {"Select Crop", "Cotton", "Beans", "Bananas"};
+	    	String [] districts = DistrictsAndCropsParser.getDistricts().toArray(new String[DistrictsAndCropsParser.getDistricts().size()]);
+	    	String [] crops = DistrictsAndCropsParser.getCrops().toArray(new String[DistrictsAndCropsParser.getCrops().size()]);
 	    	
 	    	Spinner districtSpinner = (Spinner) findViewById(R.id.district_spinner);
 	    	ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, districts);
