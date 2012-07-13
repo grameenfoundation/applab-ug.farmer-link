@@ -18,14 +18,17 @@ public class DistrictsAndCropsParser {
     private JSONParser jsonParser;
     private static List<String> districts = new ArrayList<String>();
     public static List<String> getDistricts() {
+    	for (String district : districts) {
+    		Log.d("DISTRICT", district);
+    	}
 		return districts;
 	}
 
-	public List<String> getCrops() {
+	public static List<String> getCrops() {
 		return crops;
 	}
 
-	private List<String> crops = new ArrayList<String>();
+	private static List<String> crops = new ArrayList<String>();
 
     /** for debugging purposes in adb logcat */
     private static final String LOG_TAG = "DistrictsAndCropsParser";
@@ -43,7 +46,7 @@ public class DistrictsAndCropsParser {
         }
         
         catch (Exception ex) {
-            Log.d(LOG_TAG, "Message "+ex.getMessage());
+            Log.d(LOG_TAG, "ParseExceptionMessage "+ex.getMessage());
             return false;
         }
     }
@@ -73,29 +76,33 @@ public class DistrictsAndCropsParser {
 
         @Override
         public boolean endArray() throws ParseException, IOException {
+        	Log.d(LOG_TAG, "inside endArray");
             return true;
         }
 
         @Override
         public void endJSON() throws ParseException, IOException {
+        	Log.d(LOG_TAG, "inside endJSON");
+        	Log.d("DISTRICT SIZE", String.valueOf(districts.size()));
             end = true;
         }
 
         @Override
         public boolean endObject() throws ParseException, IOException {
+        	Log.d(LOG_TAG, "inside endObject");
             return true;
         }
 
         @Override
         public boolean endObjectEntry() throws ParseException, IOException {
+        	Log.d(LOG_TAG, "inside endObjectEntry");
             return true;
         }
 
         @Override
         public boolean primitive(Object value) throws ParseException, IOException {
         	if (key != null) {
-        		Log.d("VALUE", "value="+(String)value);
-        		if (key.equalsIgnoreCase("district")) {
+        		if (key.equalsIgnoreCase("districts")) {
         			districts.add((String)value);
         		}
         		else if (key.equalsIgnoreCase("crops")) {
@@ -107,11 +114,15 @@ public class DistrictsAndCropsParser {
 
         @Override
         public boolean startArray() throws ParseException, IOException {
+        	Log.d(LOG_TAG, "inside startArray");
             return true;
         }
 
         @Override
         public void startJSON() throws ParseException, IOException {
+        	Log.d(LOG_TAG, "inside startJSON");
+        	districts.add("Select District");
+        	crops.add("Select Crop");
             end = false;
         }
 

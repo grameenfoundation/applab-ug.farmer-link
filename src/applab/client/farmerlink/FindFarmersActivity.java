@@ -6,7 +6,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -14,14 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-import applab.client.farmerlink.listeners.DistrictsAndCropsDownloadListener;
 import applab.client.farmerlink.parsers.DistrictsAndCropsParser;
-import applab.client.farmerlink.tasks.DistrictsAndCropsDownloadTask;
 import applab.client.farmerlink.tasks.DownloadDistrictsAndCrops;
 import applab.client.farmerlink.tasks.FarmersAndMarketPricesDownload;
-import applab.client.farmerlink.tasks.FarmersAndMarketPricesDownloadTask;
 
-public class FindFarmersActivity extends Activity implements OnItemSelectedListener, DistrictsAndCropsDownloadListener {
+public class FindFarmersActivity extends Activity implements OnItemSelectedListener {
 	
 	private String selectedDistrict;
 	private String selectedCrop;
@@ -58,15 +54,15 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	    		
 	    	}
 */	    	//At this point assume that you have an array of districts and another of crops
-	    	/*DistrictsAndCropsDownloadTask districtsAndCropsTask = new DistrictsAndCropsDownloadTask();
-	    	districtsAndCropsTask.setDownloaderListener(this);
-	    	districtsAndCropsTask.execute();*/
-	    	DownloadDistrictsAndCrops ddc = new DownloadDistrictsAndCrops();
-	    	ddc.download();
+	    	
+	    	DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops();
+	    	downloadDistrictsAndCrops.download();
 	    	
 	    	String [] districts = new String[] {"Select District", "Abim", "Pader", "Kitgum", "Nwoya"};
+	    	//List<String> districtList = DistrictsAndCropsParser.getDistricts();
+	    	//Log.d("DISTRICTS", districtList.get(0) + " " + districtList.get(1) + " " + districtList.get(2));
 	    	districts = DistrictsAndCropsParser.getDistricts().toArray(new String[DistrictsAndCropsParser.getDistricts().size()]);
-	    	String [] crops = new String[] {"Select Crop", "Cotton", "Beans", "Bananas"};
+	    	String [] crops = new String[] {"Select Crop", "Cotton", "Beans", "Bananas"};crops = DistrictsAndCropsParser.getCrops().toArray(new String[DistrictsAndCropsParser.getCrops().size()]);
 	    	
 	    	Spinner districtSpinner = (Spinner) findViewById(R.id.district_spinner);
 	    	ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, districts);
@@ -151,11 +147,6 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	public void onNothingSelected(AdapterView<?> parent) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void districtsAndCropsDownloadingComplete(List<String> result) {
-		Log.i("DOWNLOAD COMPLETE", "done with download");
 	}
 
 }

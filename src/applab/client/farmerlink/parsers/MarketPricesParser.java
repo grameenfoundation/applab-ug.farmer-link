@@ -19,16 +19,19 @@ public class MarketPricesParser {
 
     private FarmersAndMarketPricesContentHandler contentHandler;
     private JSONParser jsonParser;
-    private ArrayList<Farmer> farmers = new ArrayList<Farmer>();
-    public ArrayList<Farmer> getFarmers() {
+    private static ArrayList<Farmer> farmers = new ArrayList<Farmer>();
+    public static ArrayList<Farmer> getFarmers() {
 		return farmers;
 	}
 
-	public ArrayList<MarketPrices> getMarketPrices() {
+	public static List<MarketPrices> getMarketPrices() {
+		for (MarketPrices marketPrice : marketPrices) {
+			Log.d("MKT_PX", marketPrice.getMarketName() + marketPrice.getRetailPrice() + "-" + marketPrice.getWholesalePrice());
+		}
 		return marketPrices;
 	}
 
-	private ArrayList<MarketPrices> marketPrices = new ArrayList<MarketPrices>();
+	private static List<MarketPrices> marketPrices = new ArrayList<MarketPrices>();
 
     /** for debugging purposes in adb logcat */
     private static final String LOG_TAG = "MarketPricesParser";
@@ -47,7 +50,8 @@ public class MarketPricesParser {
         }
         
         catch (Exception ex) {
-            Log.d(LOG_TAG, ex.getMessage());
+            Log.e(LOG_TAG, ex.getMessage());
+            ex.printStackTrace();
             return false;
         }
     }
@@ -84,15 +88,21 @@ public class MarketPricesParser {
 
         @Override
         public void endJSON() throws ParseException, IOException {
+        	Log.d("ENDJSON", "inside endJSON");
+        	Log.d("MARKETPRICES", String.valueOf(marketPrices.size()));
+        	Log.d("FARMERS", String.valueOf(farmers.size()));
             end = true;
         }
 
         @Override
         public boolean endObject() throws ParseException, IOException {
+        	Log.d(LOG_TAG, "inside endObject");
         	if (marketPrice != null) {
+        		Log.d("MKT ADDED", "adding market");
         		marketPrices.add(marketPrice);
         	}
         	else if (farmer != null) {
+        		Log.d("FRMR ADDED", "adding farmer");
         		farmers.add(farmer);
         	}
         	marketPrice = null;
@@ -108,26 +118,27 @@ public class MarketPricesParser {
         @Override
         public boolean primitive(Object value) throws ParseException, IOException {
         	if (key != null) {
+        		Log.d("KEY", key);
         		if (farmer != null) {
-        			if (key.equalsIgnoreCase("Name")) {
+        			if (key.equalsIgnoreCase("Name")) {Log.d("Name", (String)value);
         				farmer.setName((String)value);
         			}
-        			else if (key.equalsIgnoreCase("ID")) {
+        			else if (key.equalsIgnoreCase("Id")) {Log.d("Id", (String)value);
         				farmer.setId((String)value);
         			}
-        			else if (key.equalsIgnoreCase("PhoneNumber")) {
+        			else if (key.equalsIgnoreCase("MobileNumber")) {Log.d("PhoneNumber", (String)value);
         				farmer.setPhoneNumber((String)value);
         			}
         		}
         		else if (marketPrice != null) {
-        			if (key.equalsIgnoreCase("marketName")) {
+        			if (key.equalsIgnoreCase("Name")) {Log.d("marketName", (String)value);
         				marketPrice.setMarketName((String)value);
         			}
-        			else if (key.equalsIgnoreCase("retailPrice")) {
-        				marketPrice.setRetailPrice((String)value);
+        			else if (key.equalsIgnoreCase("RetailPrice")) {//Log.d("retailPrice", (String)value);
+        				marketPrice.setRetailPrice(value.toString());
         			}
-        			else if (key.equalsIgnoreCase("PhoneNumber")) {
-        				marketPrice.setWholesalePrice((String)value);
+        			else if (key.equalsIgnoreCase("WholesalePrice")) {//Log.d("WholesalePrice", (String)value);
+        				marketPrice.setWholesalePrice(value.toString());
         			}
         		}
         	}
@@ -142,16 +153,19 @@ public class MarketPricesParser {
 
         @Override
         public void startJSON() throws ParseException, IOException {
+        	Log.d(LOG_TAG, "inside startJSON");
             end = false;
         }
 
         @Override
         public boolean startObject() throws ParseException, IOException {
+        	Log.d(LOG_TAG, "inside startObject");
         	if (key != null) {
         		if (key.equalsIgnoreCase("farmers")) {
         			farmer = new Farmer();
         		}
         		else if (key.equalsIgnoreCase("marketprices")) {
+        			Log.d("MKT", "we have a market");
         			marketPrice = new MarketPrices();
         		}
         	}

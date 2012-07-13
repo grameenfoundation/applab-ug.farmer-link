@@ -11,6 +11,10 @@ public class Buyer {
         this.location = location;
     }
     
+    public Buyer() {
+    	
+    }
+    
     public String getName() {
         return name;
     }

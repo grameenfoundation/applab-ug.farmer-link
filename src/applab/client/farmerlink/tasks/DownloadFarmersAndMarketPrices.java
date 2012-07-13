@@ -5,41 +5,34 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.StringEntity;
 import org.json.simple.parser.ParseException;
 
-import android.os.AsyncTask;
 import android.util.Log;
 import applab.client.farmerlink.GlobalConstants;
-import applab.client.farmerlink.listeners.FarmersAndMarketPricesDownloadListener;
+import applab.client.farmerlink.MarketPrices;
 import applab.client.farmerlink.parsers.MarketPricesParser;
 import applab.client.farmerlink.utilities.HttpHelpers;
 import applab.client.farmerlink.utilities.XmlEntityBuilder;
 
-public class FarmersAndMarketPricesDownloadTask extends
-		AsyncTask<HashMap<String, String>, String, List<String>> {
-	
-	private FarmersAndMarketPricesDownloadListener farmersAndMarketPricesListener;
-
-	@Override
-	protected List<String> doInBackground(HashMap<String, String>...values) {
+public class DownloadFarmersAndMarketPrices {
+	public List<MarketPrices> downloadFarmersAndMarketPrices(String district, String crop) {
 		InputStream farmersAndMarketPricesStream = null;
 		int networkTimeout = 5 * 60 * 1000;
 		String url = "http://test.applab.org/FarmerLink/getFarmersAndMarketPrices";
 		
 		try {
 			farmersAndMarketPricesStream = HttpHelpers.postJsonRequestAndGetStream(url,
-					(StringEntity)getFarmersAndMarketPricesRequestEntity("Abim", "Cotton"), networkTimeout);
+					(StringEntity)getFarmersAndMarketPricesRequestEntity(district, crop), networkTimeout);
 			
 			if (farmersAndMarketPricesStream != null) {
 				Log.i("SUCCESS", "Farmerlink server returned something");
 			}
 			
-			String filePath = "farmersAndMarketPrices.tmp";
+			String filePath = "sdcard/farmersAndMarketPrices.tmp";
 			
 			Boolean downloadSuccessful = HttpHelpers.writeStreamToTempFile(farmersAndMarketPricesStream, filePath);
 			farmersAndMarketPricesStream.close();
@@ -49,6 +42,7 @@ public class FarmersAndMarketPricesDownloadTask extends
             if (downloadSuccessful && inputStream != null) {
             	MarketPricesParser marketPricesParser = new MarketPricesParser();
             	try {
+            		Log.d("PARSING", "parsing begins ...");
 					marketPricesParser.parse(inputStream);
 				} catch (ParseException e) {
 					e.printStackTrace();
@@ -67,18 +61,9 @@ public class FarmersAndMarketPricesDownloadTask extends
 			Log.e("IOException", e.getLocalizedMessage());
 		}
 		
-		return null;
+		return MarketPricesParser.getMarketPrices();
 	}
 	
-	@Override
-	protected void onPostExecute(List<String> value) {
-		synchronized (this) {
-            if (farmersAndMarketPricesListener != null) {
-            	farmersAndMarketPricesListener.farmersAndMarketPricesDownloadingComplete(value);
-            }
-        }
-	}
-
 	static AbstractHttpEntity getFarmersAndMarketPricesRequestEntity(String district, String crop) throws UnsupportedEncodingException {
 
         XmlEntityBuilder xmlRequest = new XmlEntityBuilder();
@@ -95,10 +80,4 @@ public class FarmersAndMarketPricesDownloadTask extends
         return xmlRequest.getEntity();
     }
 	
-	public void setDownloaderListener(FarmersAndMarketPricesDownloadListener downloadListener) {
-        synchronized (this) {
-        	farmersAndMarketPricesListener = downloadListener;
-        }
-    }
-
 }

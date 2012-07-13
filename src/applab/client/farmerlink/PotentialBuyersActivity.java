@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import applab.client.farmerlink.tasks.DownloadBuyers;
 
 public class PotentialBuyersActivity extends ListActivity {
     
@@ -35,7 +36,9 @@ public class PotentialBuyersActivity extends ListActivity {
         
         cropTextView.setText("Crop : " + crop);
         
-        buyers = Repository.getBuyersByDistrictAndCrop(crop, district);
+        //buyers = Repository.getBuyersByDistrictAndCrop(crop, district);
+        DownloadBuyers downloadBuyers = new DownloadBuyers();
+        buyers = downloadBuyers.downloadBuyers(district, crop);
 
         setListAdapter(new BuyersAdapter());
         

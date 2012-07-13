@@ -13,37 +13,38 @@ import org.json.simple.parser.ParseException;
 
 import android.util.Log;
 import applab.client.farmerlink.GlobalConstants;
-import applab.client.farmerlink.parsers.DistrictsAndCropsParser;
+import applab.client.farmerlink.Buyer;
+import applab.client.farmerlink.parsers.BuyersParser;
 import applab.client.farmerlink.utilities.HttpHelpers;
 import applab.client.farmerlink.utilities.XmlEntityBuilder;
 
-public class DownloadDistrictsAndCrops {
-
-	public List<String> download() {
-		InputStream districtsAndCropsStream;
+public class DownloadBuyers {
+	
+	public List<Buyer> downloadBuyers(String district, String crop) {
+		InputStream farmersAndMarketPricesStream = null;
 		int networkTimeout = 5 * 60 * 1000;
-		String url = "http://test.applab.org/FarmerLink/getDistrictsAndCrops";
+		String url = "http://test.applab.org/FarmerLink/getBuyers";
+		
 		try {
-			districtsAndCropsStream = HttpHelpers.postJsonRequestAndGetStream(url,
-					(StringEntity)getDistrictsAndCropsRequestEntity(), networkTimeout);
+			farmersAndMarketPricesStream = HttpHelpers.postJsonRequestAndGetStream(url,
+					(StringEntity)getBuyersRequestEntity(district, crop), networkTimeout);
 			
-			if (districtsAndCropsStream != null) {
-				Log.d("SUCCESS", "Farmerlink server returned something");
+			if (farmersAndMarketPricesStream != null) {
+				Log.i("SUCCESS", "Farmerlink server returned something");
 			}
 			
-            String filePath = "sdcard/districtsAndCrops.tmp";
-			Boolean downloadSuccessful = HttpHelpers.writeStreamToTempFile(districtsAndCropsStream, filePath);
-			districtsAndCropsStream.close();
+			String filePath = "sdcard/buyers.tmp";
+			
+			Boolean downloadSuccessful = HttpHelpers.writeStreamToTempFile(farmersAndMarketPricesStream, filePath);
+			farmersAndMarketPricesStream.close();
             File file = new File(filePath);
-			//String filePath2 = "sdcard/testJson.tmp";
-            //File file = new File(filePath2);
             FileInputStream inputStream = new FileInputStream(file);
 
             if (downloadSuccessful && inputStream != null) {
-            	DistrictsAndCropsParser districtsAndCropsParser = new DistrictsAndCropsParser();
+            	BuyersParser buyersParser = new BuyersParser();
             	try {
-            		Log.d("PARSING", "parsing follows...");
-            		districtsAndCropsParser.parse(inputStream);
+            		Log.d("PARSING", "parsing begins ...");
+            		buyersParser.parse(inputStream);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -60,14 +61,24 @@ public class DownloadDistrictsAndCrops {
 		catch(IOException e) {
 			Log.e("IOException", e.getLocalizedMessage());
 		}
-		return DistrictsAndCropsParser.getDistricts();
+		
+		return BuyersParser.getBuyers();
 	}
 	
-	static AbstractHttpEntity getDistrictsAndCropsRequestEntity() throws UnsupportedEncodingException {
+	static AbstractHttpEntity getBuyersRequestEntity(String district, String crop) throws UnsupportedEncodingException {
 
         XmlEntityBuilder xmlRequest = new XmlEntityBuilder();
         xmlRequest. writeStartElement("FarmerLinkRequest", GlobalConstants.XMLNAMESPACE);
+        xmlRequest.writeStartElement("district");
+        xmlRequest.writeText(district);
+        xmlRequest.writeEndElement();
+
+        xmlRequest.writeStartElement("crop");
+        xmlRequest.writeText(crop);
+        xmlRequest.writeEndElement();
+        
         xmlRequest.writeEndElement();
         return xmlRequest.getEntity();
     }
+
 }

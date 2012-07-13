@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import applab.client.farmerlink.tasks.DownloadFarmersAndMarketPrices;
 
 public class FindMarketsActivity extends ListActivity {
     
@@ -36,7 +37,9 @@ public class FindMarketsActivity extends ListActivity {
             
         commodityName += crop;
         
-        marketPrices = Repository.getMarketPricesByDistrictAndCrop(crop, district); 
+        //marketPrices = Repository.getMarketPricesByDistrictAndCrop(crop, district); 
+        DownloadFarmersAndMarketPrices fmdt = new DownloadFarmersAndMarketPrices();
+        marketPrices = fmdt.downloadFarmersAndMarketPrices(district, crop);
                 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.find_markets);
