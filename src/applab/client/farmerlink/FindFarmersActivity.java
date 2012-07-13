@@ -1,8 +1,5 @@
 package applab.client.farmerlink;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +12,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import applab.client.farmerlink.parsers.DistrictsAndCropsParser;
 import applab.client.farmerlink.tasks.DownloadDistrictsAndCrops;
-import applab.client.farmerlink.tasks.FarmersAndMarketPricesDownload;
 
 public class FindFarmersActivity extends Activity implements OnItemSelectedListener {
 	
@@ -105,13 +101,7 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 		case R.id.next_button:
 			if (selectedOption.equalsIgnoreCase("selling")) {
 				if (!selectedDistrict.equalsIgnoreCase("Select District") && !selectedCrop.equalsIgnoreCase("Select Crop")) {
-					FarmersAndMarketPricesDownload farmersAndMarketPricesDownload = new FarmersAndMarketPricesDownload(selectedDistrict, selectedCrop);
-					List<String> farmersAndMarketPrices = farmersAndMarketPricesDownload.downloadFarmersAndMarketPrices();
-					//MarketSaleObject.getMarketObject().setFarmers(farmersAndMarketPrices);
-					//MarketSaleObject.getMarketObject().setMarketPrices(marketPrices);
-					Intent nextIntent = new Intent(this, AddFarmersActivity.class);
-					nextIntent.putStringArrayListExtra("farmersAndMarketPrices", (ArrayList<String>) farmersAndMarketPrices);
-					
+					Intent nextIntent = new Intent(this, AddFarmersActivity.class);					
 					MarketSaleObject.getMarketObject().setCropName(selectedCrop);
 					MarketSaleObject.getMarketObject().setDistrictName(selectedDistrict);
 					startActivity(nextIntent);
