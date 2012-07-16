@@ -19,10 +19,15 @@ import applab.client.farmerlink.utilities.XmlEntityBuilder;
 
 public class DownloadDistrictsAndCrops {
 
+	private String url;
+	public DownloadDistrictsAndCrops(String url) {
+		this.url = url;
+	}
+
 	public List<String> download() {
 		InputStream districtsAndCropsStream;
 		int networkTimeout = 5 * 60 * 1000;
-		String url = "http://test.applab.org/FarmerLink/getDistrictsAndCrops";
+
 		try {
 			districtsAndCropsStream = HttpHelpers.postJsonRequestAndGetStream(url,
 					(StringEntity)getDistrictsAndCropsRequestEntity(), networkTimeout);

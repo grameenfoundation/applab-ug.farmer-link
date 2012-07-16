@@ -19,10 +19,14 @@ import applab.client.farmerlink.utilities.HttpHelpers;
 import applab.client.farmerlink.utilities.XmlEntityBuilder;
 
 public class DownloadFarmersAndMarketPrices {
+	private String url;
+	public DownloadFarmersAndMarketPrices(String url) {
+		this.url = url;
+	}
+
 	public List<MarketPrices> downloadFarmersAndMarketPrices(String district, String crop) {
 		InputStream farmersAndMarketPricesStream = null;
 		int networkTimeout = 5 * 60 * 1000;
-		String url = "http://test.applab.org/FarmerLink/getFarmersAndMarketPrices";
 		
 		try {
 			farmersAndMarketPricesStream = HttpHelpers.postJsonRequestAndGetStream(url,
