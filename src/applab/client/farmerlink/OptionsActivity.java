@@ -22,8 +22,8 @@ public class OptionsActivity extends ListActivity {
         
         options = new ArrayList<String>();
         options.add("Selling");
-        options.add("Buying");
-        
+        options.add("Buying");      
+
         setListAdapter(new OptionsAdapter());
     }
     
@@ -49,6 +49,7 @@ public class OptionsActivity extends ListActivity {
     		
     		View row = inflater.inflate(R.layout.options_list, parent, false);
     		TextView optionView = (TextView) row.findViewById(R.id.select_option);
+    		
 			optionView.setText(options.get(position).toString());
 			return row;
     	}
