@@ -1,6 +1,7 @@
 package applab.client.farmerlink;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -18,10 +20,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import applab.client.farmerlink.parsers.MarketPricesParser;
+import applab.client.farmerlink.tasks.DownloadFarmersAndMarketPrices;
 
 public class AddFarmersActivity extends ListActivity implements TextWatcher {
     ArrayList<String> listItems = new ArrayList<String>();
-    ArrayList<String> farmers = new ArrayList<String>();
+    List<String> farmers = new ArrayList<String>();
     ArrayList<Farmer> addedFarmers = new ArrayList<Farmer>();
     ArrayAdapter<String> addedFarmersAdapter;
     private Button addFarmerButton;
@@ -49,7 +53,15 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
         addedFarmersAdapter = new ArrayAdapter<String>(this, R.layout.simple_list, R.id.sampletext, listItems);
         setListAdapter(addedFarmersAdapter);
 
-        farmers = Repository.getFarmersByDistrictAndCrop(district, crop);
+        //farmers = Repository.getFarmersByDistrictAndCrop(district, crop);
+        if (MarketPricesParser.getFarmers().size() > 0) {
+        	populateFarmersList();
+        }
+        else {
+        	DownloadFarmersAndMarketPrices downloadFarmersAndMarketPrices = new DownloadFarmersAndMarketPrices();
+        	downloadFarmersAndMarketPrices.downloadFarmersAndMarketPrices(district, crop);
+        	populateFarmersList();
+        }
         // Add adapter for getting farmers
         // TODO: Change this to cursorAdapter
         AutoCompleteTextView farmerName = (AutoCompleteTextView)findViewById(R.id.farmer);
@@ -152,6 +164,14 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
             }
         });
     }
+
+	private void populateFarmersList() {
+		List<Farmer> farmerList = MarketPricesParser.getFarmers();
+		for (Farmer farmer : farmerList) {
+			farmers.add(farmer.getName());
+		}
+		Log.d("FARMER COUNT", String.valueOf(farmerList.size()));
+	}
     
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Farmer farmer = addedFarmers.get(position);

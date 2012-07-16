@@ -18,9 +18,7 @@ public class DistrictsAndCropsParser {
     private JSONParser jsonParser;
     private static List<String> districts = new ArrayList<String>();
     public static List<String> getDistricts() {
-    	for (String district : districts) {
-    		Log.d("DISTRICT", district);
-    	}
+    	Log.d("DISTRICT COUNT", String.valueOf(districts.size()));
 		return districts;
 	}
 
@@ -103,10 +101,14 @@ public class DistrictsAndCropsParser {
         public boolean primitive(Object value) throws ParseException, IOException {
         	if (key != null) {
         		if (key.equalsIgnoreCase("districts")) {
-        			districts.add((String)value);
+        			if (!districts.contains((String)value)) {
+        				districts.add((String)value);
+        			}
         		}
         		else if (key.equalsIgnoreCase("crops")) {
-        			crops.add((String)value);
+        			if (!crops.contains((String)value)) {
+        				crops.add((String)value);
+        			}
         		}
         	}
             return true;
@@ -121,8 +123,12 @@ public class DistrictsAndCropsParser {
         @Override
         public void startJSON() throws ParseException, IOException {
         	Log.d(LOG_TAG, "inside startJSON");
-        	districts.add("Select District");
-        	crops.add("Select Crop");
+        	if (!districts.contains("Select District")) {
+        		districts.add("Select District");
+        	}
+        	if (!crops.contains("Select Crop")) {
+        		crops.add("Select Crop");
+        	}	
             end = false;
         }
 

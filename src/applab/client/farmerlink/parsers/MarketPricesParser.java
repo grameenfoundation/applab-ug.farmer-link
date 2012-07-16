@@ -83,6 +83,7 @@ public class MarketPricesParser {
 
         @Override
         public boolean endArray() throws ParseException, IOException {
+        	Log.d(LOG_TAG, "inside endArray");
             return false;
         }
 
@@ -97,14 +98,6 @@ public class MarketPricesParser {
         @Override
         public boolean endObject() throws ParseException, IOException {
         	Log.d(LOG_TAG, "inside endObject");
-        	if (marketPrice != null) {
-        		Log.d("MKT ADDED", "adding market");
-        		marketPrices.add(marketPrice);
-        	}
-        	else if (farmer != null) {
-        		Log.d("FRMR ADDED", "adding farmer");
-        		farmers.add(farmer);
-        	}
         	marketPrice = null;
         	farmer = null;
             return false;
@@ -118,27 +111,33 @@ public class MarketPricesParser {
         @Override
         public boolean primitive(Object value) throws ParseException, IOException {
         	if (key != null) {
-        		Log.d("KEY", key);
-        		if (farmer != null) {
-        			if (key.equalsIgnoreCase("Name")) {Log.d("Name", (String)value);
-        				farmer.setName((String)value);
+        		//Log.d("KEY", key);
+        		Log.d("VALUE", "VALUE="+value.toString());
+        		if (key.equalsIgnoreCase("Name") || (key.equalsIgnoreCase("MobileNumber")) || (key.equalsIgnoreCase("Id"))) {
+        			if (key.equalsIgnoreCase("Name")) {
+        				farmer = new Farmer();
+        				farmer.setName(value.toString());
         			}
-        			else if (key.equalsIgnoreCase("Id")) {Log.d("Id", (String)value);
-        				farmer.setId((String)value);
+        			else if (key.equalsIgnoreCase("MobileNumber")) {
+        				farmer.setPhoneNumber(value.toString());
         			}
-        			else if (key.equalsIgnoreCase("MobileNumber")) {Log.d("PhoneNumber", (String)value);
-        				farmer.setPhoneNumber((String)value);
+        			else if (key.equalsIgnoreCase("Id")) {
+        				farmer.setId(value.toString());
+        				farmers.add(farmer);
         			}
+        			
         		}
-        		else if (marketPrice != null) {
-        			if (key.equalsIgnoreCase("Name")) {Log.d("marketName", (String)value);
-        				marketPrice.setMarketName((String)value);
+        		else if (key.equalsIgnoreCase("WholesalePrice") || key.equalsIgnoreCase("RetailPrice") || key.equalsIgnoreCase("Name")) {
+        			if (key.equalsIgnoreCase("WholesalePrice")) {
+        				marketPrice = new MarketPrices();
+        				marketPrice.setWholesalePrice(value.toString());
         			}
-        			else if (key.equalsIgnoreCase("RetailPrice")) {//Log.d("retailPrice", (String)value);
+        			else if (key.equalsIgnoreCase("RetailPrice")) {
         				marketPrice.setRetailPrice(value.toString());
         			}
-        			else if (key.equalsIgnoreCase("WholesalePrice")) {//Log.d("WholesalePrice", (String)value);
-        				marketPrice.setWholesalePrice(value.toString());
+        			else if (key.equalsIgnoreCase("Name")) {
+        				marketPrice.setMarketName((String)value);
+        				marketPrices.add(marketPrice);
         			}
         		}
         	}
@@ -147,7 +146,7 @@ public class MarketPricesParser {
 
         @Override
         public boolean startArray() throws ParseException, IOException {
-        	
+        	Log.d(LOG_TAG, "inside startArray");
             return false;
         }
 
@@ -159,16 +158,6 @@ public class MarketPricesParser {
 
         @Override
         public boolean startObject() throws ParseException, IOException {
-        	Log.d(LOG_TAG, "inside startObject");
-        	if (key != null) {
-        		if (key.equalsIgnoreCase("farmers")) {
-        			farmer = new Farmer();
-        		}
-        		else if (key.equalsIgnoreCase("marketprices")) {
-        			Log.d("MKT", "we have a market");
-        			marketPrice = new MarketPrices();
-        		}
-        	}
             return false;
         }
 

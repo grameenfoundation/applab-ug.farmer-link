@@ -3,6 +3,7 @@ package applab.client.farmerlink;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -19,6 +20,7 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	private String selectedCrop;
 	private Button nextButton;
 	private String selectedOption;
+	private Spinner districtSpinner;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,29 +39,14 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
         });
 	    DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops();
     	downloadDistrictsAndCrops.download();
+    	
 	    if (selectedOption.equalsIgnoreCase("selling")) {
-	    	//Assume that we query the URL which will return the districts and crops
-	    	//in JSON format (array of arrays)
-	    	//Sample format that will be returned by URL
-	    	// {"districts": ["Abim", "Pader","Nwoya","Kitgum"], "crops":["Simsim", "Beans","Bananas","Maize"]}
-	   /* 	String jsonString = "{\"districts\": [\"Abim\", \"Pader\",\"Nwoya\",\"Kitgum\"], \"crops\":[\"Simsim\", \"Beans\",\"Bananas\",\"Maize\"]}";
-	    	JSONParser parser = new JSONParser();
-	    	Object parsedObject;
-	    	
-	    	try {
-	    		parsedObject = parser.parse(jsonString);
-	    	} catch(ParseException e) {
-	    		
-	    	}
-*/	    	//At this point assume that you have an array of districts and another of crops
-	    	
-	    	
-	    	
-	    	
+
 	    	String [] districts = DistrictsAndCropsParser.getDistricts().toArray(new String[DistrictsAndCropsParser.getDistricts().size()]);
 	    	String [] crops = DistrictsAndCropsParser.getCrops().toArray(new String[DistrictsAndCropsParser.getCrops().size()]);
-	    	
-	    	Spinner districtSpinner = (Spinner) findViewById(R.id.district_spinner);
+	    	Log.d("districtsCountSelling", String.valueOf(districts.length));
+	    	districtSpinner = (Spinner) findViewById(R.id.district_spinner);
+	    	districtSpinner.setAdapter(null);
 	    	ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, districts);
 	    	districtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    	districtSpinner.setAdapter(districtAdapter);
@@ -74,8 +61,8 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 	    } else if (selectedOption.equalsIgnoreCase("buying")) {
 	    	String [] districts = DistrictsAndCropsParser.getDistricts().toArray(new String[DistrictsAndCropsParser.getDistricts().size()]);
 	    	String [] crops = DistrictsAndCropsParser.getCrops().toArray(new String[DistrictsAndCropsParser.getCrops().size()]);
-	    	
-	    	Spinner districtSpinner = (Spinner) findViewById(R.id.district_spinner);
+	    	Log.d("districtsCountBuying", String.valueOf(districts.length));
+	    	districtSpinner = (Spinner) findViewById(R.id.district_spinner);
 	    	ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, districts);
 	    	districtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    	districtSpinner.setAdapter(districtAdapter);
