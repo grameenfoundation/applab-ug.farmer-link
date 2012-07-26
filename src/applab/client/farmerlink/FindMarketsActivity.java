@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import applab.client.farmerlink.tasks.DownloadFarmersAndMarketPrices;
+import applab.client.farmerlink.utilities.PricesFormatter;
 
 public class FindMarketsActivity extends ListActivity {
 
@@ -40,12 +41,12 @@ public class FindMarketsActivity extends ListActivity {
 
 		commodityName += crop;
 
-		// marketPrices = Repository.getMarketPricesByDistrictAndCrop(crop,
-		// district);
-		DownloadFarmersAndMarketPrices fmdt = new DownloadFarmersAndMarketPrices(
+		/*DownloadFarmersAndMarketPrices fmdt = new DownloadFarmersAndMarketPrices(
 				getString(R.string.server) + "/" + "FarmerLink"
 						+ getString(R.string.farmers_market_prices));
-		marketPrices = fmdt.downloadFarmersAndMarketPrices(district, crop);
+		marketPrices = fmdt.downloadFarmersAndMarketPrices(district, crop);*/
+		marketPrices = Repository.getMarketPricesByDistrictAndCrop(getString(R.string.server) + "/" + "FarmerLink"
+				+ getString(R.string.farmers_market_prices), crop, district);
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.find_markets);
@@ -110,12 +111,12 @@ public class FindMarketsActivity extends ListActivity {
 			TextView retailPriceView = (TextView) row
 					.findViewById(R.id.retail_price);
 			retailPriceView.setText("Retail Price : "
-					+ marketPrices.get(position).getRetailPrice());
+					+ PricesFormatter.formatPrice(marketPrices.get(position).getRetailPriceValue()));
 
 			TextView wholesalePriceView = (TextView) row
 					.findViewById(R.id.wholesale_price);
 			wholesalePriceView.setText("Wholesale Price : "
-					+ marketPrices.get(position).getWholesalePrice());
+					+ PricesFormatter.formatPrice(marketPrices.get(position).getWholesalePriceValue()));
 
 			return row;
 		}

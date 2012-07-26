@@ -99,11 +99,18 @@
                           android:layout_toRightOf="@+id/transaction_fee"
                           android:text="Transaction Fee Value"
                           />
+                <TextView android:id ="@+id/borderline"
+                          android:layout_height="1dp"
+                          android:layout_width="fill_parent"
+                          android:layout_below="@+id/transaction_fee_value"
+                          android:background="@color/white"
+                          android:text=""
+                          />
                 <ListView android:id="@android:id/list"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
                           android:layout_margin="2dip"
-                          android:layout_below="@+id/transaction_fee_value"
+                          android:layout_below="@+id/borderline"
                           />
                  <Button android:layout_height="wrap_content"
                         android:layout_width="150dip"                         

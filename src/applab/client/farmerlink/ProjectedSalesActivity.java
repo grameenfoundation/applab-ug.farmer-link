@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import applab.client.farmerlink.utilities.PricesFormatter;
 
 public class ProjectedSalesActivity extends ListActivity {
     private TextView marketTextView;
@@ -79,19 +80,20 @@ public class ProjectedSalesActivity extends ListActivity {
         cropTextView.setText(MarketSaleObject.getMarketObject().getCropName());
 
         quantityTextView = (TextView)findViewById(R.id.quantity_value);
-        quantityTextView.setText(String.valueOf(MarketSaleObject.getMarketObject().getTotalQuantity()));
+        quantityTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTotalQuantity()));
 
         priceTextView = (TextView)findViewById(R.id.kg_price_value);
-        priceTextView.setText(String.valueOf(MarketSaleObject.getMarketObject().getMarketPrices().getRetailPrice()));
+        //priceTextView.setText(String.valueOf(MarketSaleObject.getMarketObject().getMarketPrices().getRetailPrice()));
+        priceTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getMarketPrices().getRetailPriceValue()));
 
         totalValueTextView = (TextView)findViewById(R.id.total_value);
-        totalValueTextView.setText(String.valueOf(MarketSaleObject.getMarketObject().getTotalValue()));
+        totalValueTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTotalValue()));
 
         transportTextView = (TextView)findViewById(R.id.transport_value);
-        transportTextView.setText(String.valueOf(MarketSaleObject.getMarketObject().getTransportCost()));
+        transportTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTransportCost()));
 
         transactFeeTextView = (TextView)findViewById(R.id.transaction_fee_value);
-        transactFeeTextView.setText(String.valueOf(MarketSaleObject.getMarketObject().getTotalTransactionFee()));
+        transactFeeTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTotalTransactionFee()));
     }
 
     class FarmerAdapter extends ArrayAdapter<Farmer> {
@@ -116,16 +118,16 @@ public class ProjectedSalesActivity extends ListActivity {
             farmerIdView.setText("Farmer ID : " + farmers.get(position).getId());
             
             TextView quantityView = (TextView)row.findViewById(R.id.quantity_text);
-            quantityView.setText("Quantity : " + farmers.get(position).getQuantity());
+            quantityView.setText("Quantity : " + PricesFormatter.formatPrice(farmers.get(position).getQuantity()));
           
             TextView revenueView = (TextView)row.findViewById(R.id.revenue_text);
-            revenueView.setText("Revenue : " + revenue);
+            revenueView.setText("Revenue : " + PricesFormatter.formatPrice(revenue));
             
             TextView transportView = (TextView)row.findViewById(R.id.transport_text);
-            transportView.setText("Transport Cost : " + MarketSaleObject.getMarketObject().getTransportCost());
+            transportView.setText("Transport Cost : " + PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTransportCost()));
             
             TextView transactionFeeView = (TextView)row.findViewById(R.id.transaction_fee_text);
-            transactionFeeView.setText("Transaction Fee : " + transactionFee);           
+            transactionFeeView.setText("Transaction Fee : " + PricesFormatter.formatPrice(transactionFee));           
 
             return row;
         }

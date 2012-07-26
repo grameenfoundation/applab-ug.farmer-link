@@ -36,10 +36,12 @@ public class PotentialBuyersActivity extends ListActivity {
 
 		cropTextView.setText("Crop : " + crop);
 
-		DownloadBuyers downloadBuyers = new DownloadBuyers(
+		/*DownloadBuyers downloadBuyers = new DownloadBuyers(
 				getString(R.string.server) + "/" + "FarmerLink"
 						+ getString(R.string.buyers));
-		buyers = downloadBuyers.downloadBuyers(district, crop);
+		buyers = downloadBuyers.downloadBuyers(district, crop);*/
+		buyers = Repository.getBuyersByDistrictAndCrop(getString(R.string.server) + "/" + "FarmerLink"
+				+ getString(R.string.buyers), district, crop);
 
 		setListAdapter(new BuyersAdapter());
 

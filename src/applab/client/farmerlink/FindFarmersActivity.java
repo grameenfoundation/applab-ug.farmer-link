@@ -1,5 +1,7 @@
 package applab.client.farmerlink;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ public class FindFarmersActivity extends Activity implements
 	private Button nextButton;
 	private String selectedOption;
 	private Spinner districtSpinner;
+	private List<String> districts;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,10 +41,12 @@ public class FindFarmersActivity extends Activity implements
 				buttonClicked(view);
 			}
 		});
-		DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops(
+		/*DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops(
 				getString(R.string.server) + "/" + "FarmerLink"
 						+ getString(R.string.districts_crops));
-		downloadDistrictsAndCrops.download();
+		downloadDistrictsAndCrops.download();*/
+		districts = Repository.getDistricts(getString(R.string.server) + "/" + "FarmerLink"
+				+ getString(R.string.districts_crops));
 
 		if (selectedOption.equalsIgnoreCase("selling")) {
 
@@ -49,9 +54,11 @@ public class FindFarmersActivity extends Activity implements
 					.toArray(
 							new String[DistrictsAndCropsParser.getDistricts()
 									.size()]);
-			String[] crops = DistrictsAndCropsParser.getCrops().toArray(
-					new String[DistrictsAndCropsParser.getCrops().size()]);
-			Log.d("districtsCountSelling", String.valueOf(districts.length));
+			String[] crops = Repository.getCrops(getString(R.string.server) + "/" + "FarmerLink"
+					+ getString(R.string.districts_crops)).toArray(
+					new String[Repository.getCrops(getString(R.string.server) + "/" + "FarmerLink"
+							+ getString(R.string.districts_crops)).size()]);
+			
 			districtSpinner = (Spinner) findViewById(R.id.district_spinner);
 			districtSpinner.setAdapter(null);
 			ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(
@@ -104,23 +111,35 @@ public class FindFarmersActivity extends Activity implements
 			startActivity(intent);
 			break;
 		case R.id.next_button:
-			if (selectedOption.equalsIgnoreCase("selling")) {
-				if (!selectedDistrict.equalsIgnoreCase("Select District")
-						&& !selectedCrop.equalsIgnoreCase("Select Crop")) {
-					Intent nextIntent = new Intent(this,
-							AddFarmersActivity.class);
-					MarketSaleObject.getMarketObject()
-							.setCropName(selectedCrop);
-					MarketSaleObject.getMarketObject().setDistrictName(
-							selectedDistrict);
-					startActivity(nextIntent);
-				} else {
-					Toast toast = Toast.makeText(getApplicationContext(),
-							"Please select a district and a crop",
-							Toast.LENGTH_LONG);
-					toast.show();
-				}
-			} else if (selectedOption.equalsIgnoreCase("buying")) {
+			if (selectedDistrict.equalsIgnoreCase("Select District") && selectedCrop.equalsIgnoreCase("Select Crop")) {
+				Toast toast = Toast.makeText(getApplicationContext(),
+						"Please select a district and a crop",
+						Toast.LENGTH_LONG);
+				toast.show();
+			}
+			else if (selectedDistrict.equalsIgnoreCase("Select District")) {
+				Toast toast = Toast.makeText(getApplicationContext(),
+						"Please select a district",
+						Toast.LENGTH_LONG);
+				toast.show();
+			}
+			else if (selectedCrop.equalsIgnoreCase("Select Crop")) {
+				Toast toast = Toast.makeText(getApplicationContext(),
+						"Please select a crop",
+						Toast.LENGTH_LONG);
+				toast.show();
+			}
+			else if (selectedOption.equalsIgnoreCase("selling") && (!selectedCrop.equalsIgnoreCase("Select Crop") && (!selectedDistrict.equalsIgnoreCase("Select District")))) {
+				Intent nextIntent = new Intent(this,
+						AddFarmersActivity.class);
+				MarketSaleObject.getMarketObject()
+						.setCropName(selectedCrop);
+				MarketSaleObject.getMarketObject().setDistrictName(
+						selectedDistrict);
+				startActivity(nextIntent);
+			
+			} 
+			else if (selectedOption.equalsIgnoreCase("buying") && (!selectedCrop.equalsIgnoreCase("Select Crop") && (!selectedDistrict.equalsIgnoreCase("Select District")))) {
 				Intent buyingIntent = new Intent(this,
 						FindSuppliersActivity.class);
 				MarketSaleObject.getMarketObject().setCropName(selectedCrop);

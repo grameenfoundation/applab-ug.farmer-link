@@ -45,7 +45,7 @@ public class Farmer {
     }
     
     public double computeTransactionFee(double unitPrice) {
-        return 0.1 * computeRevenue(unitPrice);
+        return Math.ceil(0.1 * computeRevenue(unitPrice));
     }
     
     @Override
