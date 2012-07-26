@@ -70,9 +70,6 @@ public class BuyersParser {
 
         @Override
         public boolean endObject() throws ParseException, IOException {
-        	if (buyer != null) {
-        		buyers.add(buyer);
-        	}
             return false;
         }
 
@@ -91,7 +88,7 @@ public class BuyersParser {
         			else if (key.equalsIgnoreCase("Location")) {
         				buyer.setLocation((String)value);
         			}
-        			else if (key.equalsIgnoreCase("PhoneNumber")) {
+        			else if (key.equalsIgnoreCase("Contact")) {
         				buyer.setTelephone((String)value);
         				buyers.add(buyer);
         				buyer = new Buyer();
@@ -103,6 +100,7 @@ public class BuyersParser {
 
         @Override
         public boolean startArray() throws ParseException, IOException {
+        	Log.d("INSIDE ARRAY", "");
         	buyer = new Buyer();
             return false;
         }

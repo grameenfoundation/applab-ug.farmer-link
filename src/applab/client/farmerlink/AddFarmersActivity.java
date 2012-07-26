@@ -60,7 +60,7 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 		} else {
 			DownloadFarmersAndMarketPrices downloadFarmersAndMarketPrices = new DownloadFarmersAndMarketPrices(
 					getString(R.string.server) + "/"
-							+ getString(R.string.app_name)
+							+ "FarmerLink"
 							+ getString(R.string.farmers_market_prices));
 			downloadFarmersAndMarketPrices.downloadFarmersAndMarketPrices(
 					district, crop);

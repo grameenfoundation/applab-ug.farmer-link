@@ -39,6 +39,8 @@ public class MarketPricesParser {
     public boolean parse(InputStream marketPricesStream) throws IOException, ParseException {
 
         try {
+        	marketPrices = new ArrayList<MarketPrices>();
+        	farmers = new ArrayList<Farmer>();
             contentHandler = new FarmersAndMarketPricesContentHandler();
             jsonParser = new JSONParser();
 
@@ -98,8 +100,8 @@ public class MarketPricesParser {
         @Override
         public boolean endObject() throws ParseException, IOException {
         	Log.d(LOG_TAG, "inside endObject");
-        	marketPrice = null;
-        	farmer = null;
+        	//marketPrice = null;
+        	//farmer = null;
             return false;
         }
 
@@ -127,7 +129,7 @@ public class MarketPricesParser {
         			}
         			
         		}
-        		else if (key.equalsIgnoreCase("WholesalePrice") || key.equalsIgnoreCase("RetailPrice") || key.equalsIgnoreCase("Name")) {
+        		else if (key.equalsIgnoreCase("WholesalePrice") || key.equalsIgnoreCase("RetailPrice") || key.equalsIgnoreCase("MarketName")) {
         			if (key.equalsIgnoreCase("WholesalePrice")) {
         				marketPrice = new MarketPrices();
         				marketPrice.setWholesalePrice(value.toString());
@@ -135,7 +137,8 @@ public class MarketPricesParser {
         			else if (key.equalsIgnoreCase("RetailPrice")) {
         				marketPrice.setRetailPrice(value.toString());
         			}
-        			else if (key.equalsIgnoreCase("Name")) {
+        			else if (key.equalsIgnoreCase("MarketName")) {
+        				Log.d("CREATING MKT", "we are in here so market is added");
         				marketPrice.setMarketName((String)value);
         				marketPrices.add(marketPrice);
         			}

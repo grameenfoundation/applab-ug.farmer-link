@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,7 +43,7 @@ public class FindMarketsActivity extends ListActivity {
 		// marketPrices = Repository.getMarketPricesByDistrictAndCrop(crop,
 		// district);
 		DownloadFarmersAndMarketPrices fmdt = new DownloadFarmersAndMarketPrices(
-				getString(R.string.server) + "/" + getString(R.string.app_name)
+				getString(R.string.server) + "/" + "FarmerLink"
 						+ getString(R.string.farmers_market_prices));
 		marketPrices = fmdt.downloadFarmersAndMarketPrices(district, crop);
 
@@ -90,8 +91,10 @@ public class FindMarketsActivity extends ListActivity {
 	class PricesAdapter extends ArrayAdapter<MarketPrices> {
 
 		PricesAdapter() {
+			
 			super(FindMarketsActivity.this, R.layout.market_prices_list,
 					R.id.market_name, marketPrices);
+			Log.d("MKT PRX", String.valueOf(marketPrices.size()));
 		}
 
 		@Override

@@ -6,10 +6,12 @@ import java.util.List;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,6 +31,7 @@ public class OptionsActivity extends ListActivity {
     
     protected void onListItemClick(ListView l, View v, int position, long id) {
     	String selectedOption = options.get(position).toString();
+    	Log.d("OPTION", selectedOption);
     	Intent intent = new Intent(this, FindFarmersActivity.class);
     	if (selectedOption.equalsIgnoreCase("selling")) {
     		intent.putExtra("selectedOption", "selling");
@@ -48,8 +51,14 @@ public class OptionsActivity extends ListActivity {
     		LayoutInflater inflater = getLayoutInflater();
     		
     		View row = inflater.inflate(R.layout.options_list, parent, false);
-    		TextView optionView = (TextView) row.findViewById(R.id.select_option);
     		
+    		ImageView iconView = (ImageView)row.findViewById(R.id.view_icon);
+    		iconView.setImageResource(R.drawable.selling);
+    		if (position == 1) {
+    			iconView.setImageResource(R.drawable.buying);
+    		}
+    		
+    		TextView optionView = (TextView) row.findViewById(R.id.select_option);
 			optionView.setText(options.get(position).toString());
 			return row;
     	}

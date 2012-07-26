@@ -3,9 +3,19 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:padding="6dip"> 
+                
+        <ImageView android:id ="@+id/view_icon"
+                   android:layout_height="wrap_content"
+                   android:layout_width="wrap_content"
+                   android:contentDescription="@string/iconDescription"
+            	   android:src="@drawable/buying"
+            	   android:padding="5dp"
+            />
         <TextView android:id ="@+id/select_option"
                   android:layout_height="wrap_content"
-                  android:layout_width="fill_parent"
+                  android:layout_width="wrap_content"
                   android:layout_alignParentTop="true"
+                  android:layout_toRightOf="@+id/view_icon"
+                  android:padding="5dp"
                   android:textSize = "20dp"/>
 </RelativeLayout>

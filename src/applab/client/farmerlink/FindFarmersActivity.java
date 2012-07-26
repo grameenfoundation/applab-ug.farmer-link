@@ -39,7 +39,7 @@ public class FindFarmersActivity extends Activity implements
 			}
 		});
 		DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops(
-				getString(R.string.server) + "/" + getString(R.string.app_name)
+				getString(R.string.server) + "/" + "FarmerLink"
 						+ getString(R.string.districts_crops));
 		downloadDistrictsAndCrops.download();
 

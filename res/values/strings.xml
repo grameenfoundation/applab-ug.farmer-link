@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="select_option">Select an option:</string>
-    <string name="app_name">FarmerLink</string>
+    <string name="app_name">MarketLink</string>
     <string name="selling">Selling</string>
     <string name="buying">Buying</string>
     <string name="back_button">Back</string>
@@ -16,4 +16,5 @@
     <string name="buyers">/getBuyers</string>
     <string name="districts_crops">/getDistrictsAndCrops</string>
     <string name="farmers_market_prices">/getFarmersAndMarketPrices</string>
+    <string name="iconDescription">an icon</string>
 </resources>

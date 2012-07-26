@@ -128,7 +128,8 @@ public class DistrictsAndCropsParser {
         	}
         	if (!crops.contains("Select Crop")) {
         		crops.add("Select Crop");
-        	}	
+        	}
+        	Log.d("EXIT", "Leaving ...");
             end = false;
         }
 
