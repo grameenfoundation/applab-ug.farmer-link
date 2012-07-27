@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.json.simple.parser.ContentHandler;
@@ -18,10 +19,14 @@ public class DistrictsAndCropsParser {
     private JSONParser jsonParser;
     private static List<String> districts = new ArrayList<String>();
     public static List<String> getDistricts() {
+    	Collections.sort(districts);
+    	districts.add(0, "Select District");
 		return districts;
 	}
 
 	public static List<String> getCrops() {
+		Collections.sort(crops);
+		crops.add(0, "Select Crop");
 		return crops;
 	}
 
@@ -43,7 +48,7 @@ public class DistrictsAndCropsParser {
         }
         
         catch (Exception ex) {
-            Log.d(LOG_TAG, "ParseExceptionMessage "+ex.getMessage());
+            Log.e(LOG_TAG, "ExceptionMessage "+ex.getMessage());
             return false;
         }
     }
@@ -122,13 +127,13 @@ public class DistrictsAndCropsParser {
         @Override
         public void startJSON() throws ParseException, IOException {
         	Log.d(LOG_TAG, "inside startJSON");
-        	if (!districts.contains("Select District")) {
+        	/*if (!districts.contains("Select District")) {
         		districts.add("Select District");
         	}
         	if (!crops.contains("Select Crop")) {
         		crops.add("Select Crop");
         	}
-        	Log.d("EXIT", "Leaving ...");
+        	Log.d("EXIT", "Leaving ...");*/
             end = false;
         }
 

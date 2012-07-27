@@ -60,7 +60,7 @@ public class MarketSaleObject {
         for (Farmer farmer : farmers) {
             totalQuantity += farmer.getQuantity();
         }
-        return totalQuantity;
+        return Math.ceil(totalQuantity);
     }
     
     public double getTotalValue() {

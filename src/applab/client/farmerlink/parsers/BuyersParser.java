@@ -22,6 +22,7 @@ public class BuyersParser {
 	private static List<Buyer> buyers = new ArrayList<Buyer>();
 	
 	public static List<Buyer> getBuyers() {
+		Log.i("BUYERS COUNT", String.valueOf(buyers.size()));
 		return buyers;
 	}
 	
@@ -82,13 +83,13 @@ public class BuyersParser {
         public boolean primitive(Object value) throws ParseException, IOException {
         	if (key != null) {
         		if (buyer != null) {
-        			if (key.equalsIgnoreCase("Name")) {
+        			if (key.equalsIgnoreCase("Name") && null != value) {
         				buyer.setName((String)value);
         			}
-        			else if (key.equalsIgnoreCase("Location")) {
+        			else if (key.equalsIgnoreCase("Location") && null != value) {
         				buyer.setLocation((String)value);
         			}
-        			else if (key.equalsIgnoreCase("Contact")) {
+        			else if (key.equalsIgnoreCase("Contact") && null != value) {
         				buyer.setTelephone((String)value);
         				buyers.add(buyer);
         				buyer = new Buyer();

@@ -104,6 +104,7 @@ public class FindMarketsActivity extends ListActivity {
 
 			View row = inflater.inflate(R.layout.market_prices_list, parent,
 					false);
+			if (marketPrices.size() > 0) {
 			TextView marketView = (TextView) row.findViewById(R.id.market_name);
 			marketView.setText("Market Name : "
 					+ marketPrices.get(position).getMarketName());
@@ -117,6 +118,11 @@ public class FindMarketsActivity extends ListActivity {
 					.findViewById(R.id.wholesale_price);
 			wholesalePriceView.setText("Wholesale Price : "
 					+ PricesFormatter.formatPrice(marketPrices.get(position).getWholesalePriceValue()));
+			}
+			else {
+				TextView marketView = (TextView) row.findViewById(R.id.market_name);
+				marketView.setText("NO MARKET PRICES FOUND");
+			}
 
 			return row;
 		}

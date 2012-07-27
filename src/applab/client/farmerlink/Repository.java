@@ -54,7 +54,7 @@ public class Repository {
 		return suppliers;
 	}
 
-	public static List<Buyer> getBuyersByDistrictAndCrop(String url, String crop, String district) {
+	public static List<Buyer> getBuyersByDistrictAndCrop(String url, String district, String crop) {
 		if (buyers == null || buyers.size() == 0) {
 			Log.i("BUYERS DOWNLOAD", "Buyers cache empty, downloading ...");
 			DownloadBuyers downloadBuyers = new DownloadBuyers(url);
@@ -67,8 +67,9 @@ public class Repository {
 	}
 	
 	public static List<String> getDistricts(String url) {
-		if (districts == null) {
+		if (districts == null || districts.size() == 0) {
 			Log.i("DISTRICTS DOWNLOAD", "No district in repository, downloading ...");
+			Log.i("URL", url);
 			DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops(url);
 			districts = downloadDistrictsAndCrops.download();
 		}
@@ -78,7 +79,7 @@ public class Repository {
 		return districts;
 	}
 	public static List<String> getCrops(String url) {
-		if (crops == null) {
+		if (crops == null || crops.size() == 0) {
 			Log.i("CROPS DOWNLOAD", "No crop in repository, downloading ...");
 			DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops(url);
 			downloadDistrictsAndCrops.download();

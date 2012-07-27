@@ -31,7 +31,12 @@ public class MarketPrices {
      * @return
      */
     public double getRetailPriceValue() {
-        return Math.ceil(Double.parseDouble(retailPrice));
+    	if (retailPrice != null) {
+    		return Math.ceil(Double.parseDouble(retailPrice));
+    	}
+    	else {
+    		return 0;
+    	}
     }
     
     public void setRetailPrice(String retailPrice) {
@@ -41,7 +46,12 @@ public class MarketPrices {
         return wholesalePrice + " Shs";
     }
     public double getWholesalePriceValue() {
-        return Math.ceil(Double.parseDouble(wholesalePrice));
+    	if (wholesalePrice != null) {
+    		return Math.ceil(Double.parseDouble(wholesalePrice));
+    	}
+    	else {
+    		return 0;
+    	}
     }
     public void setWholesalePrice(String wholesalePrice) {
         this.wholesalePrice = wholesalePrice;

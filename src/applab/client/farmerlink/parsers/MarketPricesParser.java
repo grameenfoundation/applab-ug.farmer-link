@@ -52,7 +52,7 @@ public class MarketPricesParser {
         }
         
         catch (Exception ex) {
-            Log.e(LOG_TAG, ex.getMessage());
+            //Log.e(LOG_TAG, ex.getMessage());
             ex.printStackTrace();
             return false;
         }
@@ -113,14 +113,12 @@ public class MarketPricesParser {
         @Override
         public boolean primitive(Object value) throws ParseException, IOException {
         	if (key != null) {
-        		//Log.d("KEY", key);
-        		Log.d("VALUE", "VALUE="+value.toString());
         		if (key.equalsIgnoreCase("Name") || (key.equalsIgnoreCase("MobileNumber")) || (key.equalsIgnoreCase("Id"))) {
         			if (key.equalsIgnoreCase("Name")) {
         				farmer = new Farmer();
         				farmer.setName(value.toString());
         			}
-        			else if (key.equalsIgnoreCase("MobileNumber")) {
+        			else if (key.equalsIgnoreCase("MobileNumber") && null != value) {
         				farmer.setPhoneNumber(value.toString());
         			}
         			else if (key.equalsIgnoreCase("Id")) {
@@ -132,14 +130,18 @@ public class MarketPricesParser {
         		else if (key.equalsIgnoreCase("WholesalePrice") || key.equalsIgnoreCase("RetailPrice") || key.equalsIgnoreCase("MarketName")) {
         			if (key.equalsIgnoreCase("WholesalePrice")) {
         				marketPrice = new MarketPrices();
-        				marketPrice.setWholesalePrice(value.toString());
+        				if (null != value) {
+        					marketPrice.setWholesalePrice(value.toString());
+        				}
         			}
         			else if (key.equalsIgnoreCase("RetailPrice")) {
-        				marketPrice.setRetailPrice(value.toString());
+        				if (null != value) {
+        					marketPrice.setRetailPrice(value.toString());
+        				}
         			}
         			else if (key.equalsIgnoreCase("MarketName")) {
         				Log.d("CREATING MKT", "we are in here so market is added");
-        				marketPrice.setMarketName((String)value);
+        				marketPrice.setMarketName(value.toString());
         				marketPrices.add(marketPrice);
         			}
         		}

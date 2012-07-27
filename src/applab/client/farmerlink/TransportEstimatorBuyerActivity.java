@@ -30,7 +30,7 @@ public class TransportEstimatorBuyerActivity extends Activity {
         cropTextView = (TextView)findViewById(R.id.commodity_name);
         cropTextView.setText(MarketSaleObject.getMarketObject().getCropName());
         quantityView = (TextView) findViewById(R.id.quantity_amount);
-        quantityView.setText(String.valueOf(MarketSaleObject.getMarketObject().getTotalQuantity()));
+        quantityView.setText(String.valueOf(MarketSaleObject.getMarketObject().getTotalQuantity()) + " Kg");
         selectedOption = MarketSaleObject.getMarketObject().getSelectedOption();
         
         crop = MarketSaleObject.getMarketObject().getCropName();
