@@ -47,29 +47,31 @@
 		    android:layout_alignParentRight="true"
 		    android:text="@string/add_farmer"
 		    android:layout_below="@+id/quantity"
-		    android:id="@+id/addFarmerButton"
-		    />
+		    android:id="@+id/addFarmerButton"/>
         
-                 <ListView android:id="@android:id/list" 
-                   android:layout_width="fill_parent" 
-                   android:layout_height="wrap_content"
-                   android:layout_alignParentLeft="true"
-                   android:layout_below="@+id/addFarmerButton"
-          />
-		    
+		<ListView
+		    android:id="@android:id/list"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/addFarmerButton"
+		    android:layout_gravity="fill_vertical"
+		    android:scrollbars="vertical" 
+		    android:layout_above="@+id/back_find_farmers"		 
+		    />   
 		 <Button  
 		    android:layout_width="160dip" 
 		    android:layout_height="wrap_content" 
 		    android:layout_alignParentBottom="true"
 		    android:layout_alignParentLeft="true"
 		    android:text="@string/back_button"
-		    android:id="@+id/back_find_farmers"
-		    />
-		    <Button  
-		     android:layout_width="160dip" 
+		    android:id="@+id/back_find_farmers"/>
+		 
+		<Button  
+		    android:layout_width="160dip" 
 		    android:layout_height="wrap_content" 
 		    android:layout_alignParentBottom="true"
-		     android:layout_alignParentRight="true"
+		    android:layout_alignParentRight="true"
 		    android:text="@string/next_button"
 		    android:id="@+id/next_market_prices"
 		    />        

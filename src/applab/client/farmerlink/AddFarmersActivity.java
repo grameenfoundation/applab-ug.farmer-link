@@ -12,8 +12,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -50,7 +54,15 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 		String displayTitle = getResources().getString(R.string.app_name)
 				+ " - " + crop;
 		setTitle(displayTitle);
+		
+		ArrayList<Farmer> existingFarmers = MarketSaleObject.getMarketObject().getFarmers();
 
+		if ((existingFarmers != null) && (existingFarmers.size() > 0)) {
+			for (Farmer existingFarmer: existingFarmers) {
+				addedFarmers.add(existingFarmer);
+				listItems.add(existingFarmer.toString());
+			}
+		}
 		addedFarmersAdapter = new ArrayAdapter<String>(this,
 				R.layout.simple_list, R.id.sampletext, listItems);
 		setListAdapter(addedFarmersAdapter);
@@ -73,13 +85,16 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 				R.layout.simple_list, R.id.sampletext, farmers);
 		farmerName.setAdapter(farmerAdapter);
 
+		ListView listView = (ListView) findViewById(android.R.id.list);
+		registerForContextMenu(listView);
+
 		addFarmerButton = (Button) findViewById(R.id.addFarmerButton);
 		addFarmerButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				AutoCompleteTextView farmerName = (AutoCompleteTextView) findViewById(R.id.farmer);
 				EditText quantity = (EditText) findViewById(R.id.quantity);
-
+				
 				if ((Double.compare(maximumQuantity,
 						Double.parseDouble(quantity.getText().toString()))) >= 0) {
 					final Farmer farmer = new Farmer("CD-2320", farmerName
@@ -206,8 +221,69 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 		Log.d("FARMER COUNT", String.valueOf(farmerList.size()));
 	}
 
+		@Override
+		public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+			super.onCreateContextMenu(menu, v, menuInfo);
+			menu.setHeaderTitle("Select option");
+			String edit = "Edit";
+			String delete = "Remove";
+			menu.add(0, v.getId(), 0, edit);
+			menu.add(0, v.getId(), 0, delete);
+		}
+		
+	/**	
+	 * Obsoleted by the context menu edit option
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		Farmer farmer = addedFarmers.get(position);
+		AutoCompleteTextView farmerName = (AutoCompleteTextView) findViewById(R.id.farmer);
+		EditText quantity = (EditText) findViewById(R.id.quantity);
+		farmerName.setText(farmer.getName());
+		quantity.setText(Double.toString(farmer.getQuantity()));
+	}
+	*/
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		if(item.getTitle() =="Edit") {
+			editSelectedFarmer(info.id);
+		} else if (item.getTitle() == "Remove") {
+			deleteSelectedFarmer(info.id);
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	private void deleteSelectedFarmer(final long selectedFarmerId) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setMessage(
+				"Please confirm that you want to remove this farmer from the selection.")
+				.setCancelable(false)
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(
+									DialogInterface dialog,
+									int id) {
+								addedFarmers.remove((int) selectedFarmerId);
+								listItems.remove((int) selectedFarmerId);
+								addedFarmersAdapter.notifyDataSetChanged();
+							}
+						})
+				.setNegativeButton("No",
+						new DialogInterface.OnClickListener() {
+							public void onClick(
+									DialogInterface dialog,
+									int id) {
+								// Do nothing
+							}
+						});
+
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+
+	private void editSelectedFarmer(long id) {
+		Farmer farmer = addedFarmers.get((int) id);
 		AutoCompleteTextView farmerName = (AutoCompleteTextView) findViewById(R.id.farmer);
 		EditText quantity = (EditText) findViewById(R.id.quantity);
 		farmerName.setText(farmer.getName());

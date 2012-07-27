@@ -22,6 +22,10 @@ public class OptionsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.options);
         
+        if (MarketSaleObject.getMarketObject() != null) {
+        	MarketSaleObject.getMarketObject().setCropName(null);
+        	MarketSaleObject.getMarketObject().setDistrictName(null);
+        }
         options = new ArrayList<String>();
         options.add("Selling");
         options.add("Buying");      

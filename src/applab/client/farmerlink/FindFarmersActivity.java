@@ -60,6 +60,13 @@ public class FindFarmersActivity extends Activity implements
 					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			districtSpinner.setAdapter(districtAdapter);
 			districtSpinner.setOnItemSelectedListener(this);
+			
+			//If a district has already been selected (maybe CKW is coming "back"
+			//set that district to that value
+			if(MarketSaleObject.getMarketObject().getDistrictName() != null) {
+				int districtPosition = districtAdapter.getPosition(MarketSaleObject.getMarketObject().getDistrictName());
+				districtSpinner.setSelection(districtPosition);
+			}
 
 			Spinner cropSpinner = (Spinner) findViewById(R.id.crop_spinner);
 			ArrayAdapter<String> cropAdapter = new ArrayAdapter<String>(this,
@@ -68,6 +75,12 @@ public class FindFarmersActivity extends Activity implements
 					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			cropSpinner.setAdapter(cropAdapter);
 			cropSpinner.setOnItemSelectedListener(this);
+			
+			if(MarketSaleObject.getMarketObject().getCropName() != null) {
+				int cropPosition = cropAdapter.getPosition(MarketSaleObject.getMarketObject().getCropName());
+				cropSpinner.setSelection(cropPosition);
+			}
+			
 
 		} else if (selectedOption.equalsIgnoreCase("buying")) {
 			String[] districts = DistrictsAndCropsParser.getDistricts()
@@ -84,6 +97,13 @@ public class FindFarmersActivity extends Activity implements
 					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			districtSpinner.setAdapter(districtAdapter);
 			districtSpinner.setOnItemSelectedListener(this);
+			
+			//If a district has already been selected (maybe CKW is coming "back"
+			//set that district to that value
+			if(MarketSaleObject.getMarketObject().getDistrictName() != null) {
+				int districtPosition = districtAdapter.getPosition(MarketSaleObject.getMarketObject().getDistrictName());
+				districtSpinner.setSelection(districtPosition);
+			}
 
 			Spinner cropSpinner = (Spinner) findViewById(R.id.crop_spinner);
 			ArrayAdapter<String> cropAdapter = new ArrayAdapter<String>(this,
@@ -92,6 +112,11 @@ public class FindFarmersActivity extends Activity implements
 					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			cropSpinner.setAdapter(cropAdapter);
 			cropSpinner.setOnItemSelectedListener(this);
+			
+			if(MarketSaleObject.getMarketObject().getCropName() != null) {
+				int cropPosition = cropAdapter.getPosition(MarketSaleObject.getMarketObject().getCropName());
+				cropSpinner.setSelection(cropPosition);
+			}
 
 		}
 	}

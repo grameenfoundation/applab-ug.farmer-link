@@ -10,9 +10,11 @@
                           
                 <ListView android:id="@android:id/list" 
                       android:layout_width="fill_parent" 
-                      android:layout_height="wrap_content"                     
+                      android:layout_height="fill_parent"                     
                       android:layout_above = "@+id/back_find_markets"
                       android:layout_below="@+id/crop"
+                      android:layout_gravity="fill_vertical"
+                      android:scrollbars="vertical"
                       />
                 <Button android:layout_height="wrap_content"
                         android:layout_width="150dip"                         

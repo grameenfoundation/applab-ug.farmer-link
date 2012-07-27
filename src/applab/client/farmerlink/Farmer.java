@@ -50,7 +50,7 @@ public class Farmer {
     
     @Override
     public String toString() {
-        return "Farmer Name: " + getName() + "   Quantity (kgs): " + getQuantity();
+        return "Farmer Name: " + getName() + "\nQuantity (kgs): " + getQuantity();
     }
     
     @Override
