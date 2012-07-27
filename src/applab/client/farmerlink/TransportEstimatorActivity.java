@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TransportEstimatorActivity extends Activity{
 	 private Button nextButton;
@@ -40,14 +41,22 @@ public class TransportEstimatorActivity extends Activity{
 				@Override
 				public void onClick(View arg0) {
 				    transportText = (EditText) findViewById(R.id.transport_cost);
-		            transportCosts = Double.parseDouble(transportText.getText().toString());
-		            MarketSaleObject.getMarketObject().setTransportCost(transportCosts);
-		            
-		            // load intent and show summary activity
-					Intent intent = new Intent(getApplicationContext(), ProjectedSalesActivity.class);
-					intent.putExtra("source", "Market: ");
-					//intent.putExtra("crop", crop);
-					startActivity(intent);
+				    if (transportText.getText().toString().trim().length() > 0) {
+			            transportCosts = Double.parseDouble(transportText.getText().toString());
+			            MarketSaleObject.getMarketObject().setTransportCost(transportCosts);
+			            
+			            // load intent and show summary activity
+						Intent intent = new Intent(getApplicationContext(), ProjectedSalesActivity.class);
+						intent.putExtra("source", "Market: ");
+						//intent.putExtra("crop", crop);
+						startActivity(intent);
+				    }
+				    else {
+				    	Toast toast = Toast.makeText(getApplicationContext(),
+								"Please enter a transport cost",
+								Toast.LENGTH_LONG);
+						toast.show();
+				    }
 				}
 	        	
 	        });

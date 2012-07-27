@@ -68,7 +68,7 @@ public class MarketSaleObject {
     }
     
     public double getTotalTransactionFee() {
-        return 0.1 * getTotalValue();
+        return Math.ceil(0.1 * getTotalValue());
     }
 
     public double getTransportCost() {

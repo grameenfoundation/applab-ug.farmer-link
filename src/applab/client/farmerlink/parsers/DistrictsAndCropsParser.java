@@ -18,7 +18,6 @@ public class DistrictsAndCropsParser {
     private JSONParser jsonParser;
     private static List<String> districts = new ArrayList<String>();
     public static List<String> getDistricts() {
-    	Log.d("DISTRICT COUNT", String.valueOf(districts.size()));
 		return districts;
 	}
 

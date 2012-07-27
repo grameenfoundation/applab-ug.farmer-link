@@ -21,7 +21,7 @@ import applab.client.farmerlink.utilities.XmlEntityBuilder;
 public class DownloadFarmersAndMarketPrices {
 	private String url;
 	public DownloadFarmersAndMarketPrices(String url) {
-		this.url = url;
+		this.url = url;Log.i("URL", url);
 	}
 
 	public List<MarketPrices> downloadFarmersAndMarketPrices(String district, String crop) {
