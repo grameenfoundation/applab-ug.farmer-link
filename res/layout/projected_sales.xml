@@ -108,9 +108,12 @@
                           />
                 <ListView android:id="@android:id/list"
                           android:layout_width="fill_parent"
-                          android:layout_height="wrap_content"
+                          android:layout_height="fill_parent"
                           android:layout_margin="2dip"
                           android:layout_below="@+id/borderline"
+                          android:layout_above="@+id/back_estimate_transport"
+                          android:scrollbars="vertical"
+                          android:layout_gravity="fill_vertical"
                           />
                  <Button android:layout_height="wrap_content"
                         android:layout_width="150dip"                         

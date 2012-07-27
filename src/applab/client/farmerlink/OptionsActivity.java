@@ -25,6 +25,7 @@ public class OptionsActivity extends ListActivity {
         if (MarketSaleObject.getMarketObject() != null) {
         	MarketSaleObject.getMarketObject().setCropName(null);
         	MarketSaleObject.getMarketObject().setDistrictName(null);
+        	MarketSaleObject.getMarketObject().setFarmers(null);
         }
         options = new ArrayList<String>();
         options.add("Selling");
