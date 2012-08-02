@@ -1,5 +1,7 @@
 package applab.client.farmerlink;
 
+import android.util.Log;
+
 public class MarketPrices {
     
     private String marketName;
@@ -32,7 +34,7 @@ public class MarketPrices {
      */
     public double getRetailPriceValue() {
     	if (retailPrice != null) {
-    		return Math.ceil(Double.parseDouble(retailPrice));
+    		return Math.ceil(Double.parseDouble(retailPrice.substring(0, retailPrice.indexOf("S")-1)));
     	}
     	else {
     		return 0;
@@ -43,7 +45,7 @@ public class MarketPrices {
         this.retailPrice = retailPrice;
     }
     public String getWholesalePrice() {
-        return wholesalePrice + " Shs";
+        return wholesalePrice /*+ " Shs"*/;//Log.i("WHOLESALEPRICE", wholesalePrice);
     }
     public double getWholesalePriceValue() {
     	if (wholesalePrice != null) {

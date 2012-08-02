@@ -116,7 +116,7 @@ public class MarketPricesProvider extends ContentProvider {
 
             case MARKETPRICE_ID:
                 qb.setProjectionMap(sInstancesProjectionMap);
-                qb.appendWhere(FarmerColumns._ID + "=" + uri.getPathSegments().get(1));
+                qb.appendWhere(MarketPricesColumns._ID + "=" + uri.getPathSegments().get(1));
                 break;
 
             default:
@@ -139,8 +139,8 @@ public class MarketPricesProvider extends ContentProvider {
 
 	static {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sUriMatcher.addURI(FarmerProviderAPI.AUTHORITY, "marketprices", MARKETPRICES);
-        sUriMatcher.addURI(FarmerProviderAPI.AUTHORITY, "marketprices/#", MARKETPRICE_ID);
+        sUriMatcher.addURI(MarketPricesProviderAPI.AUTHORITY, "marketprices", MARKETPRICES);
+        sUriMatcher.addURI(MarketPricesProviderAPI.AUTHORITY, "marketprices/#", MARKETPRICE_ID);
 
         sInstancesProjectionMap = new HashMap<String, String>();
         sInstancesProjectionMap.put(MarketPricesColumns._ID, MarketPricesColumns._ID);

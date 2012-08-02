@@ -12,5 +12,5 @@
        <TextView android:id ="@+id/wholesale_price"
                   android:layout_height="wrap_content"
                   android:layout_width="fill_parent"                  
-                  android:layout_below="@+id/retail_price"/>
+                  android:layout_below="@+id/market_name"/>
 </RelativeLayout>
