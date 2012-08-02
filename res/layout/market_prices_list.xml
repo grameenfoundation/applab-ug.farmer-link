@@ -9,11 +9,6 @@
                   android:layout_width="fill_parent"
                   android:layout_alignParentTop="true"/>
                   
-        <TextView android:id ="@+id/retail_price"
-                  android:layout_height="wrap_content"
-                  android:layout_width="fill_parent"                  
-                  android:layout_below="@+id/market_name"/>
-                  
        <TextView android:id ="@+id/wholesale_price"
                   android:layout_height="wrap_content"
                   android:layout_width="fill_parent"                  

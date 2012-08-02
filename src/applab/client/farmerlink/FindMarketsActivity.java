@@ -109,11 +109,6 @@ public class FindMarketsActivity extends ListActivity {
 			marketView.setText("Market Name : "
 					+ marketPrices.get(position).getMarketName());
 
-			TextView retailPriceView = (TextView) row
-					.findViewById(R.id.retail_price);
-			retailPriceView.setText("Retail Price : "
-					+ PricesFormatter.formatPrice(marketPrices.get(position).getRetailPriceValue()));
-
 			TextView wholesalePriceView = (TextView) row
 					.findViewById(R.id.wholesale_price);
 			wholesalePriceView.setText("Wholesale Price : "
