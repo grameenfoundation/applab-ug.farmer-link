@@ -11,7 +11,10 @@ import org.json.simple.parser.ContentHandler;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import android.content.ContentValues;
 import android.util.Log;
+import applab.client.farmerlink.MarketLinkApplication;
+import applab.client.farmerlink.provider.DistrictsProviderAPI;
 
 public class DistrictsAndCropsParser {
 
@@ -20,13 +23,20 @@ public class DistrictsAndCropsParser {
     private static List<String> districts = new ArrayList<String>();
     public static List<String> getDistricts() {
     	Collections.sort(districts);
+    	if (districts.contains("Select District")) {
+    		districts.remove("Select District");
+    	}
     	districts.add(0, "Select District");
 		return districts;
 	}
 
 	public static List<String> getCrops() {
 		Collections.sort(crops);
+		if (crops.contains("Select Crop")) {
+			crops.remove("Select Crop");
+		}
 		crops.add(0, "Select Crop");
+		
 		return crops;
 	}
 
@@ -84,8 +94,13 @@ public class DistrictsAndCropsParser {
 
         @Override
         public void endJSON() throws ParseException, IOException {
-        	Log.d(LOG_TAG, "inside endJSON");
-        	Log.d("DISTRICT SIZE", String.valueOf(districts.size()));
+        	
+        	districts.add(0, "Select District");
+        	
+        	for (String district : districts) {
+        		Log.i("DISTRICT", district);
+        		
+        	}
             end = true;
         }
 
@@ -107,6 +122,9 @@ public class DistrictsAndCropsParser {
         		if (key.equalsIgnoreCase("districts")) {
         			if (!districts.contains((String)value)) {
         				districts.add((String)value);
+        				ContentValues values = new ContentValues();
+        				values.put(DistrictsProviderAPI.DistrictsColumns.DISTRICT_NAME, (String)value);
+                		MarketLinkApplication.getInstance().getContentResolver().insert(DistrictsProviderAPI.DistrictsColumns.CONTENT_URI, values);
         			}
         		}
         		else if (key.equalsIgnoreCase("crops")) {

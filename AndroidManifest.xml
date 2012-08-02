@@ -8,7 +8,13 @@
     <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.INTERNET"/>
     <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <application android:icon="@drawable/farmerlink" android:label="@string/app_name">
+    <application android:icon="@drawable/farmerlink" android:label="@string/app_name" android:name="applab.client.farmerlink.MarketLinkApplication">
+        <provider
+			android:name="applab.client.farmerlink.provider.DistrictsProvider"
+			android:authorities="applab.client.farmerlink.provider.farmerlink.districts" />
+		<provider
+			android:name="applab.client.farmerlink.provider.CropsProvider"
+			android:authorities="applab.client.farmerlink.provider.farmerlink.crops" />
         <activity android:name=".OptionsActivity"
                   android:label="@string/app_name">
             <intent-filter>
@@ -40,7 +46,7 @@
         <activity android:name=".FinishSellActivity"
                   android:label="@string/app_name">
         </activity>
-        <activity android:name="FindSuppliersActivity"></activity>/
+        <activity android:name=".FindSuppliersActivity"></activity>/
         
     </application>
 </manifest>

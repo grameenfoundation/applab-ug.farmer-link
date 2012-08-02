@@ -15,12 +15,21 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import applab.client.farmerlink.MarketLinkApplication;
+
 public class OptionsActivity extends ListActivity {
 	List<String> options;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.options);
+        
+        try {
+        	MarketLinkApplication.createMarketLinkDirectories();
+        }
+        catch (Exception ex) {
+        	Log.e("EXCEPTION", ex.getMessage());
+        }
         
         if (MarketSaleObject.getMarketObject() != null) {
         	MarketSaleObject.getMarketObject().setCropName(null);
