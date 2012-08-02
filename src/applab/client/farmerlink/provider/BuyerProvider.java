@@ -32,7 +32,7 @@ public class BuyerProvider extends ContentProvider {
     private static class DatabaseHelper extends MarketLinkSQLiteOpenHelper {
 
 		public DatabaseHelper(String databaseName) {
-			super("/sdcard/marketlink/metadata", databaseName, null, DATABASE_VERSION);
+			super("/sdcard/marketlink/databases", databaseName, null, DATABASE_VERSION);
 		}
 
 		@Override
