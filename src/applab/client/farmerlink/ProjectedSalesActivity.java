@@ -107,8 +107,8 @@ public class ProjectedSalesActivity extends ListActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
 
-            double revenue = farmers.get(position).computeRevenue(MarketSaleObject.getMarketObject().getMarketPrices().getRetailPriceValue());
-            double transactionFee = farmers.get(position).computeTransactionFee(MarketSaleObject.getMarketObject().getMarketPrices().getRetailPriceValue());
+            double revenue = farmers.get(position).computeRevenue(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue());
+            double transactionFee = farmers.get(position).computeTransactionFee(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue());
             
             View row = inflater.inflate(R.layout.projected_sales_list, parent, false);
             TextView marketView = (TextView)row.findViewById(R.id.farmer_name_text);
