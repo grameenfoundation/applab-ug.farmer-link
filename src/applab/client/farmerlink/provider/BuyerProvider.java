@@ -138,8 +138,8 @@ public class BuyerProvider extends ContentProvider {
 
 	static {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sUriMatcher.addURI(CropsProviderAPI.AUTHORITY, "buyers", BUYERS);
-        sUriMatcher.addURI(CropsProviderAPI.AUTHORITY, "buyers/#", BUYER_ID);
+        sUriMatcher.addURI(BuyerProviderAPI.AUTHORITY, "buyers", BUYERS);
+        sUriMatcher.addURI(BuyerProviderAPI.AUTHORITY, "buyers/#", BUYER_ID);
 
         sInstancesProjectionMap = new HashMap<String, String>();
         sInstancesProjectionMap.put(BuyersColumns._ID, BuyersColumns._ID);
