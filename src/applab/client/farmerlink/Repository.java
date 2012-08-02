@@ -57,6 +57,7 @@ public class Repository {
 		    farmers.add(farmer);
 		    farmerCursor.moveToNext();
 		}
+		farmerCursor.close();
     	return farmers;
     }
 
