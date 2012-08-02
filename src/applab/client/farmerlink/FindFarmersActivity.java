@@ -1,5 +1,6 @@
 package applab.client.farmerlink;
 
+import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
@@ -25,6 +26,7 @@ public class FindFarmersActivity extends Activity implements
 	private String selectedOption;
 	private Spinner districtSpinner;
 	private List<String> districts;
+	private List<String> crops;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,28 +43,22 @@ public class FindFarmersActivity extends Activity implements
 				buttonClicked(view);
 			}
 		});
-		/*DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops(
-				getString(R.string.server) + "/" + "FarmerLink"
-						+ getString(R.string.districts_crops));
-		downloadDistrictsAndCrops.download();*/
+
 		districts = Repository.getDistricts(getString(R.string.server) + "/" + "FarmerLink"
 				+ getString(R.string.districts_crops));
+		Collections.sort(districts);
+		districts.add(0, "Select District");
+		crops = Repository.getCrops(getString(R.string.server) + "/" + "FarmerLink"
+				+ getString(R.string.districts_crops));
+		//Collections.sort(crops);
+		crops.add(0, "Select Crop");
 
 		if (selectedOption.equalsIgnoreCase("selling")) {
 
-			String[] districts = DistrictsAndCropsParser.getDistricts()
-					.toArray(
-							new String[DistrictsAndCropsParser.getDistricts()
-									.size()]);
-			String[] crops = Repository.getCrops(getString(R.string.server) + "/" + "FarmerLink"
-					+ getString(R.string.districts_crops)).toArray(
-					new String[Repository.getCrops(getString(R.string.server) + "/" + "FarmerLink"
-							+ getString(R.string.districts_crops)).size()]);
-			
 			districtSpinner = (Spinner) findViewById(R.id.district_spinner);
 			districtSpinner.setAdapter(null);
 			ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(
-					this, android.R.layout.simple_spinner_item, districts);
+					this, android.R.layout.simple_spinner_item, districts.toArray(new String[districts.size()]));
 			districtAdapter
 					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			districtSpinner.setAdapter(districtAdapter);
@@ -77,7 +73,7 @@ public class FindFarmersActivity extends Activity implements
 
 			Spinner cropSpinner = (Spinner) findViewById(R.id.crop_spinner);
 			ArrayAdapter<String> cropAdapter = new ArrayAdapter<String>(this,
-					android.R.layout.simple_spinner_item, crops);
+					android.R.layout.simple_spinner_item, crops.toArray(new String[crops.size()]));
 			cropAdapter
 					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			cropSpinner.setAdapter(cropAdapter);
@@ -90,16 +86,10 @@ public class FindFarmersActivity extends Activity implements
 			
 
 		} else if (selectedOption.equalsIgnoreCase("buying")) {
-			String[] districts = DistrictsAndCropsParser.getDistricts()
-					.toArray(
-							new String[DistrictsAndCropsParser.getDistricts()
-									.size()]);
-			String[] crops = DistrictsAndCropsParser.getCrops().toArray(
-					new String[DistrictsAndCropsParser.getCrops().size()]);
-			Log.d("districtsCountBuying", String.valueOf(districts.length));
+			
 			districtSpinner = (Spinner) findViewById(R.id.district_spinner);
 			ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(
-					this, android.R.layout.simple_spinner_item, districts);
+					this, android.R.layout.simple_spinner_item, districts.toArray(new String[districts.size()]));
 			districtAdapter
 					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			districtSpinner.setAdapter(districtAdapter);
@@ -114,7 +104,7 @@ public class FindFarmersActivity extends Activity implements
 
 			Spinner cropSpinner = (Spinner) findViewById(R.id.crop_spinner);
 			ArrayAdapter<String> cropAdapter = new ArrayAdapter<String>(this,
-					android.R.layout.simple_spinner_item, crops);
+					android.R.layout.simple_spinner_item, crops.toArray(new String[crops.size()]));
 			cropAdapter
 					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			cropSpinner.setAdapter(cropAdapter);

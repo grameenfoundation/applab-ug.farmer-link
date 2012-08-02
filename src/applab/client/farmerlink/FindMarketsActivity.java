@@ -44,7 +44,7 @@ public class FindMarketsActivity extends ListActivity {
 		/*DownloadFarmersAndMarketPrices fmdt = new DownloadFarmersAndMarketPrices(
 				getString(R.string.server) + "/" + "FarmerLink"
 						+ getString(R.string.farmers_market_prices));
-		marketPrices = fmdt.downloadFarmersAndMarketPrices(district, crop);*/
+		fmdt.downloadFarmersAndMarketPrices(district, crop);*/
 		marketPrices = Repository.getMarketPricesByDistrictAndCrop(getString(R.string.server) + "/" + "FarmerLink"
 				+ getString(R.string.farmers_market_prices), crop, district);
 

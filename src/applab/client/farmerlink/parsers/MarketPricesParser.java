@@ -10,20 +10,61 @@ import org.json.simple.parser.ContentHandler;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.util.Log;
 import applab.client.farmerlink.Farmer;
+import applab.client.farmerlink.MarketLinkApplication;
 import applab.client.farmerlink.MarketPrices;
 import applab.client.farmerlink.MarketSaleObject;
+import applab.client.farmerlink.provider.BuyerProviderAPI;
+import applab.client.farmerlink.provider.CropsProviderAPI;
+import applab.client.farmerlink.provider.DistrictsProviderAPI;
+import applab.client.farmerlink.provider.CropsProviderAPI.CropsColumns;
+import applab.client.farmerlink.provider.DistrictsProviderAPI.DistrictsColumns;
+import applab.client.farmerlink.provider.FarmerProviderAPI;
+import applab.client.farmerlink.provider.MarketPricesProviderAPI;
 
 public class MarketPricesParser {
 
     private FarmersAndMarketPricesContentHandler contentHandler;
     private JSONParser jsonParser;
+    private String districtId;
+    private String cropId;
     private static ArrayList<Farmer> farmers = new ArrayList<Farmer>();
     public static ArrayList<Farmer> getFarmers() {
 		return farmers;
 	}
 
+    public MarketPricesParser(String district, String crop) {
+    	String districtSelection = DistrictsColumns.DISTRICT_NAME + "=?";
+		String[] districtSelectionArgs = {district};
+		Cursor districtCursor = MarketLinkApplication.getInstance().getContentResolver().
+				query(DistrictsProviderAPI.DistrictsColumns.CONTENT_URI, null, districtSelection, districtSelectionArgs, null);
+		
+		districtCursor.moveToFirst();
+		while (districtCursor.isAfterLast() == false) 
+		{
+		    districtId = districtCursor.getString(districtCursor.getColumnIndex(DistrictsProviderAPI.DistrictsColumns._ID));
+		    districtCursor.moveToNext();
+		}
+		
+		districtCursor.close();
+		
+		String cropSelection = CropsColumns.CROP_NAME + "=?";
+		String[] cropSelectionArgs = {crop};
+		Cursor cropsCursor = MarketLinkApplication.getInstance().getContentResolver().
+				query(CropsProviderAPI.CropsColumns.CONTENT_URI, null, cropSelection, cropSelectionArgs, null);
+		
+		cropsCursor.moveToFirst();
+		while (cropsCursor.isAfterLast() == false) 
+		{
+		    cropId = cropsCursor.getString(cropsCursor.getColumnIndex(CropsProviderAPI.CropsColumns._ID));
+		    cropsCursor.moveToNext();
+		}
+		cropsCursor.close();
+    }
+    
 	public static List<MarketPrices> getMarketPrices() {
 		for (MarketPrices marketPrice : marketPrices) {
 			Log.d("MKT_PX", marketPrice.getMarketName() + marketPrice.getRetailPrice() + "-" + marketPrice.getWholesalePrice());
@@ -58,7 +99,23 @@ public class MarketPricesParser {
         }
     }
 
-    // Save market prices to database
+    public String getDistrictId() {
+		return districtId;
+	}
+
+	public void setDistrictId(String districtId) {
+		this.districtId = districtId;
+	}
+
+	public String getCropId() {
+		return cropId;
+	}
+
+	public void setCropId(String cropId) {
+		this.cropId = cropId;
+	}
+
+	// Save market prices to database
     private void saveMarketPrices(String districtName) {
 
     }
@@ -124,6 +181,13 @@ public class MarketPricesParser {
         			else if (key.equalsIgnoreCase("Id")) {
         				farmer.setId(value.toString());
         				farmers.add(farmer);
+        				ContentValues values = new ContentValues();
+        				values.put(FarmerProviderAPI.FarmerColumns.FARMER_NAME, farmer.getName());
+        				values.put(FarmerProviderAPI.FarmerColumns.FARMER_MOBILE, farmer.getPhoneNumber());
+        				values.put(FarmerProviderAPI.FarmerColumns.FARMER_ID, farmer.getId());
+        				values.put(FarmerProviderAPI.FarmerColumns.DISTRICT_ID, districtId);
+        				values.put(FarmerProviderAPI.FarmerColumns.CROP_ID, cropId);
+        				MarketLinkApplication.getInstance().getContentResolver().insert(FarmerProviderAPI.FarmerColumns.CONTENT_URI, values);
         			}
         			
         		}
@@ -140,9 +204,15 @@ public class MarketPricesParser {
         				}
         			}
         			else if (key.equalsIgnoreCase("MarketName")) {
-        				Log.d("CREATING MKT", "we are in here so market is added");
         				marketPrice.setMarketName(value.toString());
         				marketPrices.add(marketPrice);
+        				ContentValues values = new ContentValues();
+        				values.put(MarketPricesProviderAPI.MarketPricesColumns.WHOLESALE_PRICE, marketPrice.getWholesalePrice());
+        				values.put(MarketPricesProviderAPI.MarketPricesColumns.RETAIL_PRICE, marketPrice.getRetailPrice());
+        				values.put(MarketPricesProviderAPI.MarketPricesColumns.MARKET_NAME, marketPrice.getMarketName());
+        				values.put(MarketPricesProviderAPI.MarketPricesColumns.DISTRICT_ID, districtId);
+        				values.put(MarketPricesProviderAPI.MarketPricesColumns.CROP_ID, cropId);
+        				MarketLinkApplication.getInstance().getContentResolver().insert(MarketPricesProviderAPI.MarketPricesColumns.CONTENT_URI, values);
         			}
         		}
         	}

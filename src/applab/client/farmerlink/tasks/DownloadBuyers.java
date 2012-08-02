@@ -44,7 +44,7 @@ public class DownloadBuyers {
             FileInputStream inputStream = new FileInputStream(file);
 
             if (downloadSuccessful && inputStream != null) {
-            	BuyersParser buyersParser = new BuyersParser();
+            	BuyersParser buyersParser = new BuyersParser(district, crop);
             	try {
             		Log.d("PARSING", "parsing begins ...");
             		buyersParser.parse(inputStream);

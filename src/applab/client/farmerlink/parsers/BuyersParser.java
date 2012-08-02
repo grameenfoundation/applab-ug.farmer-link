@@ -10,17 +10,70 @@ import org.json.simple.parser.ContentHandler;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.util.Log;
 import applab.client.farmerlink.Buyer;
 import applab.client.farmerlink.Farmer;
+import applab.client.farmerlink.MarketLinkApplication;
 import applab.client.farmerlink.MarketPrices;
 import applab.client.farmerlink.parsers.MarketPricesParser.FarmersAndMarketPricesContentHandler;
+import applab.client.farmerlink.provider.BuyerProviderAPI;
+import applab.client.farmerlink.provider.CropsProviderAPI;
+import applab.client.farmerlink.provider.CropsProviderAPI.CropsColumns;
+import applab.client.farmerlink.provider.DistrictsProviderAPI;
+import applab.client.farmerlink.provider.DistrictsProviderAPI.DistrictsColumns;
 
 public class BuyersParser {
 	private JSONParser jsonParser;
 	private BuyersContentHandler contentHandler;
 	private static List<Buyer> buyers = new ArrayList<Buyer>();
+	private String districtId;
+	public String getDistrictId() {
+		return districtId;
+	}
+	public void setDistrictId(String districtId) {
+		this.districtId = districtId;
+	}
+
+	private String cropId;
 	
+	public String getCropId() {
+		return cropId;
+	}
+	public void setCropId(String cropId) {
+		this.cropId = cropId;
+	}
+	public BuyersParser(String district, String crop) {
+		
+		String districtSelection = DistrictsColumns.DISTRICT_NAME + "=?";
+		String[] districtSelectionArgs = {district};
+		Cursor districtCursor = MarketLinkApplication.getInstance().getContentResolver().
+				query(DistrictsProviderAPI.DistrictsColumns.CONTENT_URI, null, districtSelection, districtSelectionArgs, null);
+		
+		districtCursor.moveToFirst();
+		while (districtCursor.isAfterLast() == false) 
+		{
+		    districtId = districtCursor.getString(districtCursor.getColumnIndex(DistrictsProviderAPI.DistrictsColumns._ID));
+		    districtCursor.moveToNext();
+		}
+		
+		districtCursor.close();
+		
+		String cropSelection = CropsColumns.CROP_NAME + "=?";
+		String[] cropSelectionArgs = {crop};
+		Cursor cropsCursor = MarketLinkApplication.getInstance().getContentResolver().
+				query(CropsProviderAPI.CropsColumns.CONTENT_URI, null, cropSelection, cropSelectionArgs, null);
+		
+		cropsCursor.moveToFirst();
+		while (cropsCursor.isAfterLast() == false) 
+		{
+		    cropId = cropsCursor.getString(cropsCursor.getColumnIndex(CropsProviderAPI.CropsColumns._ID));
+		    cropsCursor.moveToNext();
+		}
+		cropsCursor.close();
+		
+	}
 	public static List<Buyer> getBuyers() {
 		Log.i("BUYERS COUNT", String.valueOf(buyers.size()));
 		return buyers;
@@ -92,6 +145,13 @@ public class BuyersParser {
         			else if (key.equalsIgnoreCase("Contact") && null != value) {
         				buyer.setTelephone((String)value);
         				buyers.add(buyer);
+        				ContentValues values = new ContentValues();
+        				values.put(BuyerProviderAPI.BuyersColumns.BUYER_NAME, buyer.getName());
+        				values.put(BuyerProviderAPI.BuyersColumns.BUYER_LOCATION, buyer.getLocation());
+        				values.put(BuyerProviderAPI.BuyersColumns.BUYER_TELEPHONE, buyer.getTelephone());
+        				values.put(BuyerProviderAPI.BuyersColumns.DISTRICT_ID, districtId);
+        				values.put(BuyerProviderAPI.BuyersColumns.CROP_ID, cropId);
+        				MarketLinkApplication.getInstance().getContentResolver().insert(BuyerProviderAPI.BuyersColumns.CONTENT_URI, values);
         				buyer = new Buyer();
         			}
         		}

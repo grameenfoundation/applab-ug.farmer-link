@@ -10,10 +10,8 @@ public class MarketLinkApplication extends Application {
 
     // Storage paths
     public static final String MARKETLINK_ROOT = Environment.getExternalStorageDirectory() + "/marketlink";
-    public static final String DISTRICTS_PATH = MARKETLINK_ROOT + "/districts";
-    public static final String CROPS_PATH = MARKETLINK_ROOT + "/crops";
     public static final String CACHE_PATH = MARKETLINK_ROOT + "/.cache";
-    public static final String METADATA_PATH = MARKETLINK_ROOT + "/metadata";
+    public static final String METADATA_PATH = MARKETLINK_ROOT + "/databases";
     
 	private static MarketLinkApplication singleton = null;
 
@@ -27,7 +25,7 @@ public class MarketLinkApplication extends Application {
      * @throws RuntimeException if there is no SDCard or the directory exists as a non directory
      */
     public static void createMarketLinkDirectories() throws RuntimeException {
-    	Log.i("DIRECTORIES", "creating directories");
+
         String cardstatus = Environment.getExternalStorageState();
         if (cardstatus.equals(Environment.MEDIA_REMOVED)
                 || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE)
@@ -41,7 +39,7 @@ public class MarketLinkApplication extends Application {
         }
 
         String[] dirs = {
-        		MARKETLINK_ROOT, DISTRICTS_PATH, CROPS_PATH, CACHE_PATH, METADATA_PATH
+        		MARKETLINK_ROOT, CACHE_PATH, METADATA_PATH
         };
 
         for (String dirName : dirs) {

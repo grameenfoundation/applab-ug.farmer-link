@@ -14,6 +14,7 @@ import org.json.simple.parser.ParseException;
 import android.content.ContentValues;
 import android.util.Log;
 import applab.client.farmerlink.MarketLinkApplication;
+import applab.client.farmerlink.provider.CropsProviderAPI;
 import applab.client.farmerlink.provider.DistrictsProviderAPI;
 
 public class DistrictsAndCropsParser {
@@ -22,20 +23,20 @@ public class DistrictsAndCropsParser {
     private JSONParser jsonParser;
     private static List<String> districts = new ArrayList<String>();
     public static List<String> getDistricts() {
-    	Collections.sort(districts);
+    	/*Collections.sort(districts);
     	if (districts.contains("Select District")) {
     		districts.remove("Select District");
     	}
-    	districts.add(0, "Select District");
+    	districts.add(0, "Select District");*/
 		return districts;
 	}
 
 	public static List<String> getCrops() {
-		Collections.sort(crops);
+		/*Collections.sort(crops);
 		if (crops.contains("Select Crop")) {
 			crops.remove("Select Crop");
 		}
-		crops.add(0, "Select Crop");
+		crops.add(0, "Select Crop");*/
 		
 		return crops;
 	}
@@ -130,6 +131,9 @@ public class DistrictsAndCropsParser {
         		else if (key.equalsIgnoreCase("crops")) {
         			if (!crops.contains((String)value)) {
         				crops.add((String)value);
+        				ContentValues values = new ContentValues();
+        				values.put(CropsProviderAPI.CropsColumns.CROP_NAME, (String)value);
+                		MarketLinkApplication.getInstance().getContentResolver().insert(CropsProviderAPI.CropsColumns.CONTENT_URI, values);
         			}
         		}
         	}

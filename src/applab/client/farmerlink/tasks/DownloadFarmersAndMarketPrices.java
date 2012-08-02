@@ -44,7 +44,7 @@ public class DownloadFarmersAndMarketPrices {
             FileInputStream inputStream = new FileInputStream(file);
 
             if (downloadSuccessful && inputStream != null) {
-            	MarketPricesParser marketPricesParser = new MarketPricesParser();
+            	MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
             	try {
             		Log.d("PARSING", "parsing begins ...");
 					marketPricesParser.parse(inputStream);

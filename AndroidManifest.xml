@@ -15,6 +15,15 @@
 		<provider
 			android:name="applab.client.farmerlink.provider.CropsProvider"
 			android:authorities="applab.client.farmerlink.provider.farmerlink.crops" />
+		<provider
+			android:name="applab.client.farmerlink.provider.FarmerProvider"
+			android:authorities="applab.client.farmerlink.provider.farmerlink.farmers" />
+		<provider
+			android:name="applab.client.farmerlink.provider.BuyerProvider"
+			android:authorities="applab.client.farmerlink.provider.farmerlink.buyers" />
+		<provider
+			android:name="applab.client.farmerlink.provider.MarketPricesProvider"
+			android:authorities="applab.client.farmerlink.provider.farmerlink.marketprices" />
         <activity android:name=".OptionsActivity"
                   android:label="@string/app_name">
             <intent-filter>

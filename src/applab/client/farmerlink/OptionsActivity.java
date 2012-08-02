@@ -26,6 +26,8 @@ public class OptionsActivity extends ListActivity {
         
         try {
         	MarketLinkApplication.createMarketLinkDirectories();
+        	Repository.getDistricts(getString(R.string.server) + "/" + "FarmerLink"
+    				+ getString(R.string.districts_crops));
         }
         catch (Exception ex) {
         	Log.e("EXCEPTION", ex.getMessage());
