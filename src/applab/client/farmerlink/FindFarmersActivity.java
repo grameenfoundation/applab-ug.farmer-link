@@ -48,9 +48,10 @@ public class FindFarmersActivity extends Activity implements
 				+ getString(R.string.districts_crops));
 		Collections.sort(districts);
 		districts.add(0, "Select District");
-		crops = Repository.getCrops(getString(R.string.server) + "/" + "FarmerLink"
-				+ getString(R.string.districts_crops));
-		//Collections.sort(crops);
+		crops = Repository.getCropsFromDb();
+		if (crops.contains("Select Crop")) {
+			crops.remove("Select crop");
+		}
 		crops.add(0, "Select Crop");
 
 		if (selectedOption.equalsIgnoreCase("selling")) {

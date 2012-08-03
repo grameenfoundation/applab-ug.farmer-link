@@ -6,6 +6,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,10 @@ public class PotentialBuyersActivity extends ListActivity {
 		buyers = downloadBuyers.downloadBuyers(district, crop);*/
 		buyers = Repository.getBuyersByDistrictAndCrop(getString(R.string.server) + "/" + "FarmerLink"
 				+ getString(R.string.buyers), district, crop);
+		Log.i("BUYERCOUNT", String.valueOf(buyers.size()));
+		for (Buyer buyer : buyers) {
+			Log.i("BUYER", buyer.getName() + "-" + buyer.getLocation());
+		}
 
 		setListAdapter(new BuyersAdapter());
 
