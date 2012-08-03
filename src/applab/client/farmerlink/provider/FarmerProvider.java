@@ -125,6 +125,8 @@ public class FarmerProvider extends ContentProvider {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
         // Tell the cursor what uri to watch, so it knows when its source data changes
+        String queryString = qb.buildQuery(null, selection, selectionArgs, null, null, sortOrder, null);
+        Log.i("QUERYSTRING", queryString);
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
 	}
