@@ -205,14 +205,15 @@ public class MarketPricesParser {
         			}
         			else if (key.equalsIgnoreCase("MarketName")) {
         				marketPrice.setMarketName(value.toString());
-        				marketPrices.add(marketPrice);
-        				ContentValues values = new ContentValues();
-        				values.put(MarketPricesProviderAPI.MarketPricesColumns.WHOLESALE_PRICE, marketPrice.getWholesalePrice());
-        				values.put(MarketPricesProviderAPI.MarketPricesColumns.RETAIL_PRICE, marketPrice.getRetailPrice());
-        				values.put(MarketPricesProviderAPI.MarketPricesColumns.MARKET_NAME, marketPrice.getMarketName());
-        				values.put(MarketPricesProviderAPI.MarketPricesColumns.DISTRICT_ID, districtId);
-        				values.put(MarketPricesProviderAPI.MarketPricesColumns.CROP_ID, cropId);
-        				MarketLinkApplication.getInstance().getContentResolver().insert(MarketPricesProviderAPI.MarketPricesColumns.CONTENT_URI, values);
+        				if (null != marketPrice.getWholesalePrice()) {
+	        				ContentValues values = new ContentValues();
+	        				values.put(MarketPricesProviderAPI.MarketPricesColumns.WHOLESALE_PRICE, marketPrice.getWholesalePrice());
+	        				values.put(MarketPricesProviderAPI.MarketPricesColumns.RETAIL_PRICE, marketPrice.getRetailPrice());
+	        				values.put(MarketPricesProviderAPI.MarketPricesColumns.MARKET_NAME, marketPrice.getMarketName());
+	        				values.put(MarketPricesProviderAPI.MarketPricesColumns.DISTRICT_ID, districtId);
+	        				values.put(MarketPricesProviderAPI.MarketPricesColumns.CROP_ID, cropId);
+	        				MarketLinkApplication.getInstance().getContentResolver().insert(MarketPricesProviderAPI.MarketPricesColumns.CONTENT_URI, values);
+        				}
         			}
         		}
         	}
