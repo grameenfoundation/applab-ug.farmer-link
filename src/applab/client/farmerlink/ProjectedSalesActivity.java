@@ -83,8 +83,7 @@ public class ProjectedSalesActivity extends ListActivity {
         quantityTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTotalQuantity()) + " Kg");
 
         priceTextView = (TextView)findViewById(R.id.kg_price_value);
-        //priceTextView.setText(String.valueOf(MarketSaleObject.getMarketObject().getMarketPrices().getRetailPrice()));
-        priceTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getMarketPrices().getRetailPriceValue()) + " Shs");
+        priceTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue()) + " Shs");
 
         totalValueTextView = (TextView)findViewById(R.id.total_value);
         totalValueTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTotalValue()) + " Shs");

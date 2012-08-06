@@ -37,6 +37,7 @@ public class FarmerProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			Log.i("DB CREATION", "creating Farmers database");
 			db.execSQL("CREATE TABLE " + FARMERS_TABLE_NAME + " (" 
 		               + FarmerColumns._ID + " integer primary key, " 
 		               + FarmerColumns.FARMER_NAME + " text not null, "
@@ -125,6 +126,8 @@ public class FarmerProvider extends ContentProvider {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
         // Tell the cursor what uri to watch, so it knows when its source data changes
+        String queryString = qb.buildQuery(null, selection, selectionArgs, null, null, sortOrder, null);
+        Log.i("QUERYSTRING", queryString);
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
 	}

@@ -37,6 +37,7 @@ public class CropsProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			Log.i("DB CREATION", "creating Crops database");
 		db.execSQL("CREATE TABLE " + CROPS_TABLE_NAME + " (" + CropsColumns._ID
                     + " integer primary key, " + CropsColumns.CROP_NAME + " text not null);");
 		}

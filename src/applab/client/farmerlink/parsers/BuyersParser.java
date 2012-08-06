@@ -45,7 +45,8 @@ public class BuyersParser {
 		this.cropId = cropId;
 	}
 	public BuyersParser(String district, String crop) {
-		
+		Log.i("DISTRICT", district);
+		Log.i("CROP", crop);
 		String districtSelection = DistrictsColumns.DISTRICT_NAME + "=?";
 		String[] districtSelectionArgs = {district};
 		Cursor districtCursor = MarketLinkApplication.getInstance().getContentResolver().

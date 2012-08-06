@@ -65,7 +65,7 @@ public class MarketSaleObject {
     }
     
     public double getTotalValue() {
-        return getTotalQuantity() * marketPrices.getRetailPriceValue();
+        return getTotalQuantity() * marketPrices.getWholesalePriceValue();
     }
     
     public double getTotalTransactionFee() {

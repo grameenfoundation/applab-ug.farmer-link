@@ -25,6 +25,8 @@ public class BuyerProvider extends ContentProvider {
 
     private static final int BUYERS = 1;
     private static final int BUYER_ID = 2;
+    private static final int DISTRICT_ID = 3;
+    private static final int CROP_ID = 4;
     
     private static HashMap<String, String> sInstancesProjectionMap;
     private static final UriMatcher sUriMatcher;
@@ -55,7 +57,7 @@ public class BuyerProvider extends ContentProvider {
 		}
     	
     }
-    private DatabaseHelper mDbHelper;
+    public DatabaseHelper mDbHelper;
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -75,7 +77,7 @@ public class BuyerProvider extends ContentProvider {
         if (sUriMatcher.match(uri) != BUYERS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
-
+        Log.i("INSERTBUYER", "inserting buyer");
         ContentValues values;
         if (initialValues != null) {
             values = new ContentValues(initialValues);
@@ -114,16 +116,22 @@ public class BuyerProvider extends ContentProvider {
                 break;
 
             case BUYER_ID:
+            	Log.i("BUYERID", "buyer id matched");
                 qb.setProjectionMap(sInstancesProjectionMap);
                 qb.appendWhere(BuyersColumns._ID + "=" + uri.getPathSegments().get(1));
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+            	//qb.setProjectionMap(sInstancesProjectionMap);
+            	//qb.appendWhere(BuyersColumns.DISTRICT_ID + "=" + selectionArgs[0] + "and " + BuyersColumns.CROP_ID + "=" + selectionArgs[1]);
+            	throw new IllegalArgumentException("Unknown URI " + uri);
+            	//break;
         }
         // Get the database and run the query
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        String queryString = qb.buildQuery(null, selection, selectionArgs, null, null, sortOrder, null);
+        Log.i("QUERYSTRING", queryString);
         // Tell the cursor what uri to watch, so it knows when its source data changes
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
@@ -139,7 +147,9 @@ public class BuyerProvider extends ContentProvider {
 	static {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         sUriMatcher.addURI(BuyerProviderAPI.AUTHORITY, "buyers", BUYERS);
-        sUriMatcher.addURI(BuyerProviderAPI.AUTHORITY, "buyers/#", BUYER_ID);
+        sUriMatcher.addURI(BuyerProviderAPI.AUTHORITY, "buyer/#", BUYER_ID);
+        sUriMatcher.addURI(BuyerProviderAPI.AUTHORITY, "buyer/crop", CROP_ID);
+        
 
         sInstancesProjectionMap = new HashMap<String, String>();
         sInstancesProjectionMap.put(BuyersColumns._ID, BuyersColumns._ID);

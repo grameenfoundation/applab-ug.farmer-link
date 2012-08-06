@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +47,10 @@ public class PotentialBuyersActivity extends ListActivity {
 		buyers = downloadBuyers.downloadBuyers(district, crop);*/
 		buyers = Repository.getBuyersByDistrictAndCrop(getString(R.string.server) + "/" + "FarmerLink"
 				+ getString(R.string.buyers), district, crop);
+		Log.i("BUYERCOUNT", String.valueOf(buyers.size()));
+		for (Buyer buyer : buyers) {
+			Log.i("BUYER", buyer.getName() + "-" + buyer.getLocation());
+		}
 
 		ListView listView = (ListView) findViewById(android.R.id.list);
 		registerForContextMenu(listView);

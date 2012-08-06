@@ -38,6 +38,7 @@ public class MarketPricesProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			Log.i("DB CREATION", "creating Market Prices database");
 			db.execSQL("CREATE TABLE " + MARKETPRICES_TABLE_NAME + " (" 
 		               + MarketPricesColumns._ID + " integer primary key, " 
 		               + MarketPricesColumns.WHOLESALE_PRICE + " text not null, "
@@ -56,7 +57,7 @@ public class MarketPricesProvider extends ContentProvider {
 		}
     	
     }
-    private DatabaseHelper mDbHelper;
+    public DatabaseHelper mDbHelper;
     
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -126,6 +127,8 @@ public class MarketPricesProvider extends ContentProvider {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
         // Tell the cursor what uri to watch, so it knows when its source data changes
+        String queryString = qb.buildQuery(null, selection, selectionArgs, null, null, sortOrder, null);
+        Log.i("QUERYSTRING", queryString);
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
 	}

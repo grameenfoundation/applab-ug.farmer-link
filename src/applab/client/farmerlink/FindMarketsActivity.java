@@ -27,12 +27,6 @@ public class FindMarketsActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
-		// Get data from intent
-		/*
-		 * Bundle bundle = getIntent().getExtras(); crop =
-		 * bundle.getString(GlobalConstants.CROP); district =
-		 * bundle.getString(GlobalConstants.DISTRICT);
-		 */
 		district = MarketSaleObject.getMarketObject().getDistrictName();
 		crop = MarketSaleObject.getMarketObject().getCropName();
 
@@ -41,12 +35,10 @@ public class FindMarketsActivity extends ListActivity {
 
 		commodityName += crop;
 
-		/*DownloadFarmersAndMarketPrices fmdt = new DownloadFarmersAndMarketPrices(
-				getString(R.string.server) + "/" + "FarmerLink"
-						+ getString(R.string.farmers_market_prices));
-		fmdt.downloadFarmersAndMarketPrices(district, crop);*/
-		marketPrices = Repository.getMarketPricesByDistrictAndCrop(getString(R.string.server) + "/" + "FarmerLink"
-				+ getString(R.string.farmers_market_prices), crop, district);
+		marketPrices = Repository.getMarketPricesFromDb(district, crop);
+		if (marketPrices.size() == 0) {
+			marketPrices.add(new MarketPrices("NONE", null, "NO MARKET PRICES"));
+		}
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.find_markets);
@@ -82,11 +74,16 @@ public class FindMarketsActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 
 		MarketPrices market = marketPrices.get(position);
-		Intent intent = new Intent(getApplicationContext(),
-				TransportEstimatorActivity.class);
-		MarketSaleObject.getMarketObject().setMarketPrices(market);
-		// intent.putExtra(GlobalConstants.CROP, crop);
-		startActivity(intent);
+		if (!market.getMarketName().equalsIgnoreCase("NONE")) {
+			Intent intent = new Intent(getApplicationContext(),
+					TransportEstimatorActivity.class);
+			MarketSaleObject.getMarketObject().setMarketPrices(market);
+			startActivity(intent);
+		}
+		else {
+			Intent finish = new Intent(this, FinishSellActivity.class);
+			startActivity(finish);
+		}
 	}
 
 	class PricesAdapter extends ArrayAdapter<MarketPrices> {
@@ -95,30 +92,34 @@ public class FindMarketsActivity extends ListActivity {
 			
 			super(FindMarketsActivity.this, R.layout.market_prices_list,
 					R.id.market_name, marketPrices);
-			Log.d("MKT PRX", String.valueOf(marketPrices.size()));
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = getLayoutInflater();
-
 			View row = inflater.inflate(R.layout.market_prices_list, parent,
 					false);
 			if (marketPrices.size() > 0) {
-			TextView marketView = (TextView) row.findViewById(R.id.market_name);
-			marketView.setText("Market Name : "
-					+ marketPrices.get(position).getMarketName());
-
-			TextView wholesalePriceView = (TextView) row
-					.findViewById(R.id.wholesale_price);
-			wholesalePriceView.setText("Wholesale Price : "
-					+ PricesFormatter.formatPrice(marketPrices.get(position).getWholesalePriceValue()));
+				TextView marketView = (TextView) row.findViewById(R.id.market_name);
+				if (marketPrices.get(position).getMarketName().equalsIgnoreCase("NONE")) {
+					TextView wholesalePriceView = (TextView) row
+							.findViewById(R.id.wholesale_price);
+					wholesalePriceView.setText(marketPrices.get(position).getWholesalePrice());
+				}
+				else {
+					marketView.setText("Market Name : "
+							+ marketPrices.get(position).getMarketName());
+		
+					TextView wholesalePriceView = (TextView) row
+							.findViewById(R.id.wholesale_price);
+					wholesalePriceView.setText("Wholesale Price : "
+							+ PricesFormatter.formatPrice(marketPrices.get(position).getWholesalePriceValue()));
+				}
 			}
 			else {
 				TextView marketView = (TextView) row.findViewById(R.id.market_name);
 				marketView.setText("NO MARKET PRICES FOUND");
 			}
-
 			return row;
 		}
 	}

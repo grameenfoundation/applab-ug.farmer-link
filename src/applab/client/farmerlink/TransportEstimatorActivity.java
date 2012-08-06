@@ -48,7 +48,6 @@ public class TransportEstimatorActivity extends Activity{
 			            // load intent and show summary activity
 						Intent intent = new Intent(getApplicationContext(), ProjectedSalesActivity.class);
 						intent.putExtra("source", "Market: ");
-						//intent.putExtra("crop", crop);
 						startActivity(intent);
 				    }
 				    else {

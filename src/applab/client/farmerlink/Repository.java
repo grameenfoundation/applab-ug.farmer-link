@@ -10,7 +10,6 @@ import android.util.Log;
 import applab.client.farmerlink.parsers.BuyersParser;
 import applab.client.farmerlink.parsers.DistrictsAndCropsParser;
 import applab.client.farmerlink.parsers.MarketPricesParser;
-import applab.client.farmerlink.provider.BuyerProvider;
 import applab.client.farmerlink.provider.BuyerProviderAPI;
 import applab.client.farmerlink.provider.CropsProviderAPI;
 import applab.client.farmerlink.provider.DistrictsProviderAPI;
@@ -22,19 +21,13 @@ import applab.client.farmerlink.tasks.DownloadFarmersAndMarketPrices;
 
 public class Repository {
     
-	private static List<String> districts;
-	private static List<String> crops;
-	private static List<MarketPrices> marketPrices;
-	private static List<Farmer> farmers;
-	private static List<Buyer> buyers;
-    
-    public static List<Farmer> getFarmersByDistrictAndCrop(String url, String district, String crop) {
+	public static List<Farmer> getFarmersByDistrictAndCrop(String url, String district, String crop) {
     	List<Farmer> farmers = getFarmersFromDb(district, crop);
         if (farmers == null || farmers.size() == 0) {
         	Log.i("FARMERS DOWNLOAD", "Farmer cache empty, downloading ...");
         	DownloadFarmersAndMarketPrices downloadFarmersAndMarketPrices = new DownloadFarmersAndMarketPrices(url);
         	downloadFarmersAndMarketPrices.downloadFarmersAndMarketPrices(district, crop);
-        	farmers = MarketPricesParser.getFarmers();
+        	farmers = getFarmersFromDb(district, crop);
         }
         return farmers;
     }
@@ -44,9 +37,10 @@ public class Repository {
     	List<Farmer> farmers = new ArrayList<Farmer>();
     	MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
     	
-    	String selection = DistrictsProviderAPI.DistrictsColumns._ID + "=? and " + CropsProviderAPI.CropsColumns._ID + "=?";
+    	String selection = FarmerProviderAPI.FarmerColumns.DISTRICT_ID + "=? and " + FarmerProviderAPI.FarmerColumns.CROP_ID + "=?";
     	String[] selectionArgs = {marketPricesParser.getDistrictId(), marketPricesParser.getCropId()};
     	Cursor farmerCursor = MarketLinkApplication.getInstance().getContentResolver().query(FarmerProviderAPI.FarmerColumns.CONTENT_URI, null, selection, selectionArgs, null);
+    	Log.i("FARMER DB COUNT", String.valueOf(farmerCursor.getCount()));
     	farmerCursor.moveToFirst();
 		while (farmerCursor.isAfterLast() == false) 
 		{
@@ -64,6 +58,7 @@ public class Repository {
     public static List<MarketPrices> getMarketPricesByDistrictAndCrop(String url, String crop, String district) {
         List<MarketPrices> marketPrices = getMarketPricesFromDb(district, crop);
         if (marketPrices == null || marketPrices.size() == 0) {
+        	Log.i("MarketPrice DOWNLOAD", "MarketPrice cache empty, downloading ...");
         	DownloadFarmersAndMarketPrices downloadFarmersAndMarketPrices = new DownloadFarmersAndMarketPrices(url);
         	downloadFarmersAndMarketPrices.downloadFarmersAndMarketPrices(district, crop);
         	marketPrices = getMarketPricesFromDb(district, crop);
@@ -71,13 +66,14 @@ public class Repository {
         return marketPrices;
     }
 
-    private static List<MarketPrices> getMarketPricesFromDb(String district, String crop) {
+    public static List<MarketPrices> getMarketPricesFromDb(String district, String crop) {
     	List<MarketPrices> marketPrices = new ArrayList<MarketPrices>();
     	MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
     	
     	String selection = DistrictsProviderAPI.DistrictsColumns._ID + "=? and " + CropsProviderAPI.CropsColumns._ID + "=?";
     	String[] selectionArgs = {marketPricesParser.getDistrictId(), marketPricesParser.getCropId()};
     	Cursor marketPricesCursor = MarketLinkApplication.getInstance().getContentResolver().query(MarketPricesProviderAPI.MarketPricesColumns.CONTENT_URI, null, selection, selectionArgs, null);
+    	Log.i("MKT PRICES DB COUNT", String.valueOf(marketPricesCursor.getCount()));
     	marketPricesCursor.moveToFirst();
 		while (marketPricesCursor.isAfterLast() == false) 
 		{
@@ -107,7 +103,7 @@ public class Repository {
 		
 		List<Buyer> buyers = getBuyersFromDb(district, crop);
 		if (buyers == null || buyers.size() == 0) {
-			Log.i("BUYERS DOWNLOAD", "Buyers cache empty, downloading ...");
+			Log.i("Buyers DOWNLOAD", "Buyers cache empty, downloading ...");
 			DownloadBuyers downloadBuyers = new DownloadBuyers(url);
 			downloadBuyers.downloadBuyers(district, crop);
 			buyers = getBuyersFromDb(district, crop);
@@ -120,9 +116,10 @@ public class Repository {
 		
     	BuyersParser buyersParser = new BuyersParser(district, crop);
     	
-    	String selection = DistrictsProviderAPI.DistrictsColumns._ID + "=? and " + CropsProviderAPI.CropsColumns._ID + "=?";
+    	String selection = BuyerProviderAPI.BuyersColumns.DISTRICT_ID + "=? and " + BuyerProviderAPI.BuyersColumns.CROP_ID + "=?";
     	String[] selectionArgs = {buyersParser.getDistrictId(), buyersParser.getCropId()};
     	Cursor buyerCursor = MarketLinkApplication.getInstance().getContentResolver().query(BuyerProviderAPI.BuyersColumns.CONTENT_URI, null, selection, selectionArgs, null);
+    	Log.i("BUYERDBCOUNT", String.valueOf(buyerCursor.getCount()));
     	buyerCursor.moveToFirst();
 		while (buyerCursor.isAfterLast() == false) 
 		{
@@ -156,7 +153,7 @@ public class Repository {
 	private static List<String> getDistrictsFromDb() {
 		
 		Cursor cursor = MarketLinkApplication.getInstance().getContentResolver().query(DistrictsProviderAPI.DistrictsColumns.CONTENT_URI, null, null, null, null);
-		//cursor.moveToPosition(-1);
+		Log.i("DBDISTRICTSCOUNT", String.valueOf(cursor.getCount()));
 		List<String> districts = new ArrayList<String>();
 		cursor.moveToFirst();
 		while (cursor.isAfterLast() == false) 
@@ -168,10 +165,9 @@ public class Repository {
 		return districts;
 	}
 	public static List<String> getDistricts(String url) {
-		//if (checkDataBase("/sdcard/marketlink/databases/districts.db")) {
-			List<String> districts = getDistrictsFromDb();
-		//}
+		List<String> districts = getDistrictsFromDb();
 		if (districts == null || districts.size() == 0) {
+			Log.i("Districts DOWNLOAD", "Districts cache empty, downloading ...");
 			DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops(url);
 			downloadDistrictsAndCrops.download();
 			districts = getDistrictsFromDb();
@@ -180,10 +176,9 @@ public class Repository {
 	}
 
 	public static List<String> getCrops(String url) {
-		//if (checkDataBase("/sdcard/marketlink/databases/crops.db")) {
-			List<String> crops = getCropsFromDb();
-		//}
+		List<String> crops = getCropsFromDb();
 		if (crops == null || crops.size() == 0) {
+			Log.i("Crops DOWNLOAD", "Crops cache empty, downloading ...");
 			DownloadDistrictsAndCrops downloadDistrictsAndCrops = new DownloadDistrictsAndCrops(url);
 			downloadDistrictsAndCrops.download();
 			DistrictsAndCropsParser.getCrops();
@@ -192,10 +187,10 @@ public class Repository {
 		return crops;
 	}
 	
-	private static List<String> getCropsFromDb() {
+	public static List<String> getCropsFromDb() {
 		Cursor cursor = MarketLinkApplication.getInstance().getContentResolver().query(CropsProviderAPI.CropsColumns.CONTENT_URI, null, null, null, null);
-		//cursor.moveToPosition(-1);
 		List<String> crops = new ArrayList<String>();
+		Log.i("CROPS DB COUNT", String.valueOf(cursor.getCount()));
 		cursor.moveToFirst();
 		while (cursor.isAfterLast() == false) 
 		{
