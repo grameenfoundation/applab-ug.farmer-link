@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TransportEstimatorBuyerActivity extends Activity {
     
@@ -45,21 +46,42 @@ public class TransportEstimatorBuyerActivity extends Activity {
             public void onClick(View arg0) {
                 buyerText = (EditText) findViewById(R.id.buyer_name);
                 String buyerName = buyerText.getText().toString();
+                if (buyerName.trim().length() == 0) {
+                	Toast toast = Toast.makeText(getApplicationContext(),
+							"Please enter a buyer",
+							Toast.LENGTH_LONG);
+					toast.show();
+					return;
+                }
                 
                 priceText = (EditText) findViewById(R.id.price_value);
                 String price = priceText.getText().toString();
+                if (price.trim().length() == 0) {
+                	Toast toast = Toast.makeText(getApplicationContext(),
+							"Please enter a price",
+							Toast.LENGTH_LONG);
+					toast.show();
+					return;
+                }
                 
                 MarketSaleObject.getMarketObject().setMarketPrices(new MarketPrices(buyerName, price, price));
                 
                 transportText = (EditText) findViewById(R.id.transport_cost);
-                transportCosts = Double.parseDouble(transportText.getText().toString());
-                MarketSaleObject.getMarketObject().setTransportCost(transportCosts);
-                
-                // load intent and show summary activity
-                Intent intent = new Intent(getApplicationContext(), ProjectedSalesActivity.class);
-                intent.putExtra("source", "Buyer: ");
-                //intent.putExtra("crop", crop);
-                startActivity(intent);
+                if (transportText.getText().toString().trim().length() > 0) {
+	                transportCosts = Double.parseDouble(transportText.getText().toString());
+	                MarketSaleObject.getMarketObject().setTransportCost(transportCosts);
+	                
+	                // load intent and show summary activity
+	                Intent intent = new Intent(getApplicationContext(), ProjectedSalesActivity.class);
+	                intent.putExtra("source", "Buyer: ");
+	                startActivity(intent);
+                }
+                else {
+                	Toast toast = Toast.makeText(getApplicationContext(),
+							"Please enter a transport cost",
+							Toast.LENGTH_LONG);
+					toast.show();
+                }
             }
             
         });
