@@ -8,24 +8,29 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import applab.client.farmerlink.parsers.MarketPricesParser;
 import applab.client.farmerlink.tasks.DownloadFarmersAndMarketPrices;
+import applab.client.farmerlink.utilities.PricesFormatter;
 
 public class AddFarmersActivity extends ListActivity implements TextWatcher {
 	ArrayList<String> listItems = new ArrayList<String>();
@@ -63,8 +68,8 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 				listItems.add(existingFarmer.toString());
 			}
 		}
-		addedFarmersAdapter = new ArrayAdapter<String>(this,
-				R.layout.simple_list, R.id.sampletext, listItems);
+		addedFarmersAdapter = new AlternateArrayAdapter(this,
+				R.layout.farmer_list, R.id.sampletext, listItems);
 		setListAdapter(addedFarmersAdapter);
 		String url = getString(R.string.server) + "/"
 				+ "FarmerLink"
@@ -170,10 +175,11 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 						} else {
 							addedFarmers.add(farmer);
 							listItems.add(farmer.toString());
+							addedFarmersAdapter.notifyDataSetChanged();
 						}
 						farmerName.setText("");
 						quantity.setText("");
-						addedFarmersAdapter.notifyDataSetChanged();
+						
 					} else {
 						quantity.setText("");
 						Toast toast = Toast.makeText(getApplicationContext(),
@@ -343,4 +349,35 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 
 	}
 
+	private class AlternateArrayAdapter extends ArrayAdapter<String> {
+		
+		private final int[] bgColors = new int[] {R.color.list_bg_1, R.color.list_bg_2};
+
+		public AlternateArrayAdapter(Context context, int resource,
+				int textViewResourceId, List<String> objects) {
+			super(context, resource, textViewResourceId, objects);
+		}
+		
+		@Override
+		public View getView (int position, View convertView, ViewGroup parent) {
+			
+			LayoutInflater inflater = getLayoutInflater();
+
+			View row = inflater.inflate(R.layout.farmer_list, parent,
+					false);
+			TextView farmerView = (TextView) row.findViewById(R.id.farmer_name);
+			int colorPos = position % bgColors.length;
+			Log.d("Position", String.valueOf(position));
+			Log.d("Length:", String.valueOf(bgColors.length));
+			Log.d("Color Position", String.valueOf(colorPos));
+			Log.d("COlor:", String.valueOf(bgColors[colorPos]));
+			Log.d("Final color:", String.valueOf(bgColors[0]));
+			farmerView.setBackgroundColor(bgColors[0]);
+			//farmerView.setBackgroundColor(Color.GRAY);
+			farmerView.setText(listItems.get(position));
+			return row;
+		}
+			
+
+	}
 }

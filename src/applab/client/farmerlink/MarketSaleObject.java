@@ -11,6 +11,7 @@ public class MarketSaleObject {
     private ArrayList<Farmer> farmers;
     private MarketPrices marketPrices;
     private String selectedOption;
+	private Buyer buyer;
     
     private MarketSaleObject() {
         
@@ -86,6 +87,14 @@ public class MarketSaleObject {
 	public void setSelectedOption(String selectedOption) {
 		this.selectedOption = selectedOption;
 		
+	}
+
+	public void setBuyer(Buyer buyer) {
+		this.buyer = buyer;
+	}
+	
+	public Buyer getBuyer() {
+		return buyer;
 	}
 
 }

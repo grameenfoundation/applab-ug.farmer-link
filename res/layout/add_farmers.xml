@@ -57,6 +57,7 @@
 		    android:layout_below="@+id/addFarmerButton"
 		    android:layout_gravity="fill_vertical"
 		    android:scrollbars="vertical" 
+		    android:fadeScrollbars="false"
 		    android:layout_above="@+id/back_find_farmers"		 
 		    />   
 		 <Button  

@@ -6,13 +6,17 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import applab.client.farmerlink.tasks.DownloadBuyers;
 
 public class PotentialBuyersActivity extends ListActivity {
@@ -43,6 +47,9 @@ public class PotentialBuyersActivity extends ListActivity {
 		buyers = Repository.getBuyersByDistrictAndCrop(getString(R.string.server) + "/" + "FarmerLink"
 				+ getString(R.string.buyers), district, crop);
 
+		ListView listView = (ListView) findViewById(android.R.id.list);
+		registerForContextMenu(listView);
+		
 		setListAdapter(new BuyersAdapter());
 
 		Button nextButton = (Button) findViewById(R.id.next_transport_estimate_buyer);
@@ -75,6 +82,44 @@ public class PotentialBuyersActivity extends ListActivity {
 		startActivity(intent);
 
 	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.setHeaderTitle("Select option");
+		String edit = "Call buyer";
+		String delete = "Select buyer";
+		menu.add(0, v.getId(), 0, edit);
+		menu.add(0, v.getId(), 0, delete);
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		if(item.getTitle() =="Call buyer") {
+			callBuyer(info.id);
+		} else if (item.getTitle() == "Select buyer") {
+			selectBuyer(info.id);
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	
+	private void callBuyer(long id) {
+		Buyer buyer = buyers.get((int) id);
+		String url = "tel:" + buyer.getTelephone();
+		Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+		startActivity(intent);
+		
+	}
+	
+	private void selectBuyer(long id) {
+		Buyer buyer = buyers.get((int) id);
+		MarketSaleObject.getMarketObject().setBuyer(buyer);
+	}
+
 
 	class BuyersAdapter extends ArrayAdapter<Buyer> {
 

@@ -15,6 +15,7 @@
                       android:layout_below="@+id/crop"
                       android:layout_gravity="fill_vertical"
                       android:scrollbars="vertical"
+                      android:fadeScrollbars="false"
                       />
                 <Button android:layout_height="wrap_content"
                         android:layout_width="150dip"                         
