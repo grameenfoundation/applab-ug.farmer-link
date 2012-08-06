@@ -92,17 +92,14 @@ public class FindMarketsActivity extends ListActivity {
 			
 			super(FindMarketsActivity.this, R.layout.market_prices_list,
 					R.id.market_name, marketPrices);
-			Log.d("MKT PRX", String.valueOf(marketPrices.size()));
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = getLayoutInflater();
-			Log.i("MKT PRX SIZE", String.valueOf(marketPrices.size()));
 			View row = inflater.inflate(R.layout.market_prices_list, parent,
 					false);
 			if (marketPrices.size() > 0) {
-				Log.i("MARKETS", "we have a market");
 				TextView marketView = (TextView) row.findViewById(R.id.market_name);
 				if (marketPrices.get(position).getMarketName().equalsIgnoreCase("NONE")) {
 					TextView wholesalePriceView = (TextView) row
@@ -120,11 +117,9 @@ public class FindMarketsActivity extends ListActivity {
 				}
 			}
 			else {
-				Log.i("NO MARKETS", "we don't have a market");
 				TextView marketView = (TextView) row.findViewById(R.id.market_name);
 				marketView.setText("NO MARKET PRICES FOUND");
 			}
-
 			return row;
 		}
 	}
