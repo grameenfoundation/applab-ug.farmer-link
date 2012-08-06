@@ -37,6 +37,7 @@ public class FarmerProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			Log.i("DB CREATION", "creating Farmers database");
 			db.execSQL("CREATE TABLE " + FARMERS_TABLE_NAME + " (" 
 		               + FarmerColumns._ID + " integer primary key, " 
 		               + FarmerColumns.FARMER_NAME + " text not null, "

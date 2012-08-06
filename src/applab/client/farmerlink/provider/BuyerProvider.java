@@ -31,7 +31,7 @@ public class BuyerProvider extends ContentProvider {
     private static HashMap<String, String> sInstancesProjectionMap;
     private static final UriMatcher sUriMatcher;
     
-    public static class DatabaseHelper extends MarketLinkSQLiteOpenHelper {
+    private static class DatabaseHelper extends MarketLinkSQLiteOpenHelper {
 
 		public DatabaseHelper(String databaseName) {
 			super("/sdcard/marketlink/databases", databaseName, null, DATABASE_VERSION);

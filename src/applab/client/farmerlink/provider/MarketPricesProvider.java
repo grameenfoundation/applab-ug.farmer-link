@@ -38,6 +38,7 @@ public class MarketPricesProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			Log.i("DB CREATION", "creating Market Prices database");
 			db.execSQL("CREATE TABLE " + MARKETPRICES_TABLE_NAME + " (" 
 		               + MarketPricesColumns._ID + " integer primary key, " 
 		               + MarketPricesColumns.WHOLESALE_PRICE + " text not null, "
