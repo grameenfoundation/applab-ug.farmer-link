@@ -11,6 +11,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 import applab.client.farmerlink.database.MarketLinkSQLiteOpenHelper;
 import applab.client.farmerlink.provider.DistrictsProviderAPI.DistrictsColumns;
@@ -53,6 +54,7 @@ public class DistrictsProvider extends ContentProvider {
     }
 
     private DatabaseHelper mDbHelper;
+
     
     @Override
     public boolean onCreate() {
@@ -61,8 +63,32 @@ public class DistrictsProvider extends ContentProvider {
     }
     
 	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		return 0;
+	public int delete(Uri uri, String where, String[] whereArgs) {
+		
+		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        int count;
+        
+        switch (sUriMatcher.match(uri)) {
+            case DISTRICTS:                
+                count = db.delete(DISTRICTS_TABLE_NAME, where, whereArgs);
+                break;
+
+            case DISTRICT_ID:
+                String instanceId = uri.getPathSegments().get(1);
+                
+                count =
+                    db.delete(DISTRICTS_TABLE_NAME,
+                    		DistrictsColumns._ID + "=" + instanceId
+                                + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
+                        whereArgs);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
 	}
 
 	@Override

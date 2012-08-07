@@ -160,8 +160,8 @@ public class BuyersVersionProvider extends ContentProvider {
 
 	static {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sUriMatcher.addURI(BuyerProviderAPI.AUTHORITY, "buyersVersions", BUYERSVERSIONS);
-        sUriMatcher.addURI(BuyerProviderAPI.AUTHORITY, "buyerVersion/#", BUYERSVERSION_ID);
+        sUriMatcher.addURI(BuyersVersionProviderAPI.AUTHORITY, "buyersVersions", BUYERSVERSIONS);
+        sUriMatcher.addURI(BuyersVersionProviderAPI.AUTHORITY, "buyerVersion/#", BUYERSVERSION_ID);
         
 
         sInstancesProjectionMap = new HashMap<String, String>();

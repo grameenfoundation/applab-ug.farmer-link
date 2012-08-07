@@ -59,6 +59,7 @@ public class MarketPricesVersionProvider extends ContentProvider {
     
 	@Override
 	public int delete(Uri uri, String where, String[] whereArgs) {
+		
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
         int count;
         
