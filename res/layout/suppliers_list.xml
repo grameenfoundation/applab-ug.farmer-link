@@ -13,9 +13,4 @@
                   android:layout_height="wrap_content"
                   android:layout_width="fill_parent"                  
                   android:layout_below="@+id/name"/>
-                  
-       <TextView android:id ="@+id/location"
-                  android:layout_height="wrap_content"
-                  android:layout_width="fill_parent"                  
-                  android:layout_below="@+id/telephone"/>
 </RelativeLayout>
