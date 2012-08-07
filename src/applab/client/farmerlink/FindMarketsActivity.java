@@ -37,7 +37,7 @@ public class FindMarketsActivity extends ListActivity {
 
 		marketPrices = Repository.getMarketPricesFromDb(district, crop);
 		if (marketPrices.size() == 0) {
-			marketPrices.add(new MarketPrices("NONE", null, "NO MARKET PRICES"));
+			marketPrices.add(new MarketPrices("NONE", null, "No market prices for " + crop + " in " + district));
 		}
 
 		super.onCreate(savedInstanceState);
@@ -112,13 +112,13 @@ public class FindMarketsActivity extends ListActivity {
 		
 					TextView wholesalePriceView = (TextView) row
 							.findViewById(R.id.wholesale_price);
-					wholesalePriceView.setText("Wholesale Price : "
+					wholesalePriceView.setText("Buying Price : "
 							+ PricesFormatter.formatPrice(marketPrices.get(position).getWholesalePriceValue()));
 				}
 			}
 			else {
 				TextView marketView = (TextView) row.findViewById(R.id.market_name);
-				marketView.setText("NO MARKET PRICES FOUND");
+				marketView.setText("No market prices found for " + crop + " in " + district);
 			}
 			return row;
 		}

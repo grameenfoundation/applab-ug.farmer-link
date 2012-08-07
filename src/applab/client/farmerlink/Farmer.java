@@ -50,7 +50,7 @@ public class Farmer {
     
     @Override
     public String toString() {
-        return "Farmer Name: " + getName() + "\nQuantity (kgs): " + getQuantity();
+        return "Farmer Name: " + getName() + "\nQuantity(kg): " + getQuantity();
     }
     
     @Override
@@ -78,4 +78,7 @@ public class Farmer {
 		return this.phoneNumber;
 	}
 
+    public String getDisplayName() {
+        return getName() + " [" + getId() + "]";
+    }
 }

@@ -20,13 +20,15 @@
                           android:layout_marginTop="10dip"
                           android:text="Buyer: "
                           />
-                <EditText android:id ="@+id/buyer_name"
+                <TextView android:id ="@+id/buyer_name"
                     	  android:layout_toRightOf="@+id/buyer"
                     	  android:layout_alignParentRight="true"
                     	  android:layout_below="@+id/transport2"
                           android:layout_height="wrap_content"
-                          android:layout_width="180dip"
-                          android:text=""
+                          android:layout_width="wrap_content"
+                          android:layout_marginBottom="10dip"
+                          android:layout_marginTop="10dip"
+                          android:text="buyer here"
                           />
                 <TextView android:id ="@+id/commodity"
                     	  android:layout_below="@+id/buyer_name"
@@ -69,7 +71,7 @@
                           android:layout_width="wrap_content"
                           android:layout_marginBottom="10dip"
                           android:layout_marginTop="10dip"
-                          android:text="Price Per kg: "
+                          android:text="Price per kg: "
                           />
                 <EditText android:id ="@+id/price_value"
                     	  android:layout_toRightOf="@+id/price"

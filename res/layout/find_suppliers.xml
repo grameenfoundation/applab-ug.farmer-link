@@ -13,6 +13,9 @@
                       android:layout_height="wrap_content"                     
                       android:layout_above = "@+id/back_find_farmers"
                       android:layout_below="@+id/commodity_name"
+                      android:scrollbars="vertical"
+                      android:layout_gravity="fill_vertical"
+                      android:fadeScrollbars="false"
                       />
                 <Button android:layout_height="wrap_content"
                         android:layout_width="150dip"                         

@@ -74,7 +74,7 @@ public class Repository {
 		return farmers;
     }
     
-    private static List<Farmer> getFarmersFromDb(String district, String crop) {
+    public static List<Farmer> getFarmersFromDb(String district, String crop) {
     	
     	List<Farmer> farmers = new ArrayList<Farmer>();
     	MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
@@ -186,7 +186,7 @@ public class Repository {
 		return buyers;
 	}
 	
-	private static List<Buyer> getBuyersFromDb(String district, String crop) {
+	public static List<Buyer> getBuyersFromDb(String district, String crop) {
 		List<Buyer> buyers =  new ArrayList<Buyer>();
 		
     	BuyersParser buyersParser = new BuyersParser(district, crop);
@@ -274,5 +274,35 @@ public class Repository {
 		}
 		cursor.close();
 		return crops;
+	}
+
+	public static boolean farmersInDb(String district, String crop) {
+    	MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
+    	
+    	String selection = FarmerProviderAPI.FarmerColumns.DISTRICT_ID + "=? and " + FarmerProviderAPI.FarmerColumns.CROP_ID + "=?";
+    	String[] selectionArgs = {marketPricesParser.getDistrictId(), marketPricesParser.getCropId()};
+    	Cursor farmerCursor = MarketLinkApplication.getInstance().getContentResolver().query(FarmerProviderAPI.FarmerColumns.CONTENT_URI, null, selection, selectionArgs, null);
+    	if(farmerCursor.getCount() > 0) {
+    		farmerCursor.close();
+    		return true;
+    	} else {
+    		farmerCursor.close();
+    		return false;
+    	}
+	}
+	
+	public static boolean buyersInDb(String district, String crop) {
+    	BuyersParser buyersParser = new BuyersParser(district, crop);
+    	
+    	String selection = BuyerProviderAPI.BuyersColumns.DISTRICT_ID + "=? and " + BuyerProviderAPI.BuyersColumns.CROP_ID + "=?";
+    	String[] selectionArgs = {buyersParser.getDistrictId(), buyersParser.getCropId()};
+    	Cursor buyerCursor = MarketLinkApplication.getInstance().getContentResolver().query(BuyerProviderAPI.BuyersColumns.CONTENT_URI, null, selection, selectionArgs, null);
+    	if (buyerCursor.getCount() > 0) {
+    		buyerCursor.close();
+    		return true;
+    	} else {
+    		buyerCursor.close();
+    		return false;
+    	}
 	}
 }

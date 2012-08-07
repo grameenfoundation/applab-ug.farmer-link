@@ -11,7 +11,7 @@
     <string name="server">http://ckwapps.applab.org:8888</string>
     <string name="hello">hello world</string>
     <string name="farmer">Farmer</string>
-    <string name="quantity">Quantity(kg)</string>
+    <string name="quantity">Quantity\n(kg)</string>
     <string name="add_farmer">Add Farmer</string>
     <string name="buyers">/getBuyers</string>
     <string name="districts_crops">/getDistrictsAndCrops</string>

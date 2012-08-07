@@ -25,6 +25,7 @@ public class ProjectedSalesActivity extends ListActivity {
     private Button nextButton;
     private Button backButton;
     private String crop;
+    private String source;
     
     private ArrayList<Farmer> farmers;
     private TextView marketView;
@@ -36,6 +37,7 @@ public class ProjectedSalesActivity extends ListActivity {
         setContentView(R.layout.projected_sales);
         setTextViews();
         crop = MarketSaleObject.getMarketObject().getCropName();
+        source = getIntent().getStringExtra("source");
         String displayTitle = this.getString(R.string.app_name) + " - " + crop;
         setTitle(displayTitle);
         
@@ -58,7 +60,12 @@ public class ProjectedSalesActivity extends ListActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(), TransportEstimatorBuyerActivity.class);
+				Intent intent;
+				if(source.equalsIgnoreCase("Buyer: ")) {
+					intent = new Intent(getApplicationContext(), TransportEstimatorBuyerActivity.class);
+				} else {
+					intent = new Intent(getApplicationContext(), TransportEstimatorActivity.class);
+				}
 				startActivity(intent);
 			}
         	
@@ -96,6 +103,8 @@ public class ProjectedSalesActivity extends ListActivity {
     }
 
     class FarmerAdapter extends ArrayAdapter<Farmer> {
+    	
+    	private int[] colors = new int[] { 0x00000000, 0x30A9A9A9 };
 
         FarmerAdapter() {
             
@@ -109,23 +118,32 @@ public class ProjectedSalesActivity extends ListActivity {
             double revenue = farmers.get(position).computeRevenue(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue());
             double transactionFee = farmers.get(position).computeTransactionFee(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue());
             
+            int colorPos = position % colors.length;
+			
+            
             View row = inflater.inflate(R.layout.projected_sales_list, parent, false);
             TextView marketView = (TextView)row.findViewById(R.id.farmer_name_text);
+            marketView.setBackgroundColor(colors[colorPos]);
             marketView.setText("Farmer Name : " + farmers.get(position).getName());
 
             TextView farmerIdView = (TextView)row.findViewById(R.id.farmer_id_text);
+            farmerIdView.setBackgroundColor(colors[colorPos]);
             farmerIdView.setText("Farmer ID : " + farmers.get(position).getId());
             
             TextView quantityView = (TextView)row.findViewById(R.id.quantity_text);
+            quantityView.setBackgroundColor(colors[colorPos]);
             quantityView.setText("Quantity : " + PricesFormatter.formatPrice(farmers.get(position).getQuantity()) + " Kg");
           
             TextView revenueView = (TextView)row.findViewById(R.id.revenue_text);
+            revenueView.setBackgroundColor(colors[colorPos]);
             revenueView.setText("Revenue : " + PricesFormatter.formatPrice(revenue) + " Shs");
             
             TextView transportView = (TextView)row.findViewById(R.id.transport_text);
+            transportView.setBackgroundColor(colors[colorPos]);
             transportView.setText("Transport Cost : " + PricesFormatter.formatPrice(Math.ceil(MarketSaleObject.getMarketObject().getTransportCost()/farmers.size())) + " Shs");
             
             TextView transactionFeeView = (TextView)row.findViewById(R.id.transaction_fee_text);
+            transactionFeeView.setBackgroundColor(colors[colorPos]);
             transactionFeeView.setText("Transaction Fee : " + PricesFormatter.formatPrice(transactionFee) + " Shs");           
 
             return row;

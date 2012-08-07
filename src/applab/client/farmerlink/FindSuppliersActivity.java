@@ -3,9 +3,12 @@ package applab.client.farmerlink;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,13 +22,22 @@ public class FindSuppliersActivity extends ListActivity {
 	
 	String district;
 	String crop;
-	List<Farmer> suppliers;
+	List<Farmer> suppliers =  new ArrayList<Farmer>();;
+    List<Farmer> allSuppliers;
+    ProgressDialog progressDialog;
+    static final int PROGRESS_DIALOG = 0;
+    
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.find_suppliers);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
 		
 	    district = MarketSaleObject.getMarketObject().getDistrictName();
         crop = MarketSaleObject.getMarketObject().getCropName();
@@ -35,17 +47,30 @@ public class FindSuppliersActivity extends ListActivity {
         String url = getString(R.string.server) + "/"
 				+ "FarmerLink"
 				+ getString(R.string.farmers_market_prices);
+        
+		if (Repository.farmersInDb(district, crop)) {
+			Log.d("ADD SUPPLIERS:", "Farmers in localdb");
+			allSuppliers = Repository.getFarmersFromDb(district, crop);
+	          if((allSuppliers == null) || (allSuppliers.size() == 0)) {
+					allSuppliers.add(new Farmer("NONE", null, 0.0));
+				}
+			
+		       // allSuppliers = Repository.getFarmersByDistrictAndCrop(url, district, crop);
+		        for (Farmer farmer : allSuppliers) {
+		        	if (null != farmer.getPhoneNumber() && farmer.getPhoneNumber().trim().length() > 0) {
+		        		
+		        		suppliers.add(farmer);
+		        		Log.i("farmer no.", farmer.getPhoneNumber());
+		        	}
+		        }
 
-        List<Farmer> allSuppliers;
-        allSuppliers = Repository.getFarmersByDistrictAndCrop(url, district, crop);
-        suppliers = new ArrayList<Farmer>();
-        for (Farmer farmer : allSuppliers) {
-        	if (null != farmer.getPhoneNumber() && farmer.getPhoneNumber().trim().length() > 0) {
-        		
-        		suppliers.add(farmer);Log.i("farmer no.", farmer.getPhoneNumber());
-        	}
-        }
-        setListAdapter(new SuppliersAdapter());
+		        setListAdapter(new SuppliersAdapter());
+		} else {
+			Log.d("ADD SUPPLIERS:", "Going to download the farmers");
+			//downloadFarmers(url, district, crop);
+			new DownloadFarmers().execute(url);
+		}
+
 	}
 	
     
@@ -75,14 +100,19 @@ public class FindSuppliersActivity extends ListActivity {
 			LayoutInflater inflater = getLayoutInflater();
 			
 			View row = inflater.inflate(R.layout.suppliers_list, parent, false);
-			TextView supplierView = (TextView) row.findViewById(R.id.name);
-			supplierView.setText("Name : " +suppliers.get(position).getName());
-			
 			TextView telephoneView = (TextView) row.findViewById(R.id.telephone);
-			telephoneView.setText("Telephone : " + suppliers.get(position).getPhoneNumber());
-			/*
-			TextView locationView = (TextView) row.findViewById(R.id.location);
-			locationView.setText("Location : " + suppliers.get(position).getSupplierLocation());*/
+			TextView supplierView = (TextView) row.findViewById(R.id.name);
+			
+			if (suppliers.size() > 0) {
+				if( suppliers.get(position).getName().equalsIgnoreCase("NONE")) {
+					telephoneView.setText("No farmers found to provide " + crop + " in "+ "district");
+				} else {
+					supplierView.setText("Name : " +properCase(suppliers.get(position).getName()));
+					telephoneView.setText("Telephone : " + suppliers.get(position).getPhoneNumber());
+				}
+			} else {
+				telephoneView.setText("No farmers found to provide " + crop + " in "+ "district");
+			}
 			
 			return row;
 		}
@@ -94,4 +124,81 @@ public class FindSuppliersActivity extends ListActivity {
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
         startActivity(intent);
     }
+    
+	public static String properCase(String name) {
+		java.io.StringReader in = new java.io.StringReader(name.toLowerCase());  
+		boolean precededBySpace = true;  
+		StringBuffer properCase = new StringBuffer();    
+		try {
+		while(true) {        
+		        int i = in.read();  
+		          if (i == -1)  break;        
+		            char c = (char)i;  
+		            if (c == ' ' || c == '"' || c == '(' || c == '.' || c == '/' || c == '\\' || c == ',') {  
+		              properCase.append(c);  
+		              precededBySpace = true;  
+		           } else {  
+		              if (precededBySpace) {   
+		             properCase.append(Character.toUpperCase(c));  
+		           } else {   
+		                 properCase.append(c);   
+		           }  
+		           precededBySpace = false;  
+		        }  
+		        }  
+		       
+  
+		} catch (Exception e) {
+			
+		}
+	    return properCase.toString();   
+	}
+
+	protected Dialog onCreateDialog(int dialogId) {
+		switch(dialogId) {
+		case PROGRESS_DIALOG:
+			progressDialog = new ProgressDialog(FindSuppliersActivity.this);
+			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progressDialog.setTitle("Downloading content...");
+			progressDialog.setMessage("Content not found on phone. Please wait while it is downloaded.");
+			return progressDialog;
+		default:
+			return null;
+		}
+	}
+	
+    
+    private class DownloadFarmers extends AsyncTask<String, Void, List<Farmer>> {
+
+		@Override
+		protected void onPreExecute() {
+			showDialog(PROGRESS_DIALOG);
+		}
+		@Override
+		protected List<Farmer> doInBackground(String... urls) {
+			for (String url: urls) {
+				return(Repository.getFarmersByDistrictAndCrop(url, district, crop));
+			}
+			return null;
+		}
+		
+		@Override
+	    protected void onPostExecute(List<Farmer> farmers) {
+	    	 allSuppliers = farmers;
+	         dismissDialog(PROGRESS_DIALOG);
+	         if((allSuppliers == null) || (allSuppliers.size() == 0)) {
+					allSuppliers.add(new Farmer("NONE", null, 0.0));
+				}
+			
+	         // allSuppliers = Repository.getFarmersByDistrictAndCrop(url, district, crop);
+	          for (Farmer farmer : allSuppliers) {
+	          	if (null != farmer.getPhoneNumber() && farmer.getPhoneNumber().trim().length() > 0) {
+	          		
+	          		suppliers.add(farmer);
+	          		Log.i("farmer no.", farmer.getPhoneNumber());
+	          	}
+	          }
+	          setListAdapter(new SuppliersAdapter());
+	     }
+	}
 }
