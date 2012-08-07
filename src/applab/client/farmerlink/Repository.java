@@ -70,7 +70,7 @@ public class Repository {
     	List<MarketPrices> marketPrices = new ArrayList<MarketPrices>();
     	MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
     	
-    	String selection = DistrictsProviderAPI.DistrictsColumns._ID + "=? and " + CropsProviderAPI.CropsColumns._ID + "=?";
+    	String selection = MarketPricesProviderAPI.MarketPricesColumns.DISTRICT_ID + "=? and " + MarketPricesProviderAPI.MarketPricesColumns.CROP_ID + "=?";
     	String[] selectionArgs = {marketPricesParser.getDistrictId(), marketPricesParser.getCropId()};
     	Cursor marketPricesCursor = MarketLinkApplication.getInstance().getContentResolver().query(MarketPricesProviderAPI.MarketPricesColumns.CONTENT_URI, null, selection, selectionArgs, null);
     	Log.i("MKT PRICES DB COUNT", String.valueOf(marketPricesCursor.getCount()));

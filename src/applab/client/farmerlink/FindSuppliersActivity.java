@@ -1,11 +1,13 @@
 package applab.client.farmerlink;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,7 @@ public class FindSuppliersActivity extends ListActivity {
 	
 	String district;
 	String crop;
-	List<Suppliers> suppliers;
+	List<Farmer> suppliers;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,19 @@ public class FindSuppliersActivity extends ListActivity {
         String displayTitle = this.getString(R.string.app_name) + " - " + crop;
         setTitle(displayTitle);
         
-        suppliers = Repository.getSuppliersByDistrictAndCrop(crop, district);
+        String url = getString(R.string.server) + "/"
+				+ "FarmerLink"
+				+ getString(R.string.farmers_market_prices);
+
+        List<Farmer> allSuppliers;
+        allSuppliers = Repository.getFarmersByDistrictAndCrop(url, district, crop);
+        suppliers = new ArrayList<Farmer>();
+        for (Farmer farmer : allSuppliers) {
+        	if (null != farmer.getPhoneNumber() && farmer.getPhoneNumber().trim().length() > 0) {
+        		
+        		suppliers.add(farmer);Log.i("farmer no.", farmer.getPhoneNumber());
+        	}
+        }
         setListAdapter(new SuppliersAdapter());
 	}
 	
@@ -50,7 +64,7 @@ public class FindSuppliersActivity extends ListActivity {
     }
      
 
-	class SuppliersAdapter extends ArrayAdapter<Suppliers> {
+	class SuppliersAdapter extends ArrayAdapter<Farmer> {
 		
 		SuppliersAdapter() {
 			super(FindSuppliersActivity.this, R.layout.suppliers_list, R.id.name, suppliers);
@@ -62,21 +76,21 @@ public class FindSuppliersActivity extends ListActivity {
 			
 			View row = inflater.inflate(R.layout.suppliers_list, parent, false);
 			TextView supplierView = (TextView) row.findViewById(R.id.name);
-			supplierView.setText("Name : " +suppliers.get(position).getSupplierName());
+			supplierView.setText("Name : " +suppliers.get(position).getName());
 			
 			TextView telephoneView = (TextView) row.findViewById(R.id.telephone);
-			telephoneView.setText("Telephone : " + suppliers.get(position).getSupplierContact());
-			
+			telephoneView.setText("Telephone : " + suppliers.get(position).getPhoneNumber());
+			/*
 			TextView locationView = (TextView) row.findViewById(R.id.location);
-			locationView.setText("Location : " + suppliers.get(position).getSupplierLocation());
+			locationView.setText("Location : " + suppliers.get(position).getSupplierLocation());*/
 			
 			return row;
 		}
 	}
 	
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        Suppliers supplier = suppliers.get(position);
-        String url = "tel:"+supplier.getSupplierContact();
+        Farmer supplier = suppliers.get(position);
+        String url = "tel:"+supplier.getPhoneNumber();
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
         startActivity(intent);
     }
