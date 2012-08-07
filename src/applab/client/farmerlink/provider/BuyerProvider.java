@@ -39,6 +39,7 @@ public class BuyerProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			Log.i("DB CREATION", "creating buyers database");
 			db.execSQL("CREATE TABLE " + BUYERS_TABLE_NAME + " (" 
 		               + BuyersColumns._ID + " integer primary key, " 
 		               + BuyersColumns.BUYER_NAME + " text not null, "
@@ -116,7 +117,6 @@ public class BuyerProvider extends ContentProvider {
                 break;
 
             case BUYER_ID:
-            	Log.i("BUYERID", "buyer id matched");
                 qb.setProjectionMap(sInstancesProjectionMap);
                 qb.appendWhere(BuyersColumns._ID + "=" + uri.getPathSegments().get(1));
                 break;
