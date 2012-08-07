@@ -24,6 +24,15 @@
 		<provider
 			android:name="applab.client.farmerlink.provider.MarketPricesProvider"
 			android:authorities="applab.client.farmerlink.provider.farmerlink.marketprices" />
+		<provider
+			android:name="applab.client.farmerlink.provider.BuyersVersionProvider"
+			android:authorities="applab.client.farmerlink.provider.farmerlink.buyersVersion" />
+		<provider
+			android:name="applab.client.farmerlink.provider.FarmerVersionProvider"
+			android:authorities="applab.client.farmerlink.provider.farmerlink.farmersVersion" />
+		<provider
+			android:name="applab.client.farmerlink.provider.MarketPricesVersionProvider"
+			android:authorities="applab.client.farmerlink.provider.farmerlink.marketpricesVersion" />
         <activity android:name=".OptionsActivity"
                   android:label="@string/app_name">
             <intent-filter>
