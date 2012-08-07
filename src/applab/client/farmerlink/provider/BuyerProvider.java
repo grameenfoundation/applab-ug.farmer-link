@@ -11,6 +11,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 import applab.client.farmerlink.database.MarketLinkSQLiteOpenHelper;
 import applab.client.farmerlink.provider.BuyerProviderAPI.BuyersColumns;
@@ -61,9 +62,32 @@ public class BuyerProvider extends ContentProvider {
     public DatabaseHelper mDbHelper;
 
 	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int delete(Uri uri, String where, String[] whereArgs) {
+
+		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        int count;
+        
+        switch (sUriMatcher.match(uri)) {
+            case BUYERS:                
+                count = db.delete(BUYERS_TABLE_NAME, where, whereArgs);
+                break;
+
+            case BUYER_ID:
+                String instanceId = uri.getPathSegments().get(1);
+                
+                count =
+                    db.delete(BUYERS_TABLE_NAME,
+                    		BuyersColumns._ID + "=" + instanceId
+                                + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
+                        whereArgs);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
 	}
 
 	@Override
