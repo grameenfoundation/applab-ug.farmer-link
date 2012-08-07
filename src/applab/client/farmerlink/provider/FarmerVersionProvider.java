@@ -161,7 +161,7 @@ public class FarmerVersionProvider extends ContentProvider {
 
 	static {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sUriMatcher.addURI(FarmerVersionProviderAPI.AUTHORITY, "farmersVersions", FARMERVERSIONS);
+        sUriMatcher.addURI(FarmerVersionProviderAPI.AUTHORITY, "farmerVersions", FARMERVERSIONS);
         sUriMatcher.addURI(FarmerVersionProviderAPI.AUTHORITY, "farmerVersion/#", FARMERVERSION_ID);
         
 
