@@ -56,6 +56,7 @@ public class DownloadBuyers {
             		buyersVersionContentValues.put(BuyersVersionProviderAPI.BuyersVersionColumns.DISTRICT_ID, buyersParser.getDistrictId());
             		buyersVersionContentValues.put(BuyersVersionProviderAPI.BuyersVersionColumns.CROP_ID, buyersParser.getCropId());
             		buyersVersionContentValues.put(BuyersVersionProviderAPI.BuyersVersionColumns.VERSION, new Date().toString());
+            		MarketLinkApplication.getInstance().getContentResolver().delete(BuyersVersionProviderAPI.BuyersVersionColumns.CONTENT_URI, null, null);
             		MarketLinkApplication.getInstance().getContentResolver().insert(BuyersVersionProviderAPI.BuyersVersionColumns.CONTENT_URI,
             				buyersVersionContentValues);
             		

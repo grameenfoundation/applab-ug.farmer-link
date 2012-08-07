@@ -65,7 +65,9 @@ public class DownloadFarmersAndMarketPrices {
             	try {
             		Log.d("PARSING", "parsing begins ...");
 					marketPricesParser.parse(inputStream);
+					MarketLinkApplication.getInstance().getContentResolver().delete(MarketPricesVersionProviderAPI.MarketPricesVersionColumns.CONTENT_URI, null, null);
 					MarketLinkApplication.getInstance().getContentResolver().insert(MarketPricesVersionProviderAPI.MarketPricesVersionColumns.CONTENT_URI, marketPricesVersionContentValues);
+					MarketLinkApplication.getInstance().getContentResolver().delete(FarmerVersionProviderAPI.FarmerVersionsColumns.CONTENT_URI, null, null);
 					MarketLinkApplication.getInstance().getContentResolver().insert(FarmerVersionProviderAPI.FarmerVersionsColumns.CONTENT_URI, farmerVersionsContentValues);
 					
 				} catch (ParseException e) {
