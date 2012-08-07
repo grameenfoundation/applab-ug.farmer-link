@@ -306,7 +306,7 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 		try {
 		Log.i("FARMER COUNT", String.valueOf(listOfFarmers.size()));
 		for (Farmer farmer : listOfFarmers) {
-			farmers.add(farmer.getDisplayName());
+			farmers.add(FindSuppliersActivity.properCase(farmer.getDisplayName()));
 		}
 		} catch (Exception e) {
 			Log.e("ADD FARMERS:", "Ignoring exception");
@@ -455,6 +455,9 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 	    protected void onPostExecute(List<Farmer> farmers) {
 	    	 farmerList = farmers;
 	         dismissDialog(PROGRESS_DIALOG);
+	 		if ((farmers == null) || (farmers.size() == 0)) {
+	 			noFarmersFound();
+	 		}
 	     }
 	}
 	
@@ -478,4 +481,23 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 		}
 		
 	}
+
+	public void noFarmersFound() {
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("No farmers found with "+ crop + " in "+ district + ". Please call the Farmer Call Center on 178 for help")
+				   .setCancelable(false)
+				   .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+			            Intent intent = new Intent(getApplicationContext(), FinishSellActivity.class);
+			            startActivity(intent);
+					}
+				});
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+	
+	
 }

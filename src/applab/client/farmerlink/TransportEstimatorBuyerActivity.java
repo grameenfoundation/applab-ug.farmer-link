@@ -23,14 +23,21 @@ public class TransportEstimatorBuyerActivity extends Activity {
     private double transportCosts;
     private String selectedOption;
     private String crop;
+    private Buyer buyer;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.transport_estimator_find_buyer);
-        buyerTextView = (TextView) findViewById(R.id.buyer_name);
-        buyerTextView.setText(MarketSaleObject.getMarketObject().getBuyer().toString());
+        buyer = MarketSaleObject.getMarketObject().getBuyer();
+        if (buyer != null) {
+        	setContentView(R.layout.transport_estimator_find_buyer);
+            buyerTextView = (TextView) findViewById(R.id.buyer_name);
+            buyerTextView.setText(buyer.toString());
+        } else {
+        	setContentView(R.layout.buying_transport_estimator_find_buyer);
+        }
+
         cropTextView = (TextView)findViewById(R.id.commodity_name);
         cropTextView.setText(MarketSaleObject.getMarketObject().getCropName());
         quantityView = (TextView) findViewById(R.id.quantity_amount);
@@ -47,7 +54,14 @@ public class TransportEstimatorBuyerActivity extends Activity {
 
             @Override
             public void onClick(View arg0) {
-                String buyerName = MarketSaleObject.getMarketObject().getBuyer().toString();
+            	String buyerName;
+            	if (buyer != null) {
+            		buyerName = buyer.toString();
+            	} else {
+            		buyerText = (EditText) findViewById(R.id.buyer_name);
+            		buyerName = buyerText.getText().toString();
+            	}
+                
                 
                 priceText = (EditText) findViewById(R.id.price_value);
                 String price = priceText.getText().toString();

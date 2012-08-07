@@ -11,6 +11,13 @@ public class FinishSellActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.finish_sell);
+        if (MarketSaleObject.getMarketObject() != null) {
+        	MarketSaleObject.getMarketObject().setCropName(null);
+        	MarketSaleObject.getMarketObject().setDistrictName(null);
+        	MarketSaleObject.getMarketObject().setFarmers(null);
+        	MarketSaleObject.getMarketObject().setMarketPrices(null);
+        	MarketSaleObject.getMarketObject().setBuyer(null);
+        }
         
         Button nextButton = (Button)findViewById(R.id.finish);
         nextButton.setOnClickListener(new Button.OnClickListener() {

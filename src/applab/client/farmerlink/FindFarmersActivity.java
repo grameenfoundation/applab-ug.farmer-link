@@ -59,9 +59,9 @@ public class FindFarmersActivity extends Activity implements
 			districtSpinner = (Spinner) findViewById(R.id.district_spinner);
 			districtSpinner.setAdapter(null);
 			ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(
-					this, android.R.layout.simple_spinner_item, districts.toArray(new String[districts.size()]));
+					this, R.layout.custom_spinner, districts.toArray(new String[districts.size()]));
 			districtAdapter
-					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					.setDropDownViewResource(R.layout.custom_spinner);
 			districtSpinner.setAdapter(districtAdapter);
 			districtSpinner.setOnItemSelectedListener(this);
 			
@@ -74,9 +74,9 @@ public class FindFarmersActivity extends Activity implements
 
 			Spinner cropSpinner = (Spinner) findViewById(R.id.crop_spinner);
 			ArrayAdapter<String> cropAdapter = new ArrayAdapter<String>(this,
-					android.R.layout.simple_spinner_item, crops.toArray(new String[crops.size()]));
+					R.layout.custom_spinner, crops.toArray(new String[crops.size()]));
 			cropAdapter
-					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					.setDropDownViewResource(R.layout.custom_spinner);
 			cropSpinner.setAdapter(cropAdapter);
 			cropSpinner.setOnItemSelectedListener(this);
 			
@@ -90,9 +90,9 @@ public class FindFarmersActivity extends Activity implements
 			
 			districtSpinner = (Spinner) findViewById(R.id.district_spinner);
 			ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(
-					this, android.R.layout.simple_spinner_item, districts.toArray(new String[districts.size()]));
+					this, R.layout.custom_spinner, districts.toArray(new String[districts.size()]));
 			districtAdapter
-					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					.setDropDownViewResource(R.layout.custom_spinner);
 			districtSpinner.setAdapter(districtAdapter);
 			districtSpinner.setOnItemSelectedListener(this);
 			
@@ -105,9 +105,9 @@ public class FindFarmersActivity extends Activity implements
 
 			Spinner cropSpinner = (Spinner) findViewById(R.id.crop_spinner);
 			ArrayAdapter<String> cropAdapter = new ArrayAdapter<String>(this,
-					android.R.layout.simple_spinner_item, crops.toArray(new String[crops.size()]));
+					R.layout.custom_spinner, crops.toArray(new String[crops.size()]));
 			cropAdapter
-					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					.setDropDownViewResource(R.layout.custom_spinner);
 			cropSpinner.setAdapter(cropAdapter);
 			cropSpinner.setOnItemSelectedListener(this);
 			
