@@ -5,16 +5,20 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.StringEntity;
 import org.json.simple.parser.ParseException;
 
+import android.content.ContentValues;
 import android.util.Log;
 import applab.client.farmerlink.GlobalConstants;
 import applab.client.farmerlink.Buyer;
+import applab.client.farmerlink.MarketLinkApplication;
 import applab.client.farmerlink.parsers.BuyersParser;
+import applab.client.farmerlink.provider.BuyersVersionProviderAPI;
 import applab.client.farmerlink.utilities.HttpHelpers;
 import applab.client.farmerlink.utilities.XmlEntityBuilder;
 
@@ -48,6 +52,13 @@ public class DownloadBuyers {
             	try {
             		Log.d("PARSING", "parsing begins ...");
             		buyersParser.parse(inputStream);
+            		ContentValues buyersVersionContentValues = new ContentValues();
+            		buyersVersionContentValues.put(BuyersVersionProviderAPI.BuyersVersionColumns.DISTRICT_ID, buyersParser.getDistrictId());
+            		buyersVersionContentValues.put(BuyersVersionProviderAPI.BuyersVersionColumns.CROP_ID, buyersParser.getCropId());
+            		buyersVersionContentValues.put(BuyersVersionProviderAPI.BuyersVersionColumns.VERSION, new Date().toString());
+            		MarketLinkApplication.getInstance().getContentResolver().insert(BuyersVersionProviderAPI.BuyersVersionColumns.CONTENT_URI,
+            				buyersVersionContentValues);
+            		
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
