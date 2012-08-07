@@ -20,16 +20,7 @@
                 <Button android:layout_height="wrap_content"
                         android:layout_width="150dip"                         
                         android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
+                        android:layout_centerHorizontal="true"
                         android:text="Back"
                         android:id = "@+id/back_find_markets"/>
-                       
-                 <Button android:layout_height="wrap_content"
-                 		android:layout_toRightOf="@+id/back_find_markets"
-                        android:layout_width="150dip" 
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:text="Next"
-                        android:id = "@+id/next_transport_estimate_buyer"/>
-
 </RelativeLayout>

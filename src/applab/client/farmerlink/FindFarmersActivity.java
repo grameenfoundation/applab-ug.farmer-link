@@ -152,6 +152,7 @@ public class FindFarmersActivity extends Activity implements
 						.setCropName(selectedCrop);
 				MarketSaleObject.getMarketObject().setDistrictName(
 						selectedDistrict);
+				nextIntent.putExtra("source", "FindFarmer");
 				startActivity(nextIntent);
 			
 			} 

@@ -22,17 +22,18 @@ import applab.client.farmerlink.tasks.DownloadFarmersAndMarketPrices;
 public class Repository {
     
 	public static List<Farmer> getFarmersByDistrictAndCrop(String url, String district, String crop) {
-    	List<Farmer> farmers = getFarmersFromDb(district, crop);
-        if (farmers == null || farmers.size() == 0) {
+    	//List<Farmer> farmers = getFarmersFromDb(district, crop);
+        //if (farmers == null || farmers.size() == 0) {
+		List<Farmer> farmers;
         	Log.i("FARMERS DOWNLOAD", "Farmer cache empty, downloading ...");
         	DownloadFarmersAndMarketPrices downloadFarmersAndMarketPrices = new DownloadFarmersAndMarketPrices(url);
         	downloadFarmersAndMarketPrices.downloadFarmersAndMarketPrices(district, crop);
         	farmers = getFarmersFromDb(district, crop);
-        }
+        //}
         return farmers;
     }
     
-    private static List<Farmer> getFarmersFromDb(String district, String crop) {
+    public static List<Farmer> getFarmersFromDb(String district, String crop) {
     	
     	List<Farmer> farmers = new ArrayList<Farmer>();
     	MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
@@ -70,7 +71,7 @@ public class Repository {
     	List<MarketPrices> marketPrices = new ArrayList<MarketPrices>();
     	MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
     	
-    	String selection = DistrictsProviderAPI.DistrictsColumns._ID + "=? and " + CropsProviderAPI.CropsColumns._ID + "=?";
+    	String selection = MarketPricesProviderAPI.MarketPricesColumns.DISTRICT_ID + "=? and " + MarketPricesProviderAPI.MarketPricesColumns.CROP_ID + "=?";
     	String[] selectionArgs = {marketPricesParser.getDistrictId(), marketPricesParser.getCropId()};
     	Cursor marketPricesCursor = MarketLinkApplication.getInstance().getContentResolver().query(MarketPricesProviderAPI.MarketPricesColumns.CONTENT_URI, null, selection, selectionArgs, null);
     	Log.i("MKT PRICES DB COUNT", String.valueOf(marketPricesCursor.getCount()));
@@ -101,17 +102,18 @@ public class Repository {
 
 	public static List<Buyer> getBuyersByDistrictAndCrop(String url, String district, String crop) {
 		
-		List<Buyer> buyers = getBuyersFromDb(district, crop);
-		if (buyers == null || buyers.size() == 0) {
+		//List<Buyer> buyers = getBuyersFromDb(district, crop);
+		//f (buyers == null || buyers.size() == 0) {
+		List<Buyer> buyers;
 			Log.i("Buyers DOWNLOAD", "Buyers cache empty, downloading ...");
 			DownloadBuyers downloadBuyers = new DownloadBuyers(url);
 			downloadBuyers.downloadBuyers(district, crop);
 			buyers = getBuyersFromDb(district, crop);
-		}
+		//}
 		return buyers;
 	}
 	
-	private static List<Buyer> getBuyersFromDb(String district, String crop) {
+	public static List<Buyer> getBuyersFromDb(String district, String crop) {
 		List<Buyer> buyers =  new ArrayList<Buyer>();
 		
     	BuyersParser buyersParser = new BuyersParser(district, crop);
@@ -199,5 +201,35 @@ public class Repository {
 		}
 		cursor.close();
 		return crops;
+	}
+
+	public static boolean farmersInDb(String district, String crop) {
+    	MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
+    	
+    	String selection = FarmerProviderAPI.FarmerColumns.DISTRICT_ID + "=? and " + FarmerProviderAPI.FarmerColumns.CROP_ID + "=?";
+    	String[] selectionArgs = {marketPricesParser.getDistrictId(), marketPricesParser.getCropId()};
+    	Cursor farmerCursor = MarketLinkApplication.getInstance().getContentResolver().query(FarmerProviderAPI.FarmerColumns.CONTENT_URI, null, selection, selectionArgs, null);
+    	if(farmerCursor.getCount() > 0) {
+    		farmerCursor.close();
+    		return true;
+    	} else {
+    		farmerCursor.close();
+    		return false;
+    	}
+	}
+	
+	public static boolean buyersInDb(String district, String crop) {
+    	BuyersParser buyersParser = new BuyersParser(district, crop);
+    	
+    	String selection = BuyerProviderAPI.BuyersColumns.DISTRICT_ID + "=? and " + BuyerProviderAPI.BuyersColumns.CROP_ID + "=?";
+    	String[] selectionArgs = {buyersParser.getDistrictId(), buyersParser.getCropId()};
+    	Cursor buyerCursor = MarketLinkApplication.getInstance().getContentResolver().query(BuyerProviderAPI.BuyersColumns.CONTENT_URI, null, selection, selectionArgs, null);
+    	if (buyerCursor.getCount() > 0) {
+    		buyerCursor.close();
+    		return true;
+    	} else {
+    		buyerCursor.close();
+    		return false;
+    	}
 	}
 }

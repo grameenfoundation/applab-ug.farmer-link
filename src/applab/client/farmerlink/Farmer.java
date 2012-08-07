@@ -78,4 +78,7 @@ public class Farmer {
 		return this.phoneNumber;
 	}
 
+    public String getDisplayName() {
+        return getName() + " [" + getId() + "]";
+    }
 }

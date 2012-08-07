@@ -16,7 +16,8 @@ public class TransportEstimatorBuyerActivity extends Activity {
     private Button backButton;
     private EditText buyerText;
     private TextView cropTextView;
-    private TextView quantityView;  
+    private TextView quantityView; 
+    private TextView buyerTextView;
     private EditText transportText;
     private EditText priceText;
     private double transportCosts;
@@ -27,7 +28,9 @@ public class TransportEstimatorBuyerActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.transport_estimator_find_buyer);        
+        setContentView(R.layout.transport_estimator_find_buyer);
+        buyerTextView = (TextView) findViewById(R.id.buyer_name);
+        buyerTextView.setText(MarketSaleObject.getMarketObject().getBuyer().toString());
         cropTextView = (TextView)findViewById(R.id.commodity_name);
         cropTextView.setText(MarketSaleObject.getMarketObject().getCropName());
         quantityView = (TextView) findViewById(R.id.quantity_amount);
@@ -44,15 +47,7 @@ public class TransportEstimatorBuyerActivity extends Activity {
 
             @Override
             public void onClick(View arg0) {
-                buyerText = (EditText) findViewById(R.id.buyer_name);
-                String buyerName = buyerText.getText().toString();
-                if (buyerName.trim().length() == 0) {
-                	Toast toast = Toast.makeText(getApplicationContext(),
-							"Please enter a buyer",
-							Toast.LENGTH_LONG);
-					toast.show();
-					return;
-                }
+                String buyerName = MarketSaleObject.getMarketObject().getBuyer().toString();
                 
                 priceText = (EditText) findViewById(R.id.price_value);
                 String price = priceText.getText().toString();
