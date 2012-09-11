@@ -225,7 +225,7 @@ public class Repository {
 	    return checkDB != null ? true : false;
 	}
 	
-	private static List<String> getDistrictsFromDb() {
+	public static List<String> getDistrictsFromDb() {
 		
 		Cursor cursor = MarketLinkApplication.getInstance().getContentResolver().query(DistrictsProviderAPI.DistrictsColumns.CONTENT_URI, null, null, null, null);
 		Log.i("DBDISTRICTSCOUNT", String.valueOf(cursor.getCount()));
@@ -304,5 +304,16 @@ public class Repository {
     		buyerCursor.close();
     		return false;
     	}
+	}
+
+	public static boolean districtsinDb() {
+		Cursor cursor = MarketLinkApplication.getInstance().getContentResolver().query(DistrictsProviderAPI.DistrictsColumns.CONTENT_URI, null, null, null, null);
+		if (cursor.getCount() > 0) {
+			cursor.close();
+			return true;
+		} else {
+			cursor.close();
+			return false;
+		}
 	}
 }

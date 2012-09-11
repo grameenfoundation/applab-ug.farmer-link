@@ -3,8 +3,11 @@ package applab.client.farmerlink;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,13 +22,28 @@ import applab.client.farmerlink.MarketLinkApplication;
 
 public class OptionsActivity extends ListActivity {
 	List<String> options;
+    ProgressDialog progressDialog;
+    static final int PROGRESS_DIALOG = 0;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.options);
+    }
+    
+    @Override
+    public void onResume() {
+    	super.onResume();
         
         try {
         	MarketLinkApplication.createMarketLinkDirectories();
+        	String url = getString(R.string.server) + "/" + "FarmerLink"
+    				+ getString(R.string.districts_crops);
+        	if(Repository.districtsinDb()) {
+            	Repository.getDistrictsFromDb();
+        	} else {
+        		new DownloadDistricts().execute(url);
+        	}
         	Repository.getDistricts(getString(R.string.server) + "/" + "FarmerLink"
     				+ getString(R.string.districts_crops));
         }
@@ -81,4 +99,38 @@ public class OptionsActivity extends ListActivity {
 			return row;
     	}
     }
+    
+	protected Dialog onCreateDialog(int dialogId) {
+		switch(dialogId) {
+		case PROGRESS_DIALOG:
+			progressDialog = new ProgressDialog(OptionsActivity.this);
+			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progressDialog.setTitle("Downloading content...");
+			progressDialog.setMessage("Content not found on phone. Please wait while it is downloaded.");
+			return progressDialog;
+		default:
+			return null;
+		}
+	}
+	
+    private class DownloadDistricts extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected void onPreExecute() {
+			showDialog(PROGRESS_DIALOG);
+		}
+		@Override
+		protected Void doInBackground(String... urls) {
+			for (String url: urls) {
+				Repository.getDistricts(url);
+			}
+			return null;
+		}
+		
+		@Override
+	    protected void onPostExecute(Void ignoreReturnValue) {
+	         dismissDialog(PROGRESS_DIALOG);
+
+	     }
+	}
 }

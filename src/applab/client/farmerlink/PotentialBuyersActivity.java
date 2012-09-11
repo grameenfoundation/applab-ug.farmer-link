@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,14 +105,28 @@ public class PotentialBuyersActivity extends ListActivity {
 		menu.add(0, v.getId(), 0, edit);
 		menu.add(0, v.getId(), 0, delete);
 	}
+	/*
+	@Override
+	public boolean onPrepareOptionsMenu (Menu menu) {
+	    if (isFinalized) {
+	    	menu.getItem(1).setEnabled(false);
+	    }
+	    return false;
+	}*/
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		Buyer buyer = buyers.get((int) info.id);
+		Log.d("buyer", buyer.getName());
+		if ((buyer !=null) && !(buyer.getName().equalsIgnoreCase("NONE"))) {
 		if(item.getTitle() =="Call buyer") {
 			callBuyer(info.id);
 		} else if (item.getTitle() == "Select buyer") {
 			selectBuyer(info.id);
+		} else {
+			return false;
+		}
 		} else {
 			return false;
 		}
