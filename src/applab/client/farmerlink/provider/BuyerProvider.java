@@ -68,7 +68,7 @@ public class BuyerProvider extends ContentProvider {
         int count;
         
         switch (sUriMatcher.match(uri)) {
-            case BUYERS:                
+            case BUYERS:
                 count = db.delete(BUYERS_TABLE_NAME, where, whereArgs);
                 break;
 

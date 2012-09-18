@@ -64,15 +64,15 @@ public class FarmerProvider extends ContentProvider {
 		
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
         int count;
-        
+
         switch (sUriMatcher.match(uri)) {
-            case FARMERS:                
+            case FARMERS:
                 count = db.delete(FARMERS_TABLE_NAME, where, whereArgs);
                 break;
 
             case FARMER_ID:
                 String instanceId = uri.getPathSegments().get(1);
-                
+
                 count =
                     db.delete(FARMERS_TABLE_NAME,
                     		FarmerColumns._ID + "=" + instanceId
