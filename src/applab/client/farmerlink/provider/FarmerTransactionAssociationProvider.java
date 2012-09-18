@@ -45,7 +45,12 @@ public class FarmerTransactionAssociationProvider extends ContentProvider {
 		               + FarmerTransactionAssociationColumns._ID + " integer primary key, " 
 		               + FarmerTransactionAssociationColumns.FARMER_QUOTA + " text not null, "
 		               + FarmerTransactionAssociationColumns.FARMER_ID + " text, " 
-		               + FarmerTransactionAssociationColumns.TRANSACTION_ID + " text not null );");
+		               + FarmerTransactionAssociationColumns.FARMER_NAME + " text, "
+		               + FarmerTransactionAssociationColumns.TRANSACTION_FEE_QUOTA + " text, "
+		               + FarmerTransactionAssociationColumns.TRANSPORT_FEE_QUOTA + " text, "
+		               + FarmerTransactionAssociationColumns.TRANSACTION_ID + " text, "
+		               + FarmerTransactionAssociationColumns.FARMER_REVENUE + " text, "
+		               + FarmerTransactionAssociationColumns.STATUS + " text not null );");
 		}
 
 		@Override
@@ -98,7 +103,7 @@ public class FarmerTransactionAssociationProvider extends ContentProvider {
         if (sUriMatcher.match(uri) != FARMER_TRANSACTION_ASSOCIATIONS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
-
+        Log.i("FTINSERT UTI", uri.toString());
         ContentValues values;
         if (initialValues != null) {
             values = new ContentValues(initialValues);
@@ -129,7 +134,7 @@ public class FarmerTransactionAssociationProvider extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FARMER_TRANSACTION_ASSOCIATION_TABLE_NAME);
-
+        Log.i("FT UTI", uri.toString());
         switch (sUriMatcher.match(uri)) {
             case FARMER_TRANSACTION_ASSOCIATIONS:
                 qb.setProjectionMap(sInstancesProjectionMap);
@@ -187,5 +192,9 @@ public class FarmerTransactionAssociationProvider extends ContentProvider {
 		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.FARMER_QUOTA, FarmerTransactionAssociationColumns.FARMER_QUOTA);
 		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.FARMER_ID, FarmerTransactionAssociationColumns.FARMER_ID);
 		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.TRANSACTION_ID, FarmerTransactionAssociationColumns.TRANSACTION_ID);
+		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.FARMER_REVENUE, FarmerTransactionAssociationColumns.FARMER_REVENUE);
+		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.TRANSACTION_FEE_QUOTA, FarmerTransactionAssociationColumns.TRANSACTION_FEE_QUOTA);
+		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.TRANSPORT_FEE_QUOTA, FarmerTransactionAssociationColumns.TRANSPORT_FEE_QUOTA);
+		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.STATUS, FarmerTransactionAssociationColumns.STATUS);
 	}
 }

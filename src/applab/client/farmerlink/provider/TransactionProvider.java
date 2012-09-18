@@ -21,12 +21,12 @@ public class TransactionProvider extends ContentProvider {
 
 	private static final String t = "TransactionProvider";
 
-    private static final String DATABASE_NAME = "transaction.db";
+    private static final String DATABASE_NAME = "markettransaction.db";
     private static final int DATABASE_VERSION = 1;
-    private static final String TRANSACTION_TABLE_NAME = "transaction";
+    private static final String TRANSACTION_TABLE_NAME = "markettransaction";
 
-    private static final int TRANSACTIONS = 1;
-    private static final int TRANSACTION_ID = 2;
+    private static final int MARKET_TRANSACTIONS = 1;
+    private static final int MARKET_TRANSACTION_ID = 2;
 
     
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -40,16 +40,19 @@ public class TransactionProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			Log.i("DB CREATION", "creating buyers database");
+			Log.i("DB CREATION", "creating transaction database");
 			db.execSQL("CREATE TABLE " + TRANSACTION_TABLE_NAME + " (" 
 		               + TransactionColumns._ID + " integer primary key, " 
 		               + TransactionColumns.BUYER_NAME + " text not null, "
-		               + TransactionColumns.BUYER_TELEPHONE + " text, " 
 		               + TransactionColumns.DISTRICT + " text not null, "
 		               + TransactionColumns.CROP + " text not null, "
-		               + TransactionColumns.CKW + " text not null, "
-		               + TransactionColumns.TRANSACTION_DATE + " text not null,"
-		               + TransactionColumns.TRANSACTION_TYPE + " text not null );");
+		               + TransactionColumns.TRANSACTION_DATE + " text not null, "
+		               + TransactionColumns.TRANSACTION_TYPE + " text not null, "
+		               + TransactionColumns.QUANTITY + " text not null, "
+		               + TransactionColumns.TRANSACTION_FEE + " text not null, "
+		               + TransactionColumns.TRANSPORT_FEE + " text not null, "
+		               + TransactionColumns.UNITPRICE + " text not null, "
+		               + TransactionColumns.STATUS + " text not null );");
 		}
 
 		@Override
@@ -70,11 +73,11 @@ public class TransactionProvider extends ContentProvider {
         int count;
         
         switch (sUriMatcher.match(uri)) {
-            case TRANSACTIONS:                
+            case MARKET_TRANSACTIONS:                
                 count = db.delete(TRANSACTION_TABLE_NAME, where, whereArgs);
                 break;
 
-            case TRANSACTION_ID:
+            case MARKET_TRANSACTION_ID:
                 count =
                     db.delete(TRANSACTION_TABLE_NAME,
                     		TransactionColumns._ID + "=" + uri.getPathSegments().get(1)
@@ -97,12 +100,12 @@ public class TransactionProvider extends ContentProvider {
 	}
 
 	@Override
-	public Uri insert(Uri uri, ContentValues initialValues) {
+	public Uri insert(Uri uri, ContentValues initialValues) {Log.i("TPINSERT UTI", uri.toString());
         // Validate the requested uri
-        if (sUriMatcher.match(uri) != TRANSACTIONS) {
+        if (sUriMatcher.match(uri) != MARKET_TRANSACTIONS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
-
+        
         ContentValues values;
         if (initialValues != null) {
             values = new ContentValues(initialValues);
@@ -135,11 +138,11 @@ public class TransactionProvider extends ContentProvider {
         qb.setTables(TRANSACTION_TABLE_NAME);
 
         switch (sUriMatcher.match(uri)) {
-            case TRANSACTIONS:
+            case MARKET_TRANSACTIONS:
                 qb.setProjectionMap(sInstancesProjectionMap);
                 break;
 
-            case TRANSACTION_ID:
+            case MARKET_TRANSACTION_ID:
                 qb.setProjectionMap(sInstancesProjectionMap);
                 qb.appendWhere(TransactionColumns._ID + "=" + uri.getPathSegments().get(1));
                 break;
@@ -163,11 +166,11 @@ public class TransactionProvider extends ContentProvider {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         int count;
         switch (sUriMatcher.match(uri)) {
-            case TRANSACTIONS:
+            case MARKET_TRANSACTIONS:
                 count = db.update(TRANSACTION_TABLE_NAME, values, selection, selectionArgs);
                 break;
 
-            case TRANSACTION_ID:               
+            case MARKET_TRANSACTION_ID:               
                 count =
                     db.update(TRANSACTION_TABLE_NAME, values, TransactionColumns._ID + "=" + uri.getPathSegments().get(1)
                             + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
@@ -183,17 +186,20 @@ public class TransactionProvider extends ContentProvider {
 
 	static {
 		sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		sUriMatcher.addURI(TransactionProviderAPI.AUTHORITY, "transactions", TRANSACTIONS);
-		sUriMatcher.addURI(TransactionProviderAPI.AUTHORITY, "transaction/#", TRANSACTION_ID);
+		sUriMatcher.addURI(TransactionProviderAPI.AUTHORITY, "markettransactions", MARKET_TRANSACTIONS);
+		sUriMatcher.addURI(TransactionProviderAPI.AUTHORITY, "markettransaction/#", MARKET_TRANSACTION_ID);
 		
 		sInstancesProjectionMap = new HashMap<String, String>();
 		sInstancesProjectionMap.put(TransactionColumns._ID, TransactionColumns._ID);
 		sInstancesProjectionMap.put(TransactionColumns.BUYER_NAME, TransactionColumns.BUYER_NAME);
-		sInstancesProjectionMap.put(TransactionColumns.BUYER_TELEPHONE, TransactionColumns.BUYER_TELEPHONE);
+		sInstancesProjectionMap.put(TransactionColumns.UNITPRICE, TransactionColumns.UNITPRICE);
+		sInstancesProjectionMap.put(TransactionColumns.TRANSPORT_FEE, TransactionColumns.TRANSPORT_FEE);
+		sInstancesProjectionMap.put(TransactionColumns.TRANSACTION_FEE, TransactionColumns.TRANSACTION_FEE);
+		sInstancesProjectionMap.put(TransactionColumns.QUANTITY, TransactionColumns.QUANTITY);
 		sInstancesProjectionMap.put(TransactionColumns.CROP, TransactionColumns.CROP);
-		sInstancesProjectionMap.put(TransactionColumns.CKW, TransactionColumns.CKW);
 		sInstancesProjectionMap.put(TransactionColumns.DISTRICT, TransactionColumns.DISTRICT);
 		sInstancesProjectionMap.put(TransactionColumns.TRANSACTION_TYPE, TransactionColumns.TRANSACTION_TYPE);
 		sInstancesProjectionMap.put(TransactionColumns.TRANSACTION_DATE, TransactionColumns.TRANSACTION_DATE);
+		sInstancesProjectionMap.put(TransactionColumns.STATUS, TransactionColumns.STATUS);
 	}
 }
