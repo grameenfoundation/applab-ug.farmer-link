@@ -12,6 +12,10 @@ public class MarketSaleObject {
     private MarketPrices marketPrices;
     private String selectedOption;
 	private Buyer buyer;
+    private String transactionType;
+    public static final String BUY = "buy";
+    public static final String MARKETSALE = "marketSale";
+    public static final String BUYERSALE = "buyerSale";
     
     private MarketSaleObject() {
         
@@ -95,6 +99,14 @@ public class MarketSaleObject {
 	
 	public Buyer getBuyer() {
 		return buyer;
+	}
+
+	public String getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(String marketSale) {
+		this.transactionType = marketSale;
 	}
 
 }
