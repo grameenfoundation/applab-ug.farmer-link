@@ -1,7 +1,11 @@
 package applab.client.farmerlink;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.ListActivity;
 import android.content.ContentValues;
@@ -19,6 +23,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import applab.client.farmerlink.provider.FarmerTransactionAssociationProviderAPI;
 import applab.client.farmerlink.provider.TransactionProviderAPI;
+import applab.client.farmerlink.tasks.UploadTransactions;
 import applab.client.farmerlink.utilities.PricesFormatter;
 
 public class ProjectedSalesActivity extends ListActivity {
@@ -66,6 +71,7 @@ public class ProjectedSalesActivity extends ListActivity {
             	else {
             		values.put(TransactionProviderAPI.TransactionColumns.BUYER_NAME, MarketSaleObject.getMarketObject().getBuyer().getName());
             	}
+            	
             	values.put(TransactionProviderAPI.TransactionColumns.BUYER_NAME, "market");
             	values.put(TransactionProviderAPI.TransactionColumns.TRANSACTION_TYPE, TransactionProviderAPI.SALE_MARKET);
             	values.put(TransactionProviderAPI.TransactionColumns.CROP, MarketSaleObject.getMarketObject().getCropName());
@@ -75,20 +81,21 @@ public class ProjectedSalesActivity extends ListActivity {
             	values.put(TransactionProviderAPI.TransactionColumns.TRANSACTION_FEE, MarketSaleObject.getMarketObject().getTotalTransactionFee());
             	values.put(TransactionProviderAPI.TransactionColumns.TRANSPORT_FEE, MarketSaleObject.getMarketObject().getTransportCost());
             	values.put(TransactionProviderAPI.TransactionColumns.UNITPRICE, MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePrice());
-            	values.put(TransactionProviderAPI.TransactionColumns.TRANSACTION_DATE, today.get(Calendar.DATE) + 
-            			"/" + (today.get(Calendar.MONTH) + 1) + "/" + today.get(Calendar.YEAR));
+            	values.put(TransactionProviderAPI.TransactionColumns.TRANSACTION_DATE,today.get(Calendar.YEAR) + "-" + (today.get(Calendar.MONTH) + 1) 
+            			+ "-" + today.get(Calendar.DATE) + " 00:00:00");
             	Uri transactionUri = MarketLinkApplication.getInstance().getContentResolver().insert(TransactionProviderAPI.TransactionColumns.CONTENT_URI, values);
             	
             	String selection = TransactionProviderAPI.TransactionColumns._ID + "=?";
             	String[] selectionArgs = {transactionUri.getPathSegments().get(1)};
             	Cursor transactionCursor = MarketLinkApplication.getInstance().getContentResolver().query(TransactionProviderAPI.TransactionColumns.CONTENT_URI, null, selection, selectionArgs, null);
             	transactionCursor.moveToFirst();
+            	String transactionId = transactionUri.getPathSegments().get(1);
             	//save each farmer who participated in the transaction and their quota
             	for (Farmer farmer : farmers) {
             		ContentValues farmerTransactionValues = new ContentValues();
             		farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.FARMER_ID, farmer.getId());
             		farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.FARMER_QUOTA, farmer.getQuantity());
-            		farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.TRANSACTION_ID, transactionCursor.getString(transactionCursor.getColumnIndex(TransactionProviderAPI.TransactionColumns._ID)));
+            		farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.TRANSACTION_ID, transactionId);
             		farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.STATUS, FarmerTransactionAssociationProviderAPI.UNSYNCHED);
             		farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.FARMER_REVENUE, farmer.computeRevenue(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue()));
             		farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.TRANSACTION_FEE_QUOTA, farmer.computeTransactionFee(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue()));
@@ -97,8 +104,28 @@ public class ProjectedSalesActivity extends ListActivity {
             		MarketLinkApplication.getInstance().getContentResolver().insert(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.CONTENT_URI, farmerTransactionValues);
             	}
             	transactionCursor.close();
-                Intent intent = new Intent(getApplicationContext(), FinishSellActivity.class);
-                startActivity(intent);
+            	UploadTransactions upload = new UploadTransactions();
+            	String url = getString(R.string.server) + "/"
+        				+ "FarmerLink"
+        				+ getString(R.string.upload_url);
+            	int success = upload.uploadFarmerTransactions(url, getApplicationContext());
+            	if (success == 0) {
+            		for (Farmer farmer : farmers) {
+                		ContentValues farmerTransactionValues = new ContentValues();
+                		farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.STATUS, FarmerTransactionAssociationProviderAPI.SYNCHED);
+                		String where = FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.TRANSACTION_ID + "=?" + " AND "
+                		+ FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.FARMER_ID + "=?";
+                		String[] whereArgs = {transactionId, farmer.getId()};
+                		MarketLinkApplication.getInstance().getContentResolver().update(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.CONTENT_URI, farmerTransactionValues, where, whereArgs);
+                	}
+            		ContentValues updateValues = new ContentValues();
+            		updateValues.put(TransactionProviderAPI.TransactionColumns.STATUS, TransactionProviderAPI.SYNCHED);
+            		String where = TransactionProviderAPI.TransactionColumns._ID + "=?";
+            		String[] whereArgs = {transactionId};
+            		MarketLinkApplication.getInstance().getContentResolver().update(TransactionProviderAPI.TransactionColumns.CONTENT_URI, updateValues, where, whereArgs);
+	                Intent intent = new Intent(getApplicationContext(), FinishSellActivity.class);
+	                startActivity(intent);
+              }
             }
         });
         
@@ -118,7 +145,6 @@ public class ProjectedSalesActivity extends ListActivity {
         	
         });
     }
-
     /**
      * Sets text values
      */
