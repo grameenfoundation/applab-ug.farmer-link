@@ -1,23 +1,38 @@
 package applab.client.farmerlink.tasks;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.entity.AbstractHttpEntity;
+import org.apache.http.entity.StringEntity;
 
+import android.content.Context;
 import android.database.Cursor;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import applab.client.farmerlink.GlobalConstants;
 import applab.client.farmerlink.MarketLinkApplication;
 import applab.client.farmerlink.provider.FarmerTransactionAssociationProviderAPI;
 import applab.client.farmerlink.provider.TransactionProviderAPI;
+import applab.client.farmerlink.utilities.HttpHelpers;
 import applab.client.farmerlink.utilities.XmlEntityBuilder;
 
 public class UploadTransactions {
 
-	public void uploadFarmerTransactions() {
+	private static String imei;
+	public int uploadFarmerTransactions(String url, Context context) {
+		int status = -1;
+		imei = getImei(context);
+		Log.i("IMEI", " " + imei);
 		String selection = TransactionProviderAPI.TransactionColumns.STATUS
 				+ "=?";
 		String[] selectionArgs = { TransactionProviderAPI.UNSYNCHED };
@@ -54,22 +69,51 @@ public class UploadTransactions {
 
 			transactions.add(transaction);
 		}
+		transactionCursor.close();
 		for (Transaction transaction : transactions) {
 			List<Farmer> farmers = getTransactionFarmers(transaction);
 			transaction.attributes = extractAttributes(transaction);
 			try {
-				sendTransactionToSalesforce(transaction, farmers);
+				int networkTimeout = 5 * 60 * 1000;
+				InputStream statusStream;
+				statusStream = HttpHelpers.postJsonRequestAndGetStream(url, (StringEntity)sendTransactionToSalesforce(transaction, farmers), networkTimeout);
+				Writer writer = new StringWriter();
+				 
+	            char[] buffer = new char[1024];
+	            try {
+	                Reader reader = new BufferedReader(
+	                        new InputStreamReader(statusStream, "UTF-8"));
+	                int n;
+	                while ((n = reader.read(buffer)) != -1) {
+	                    writer.write(buffer, 0, n);
+	                }
+	            } finally {
+	            	statusStream.close();
+	            	status = Integer.parseInt(writer.toString().trim());
+	            }
+	            Log.i("OUTPUT", " "+writer.toString());
 			} catch (UnsupportedEncodingException e) {
 				Log.e("ERROR", e.getMessage());
+			} catch (IOException ex) {
+				Log.e("ERROR", ex.getMessage());
 			}
 		}
+		return status;
 	}
 
+	private String getImei(Context context) {
+		TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getDeviceId();
+	}
 	static AbstractHttpEntity sendTransactionToSalesforce(Transaction transaction, List<Farmer> farmers) throws UnsupportedEncodingException {
 
         XmlEntityBuilder xmlRequest = new XmlEntityBuilder();
         xmlRequest.writeStartElement("FarmerLinkPost", GlobalConstants.XMLNAMESPACE);
         xmlRequest.writeStartElement("transaction");
+        xmlRequest.writeStartElement("imei");
+        xmlRequest.writeText(imei);
+        xmlRequest.writeEndElement();
+        
         xmlRequest.writeStartElement("transactionDetails", transaction.attributes);
         xmlRequest.writeEndElement();
         for (Farmer farmer : farmers) {
@@ -93,8 +137,9 @@ public class UploadTransactions {
 		transactionAttributes.put("quantity", transaction.quantity);
 		transactionAttributes.put("transactionFee", transaction.transactionFee);
 		transactionAttributes.put("unitPrice", transaction.unitPrice);
-		transactionAttributes.put("buyer", transaction.buyer);
+		transactionAttributes.put("name", transaction.buyer);
 		transactionAttributes.put("transportFee", transaction.transportFee);
+		transactionAttributes.put("revenue", String.valueOf(Double.parseDouble(transaction.quantity) * Double.parseDouble(transaction.unitPrice)));
 		return transactionAttributes;
 	}
 
@@ -127,6 +172,7 @@ public class UploadTransactions {
 
 			transactionFarmers.add(transactionFarmer);
 		}
+		transactionFarmerCursor.close();
 		return transactionFarmers;
 	}
 
