@@ -22,6 +22,7 @@ import applab.client.farmerlink.provider.DistrictsProviderAPI;
 import applab.client.farmerlink.provider.FarmerProviderAPI;
 import applab.client.farmerlink.provider.FarmerVersionProviderAPI;
 import applab.client.farmerlink.provider.MarketPricesProviderAPI;
+import applab.client.farmerlink.provider.MarketPricesVersionProviderAPI;
 import applab.client.farmerlink.tasks.DownloadBuyers;
 import applab.client.farmerlink.tasks.DownloadDistrictsAndCrops;
 import applab.client.farmerlink.tasks.DownloadFarmersAndMarketPrices;
@@ -33,44 +34,52 @@ public class Repository {
 		Cursor farmersVersionCursor = MarketLinkApplication.getInstance().getContentResolver().query(FarmerVersionProviderAPI.FarmerVersionsColumns.CONTENT_URI,
 				null, null, null, null);
 		List<Farmer> farmers = new ArrayList<Farmer>();
-		if (!checkDataBase("farmerVersion.db") || null == farmersVersionCursor) {
+		if (farmersVersionCursor.getCount() == 0) {
 			DownloadFarmersAndMarketPrices downloadFarmersAndMarketPrices = new DownloadFarmersAndMarketPrices(url);
         	downloadFarmersAndMarketPrices.downloadFarmersAndMarketPrices(district, crop);
         	farmers = getFarmersFromDb(district, crop);
 		}
-		else {Log.i("Farmer Version Cursor", String.valueOf(farmersVersionCursor.getColumnCount() + " -" + farmersVersionCursor.getCount()));
-			farmersVersionCursor.moveToFirst();
-			String farmersVersion = farmersVersionCursor.getString(farmersVersionCursor.getColumnIndex(FarmerVersionProviderAPI.FarmerVersionsColumns.VERSION));
-			DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-			Calendar versionDate = Calendar.getInstance();
-			Calendar todayDate = Calendar.getInstance();
-			try {
-				Date date = df.parse(farmersVersion);
+		else {
+			 farmersVersionCursor.moveToFirst();Log.i("farmerVersion DB", "DB EXISTS!!");
+			 if (farmersVersionCursor.getCount() > 0) {
+				String farmersVersion = farmersVersionCursor.getString(farmersVersionCursor.getColumnIndex(FarmerVersionProviderAPI.FarmerVersionsColumns.VERSION));
+				DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+				Calendar versionDate = Calendar.getInstance();
+				Calendar todayDate = Calendar.getInstance();
+				try {
+					Date date = df.parse(farmersVersion);
+					
+					versionDate.setTime(date);
+					versionDate.add(Calendar.DATE, 7);
+					
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
 				
-				versionDate.setTime(date);
-				versionDate.add(Calendar.DATE, 7);
-				
-			} catch (ParseException e) {
-				e.printStackTrace();
+			
+		    	farmers = getFarmersFromDb(district, crop);
+		        if (farmers == null || farmers.size() == 0 || ((todayDate.getTimeInMillis() - versionDate.getTimeInMillis())/(24 * 60 * 60 * 1000)) >= 7) {
+		        	if (((todayDate.getTimeInMillis() - versionDate.getTimeInMillis())/(24 * 60 * 60 * 1000)) >= 7) {
+		        		String where = FarmerProviderAPI.FarmerColumns.DISTRICT_ID + " =? " + "and " + FarmerProviderAPI.FarmerColumns.CROP_ID + " =? ";
+		        		MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
+		        		String [] selectionArgs = {marketPricesParser.getDistrictId(), marketPricesParser.getCropId()};
+		        		MarketLinkApplication.getInstance().getContentResolver().delete(FarmerProviderAPI.FarmerColumns.CONTENT_URI,
+		        				where, selectionArgs);
+		        		MarketLinkApplication.getInstance().getContentResolver().delete(MarketPricesProviderAPI.MarketPricesColumns.CONTENT_URI,
+		        				where, selectionArgs);
+		        		
+		        		MarketLinkApplication.getInstance().getContentResolver().delete(FarmerVersionProviderAPI.FarmerVersionsColumns.CONTENT_URI, null, null);
+		        		MarketLinkApplication.getInstance().getContentResolver().delete(MarketPricesVersionProviderAPI.MarketPricesVersionColumns.CONTENT_URI, null, null);
+		        		Log.i("FARMERS DOWNLOAD", "Farmer cache empty, downloading ...");
+			        	DownloadFarmersAndMarketPrices downloadFarmersAndMarketPrices = new DownloadFarmersAndMarketPrices(url);
+			        	downloadFarmersAndMarketPrices.downloadFarmersAndMarketPrices(district, crop);
+			        	farmers = getFarmersFromDb(district, crop); 
+		        	}
+		        }
 			}
-	    	farmers = getFarmersFromDb(district, crop);
-	        if (farmers == null || farmers.size() == 0 || ((todayDate.getTimeInMillis() - versionDate.getTimeInMillis())/(24 * 60 * 60 * 1000)) >= 7) {
-	        	if (((todayDate.getTimeInMillis() - versionDate.getTimeInMillis())/(24 * 60 * 60 * 1000)) >= 7) {
-	        		String where = FarmerProviderAPI.FarmerColumns.DISTRICT_ID + " =? " + "and " + FarmerProviderAPI.FarmerColumns.CROP_ID + " =? ";
-	        		MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
-	        		String [] selectionArgs = {marketPricesParser.getDistrictId(), marketPricesParser.getCropId()};
-	        		MarketLinkApplication.getInstance().getContentResolver().delete(FarmerProviderAPI.FarmerColumns.CONTENT_URI,
-	        				where, selectionArgs);
-	        		MarketLinkApplication.getInstance().getContentResolver().delete(MarketPricesProviderAPI.MarketPricesColumns.CONTENT_URI,
-	        				where, selectionArgs);
-	        	}
-	        	Log.i("FARMERS DOWNLOAD", "Farmer cache empty, downloading ...");
-	        	DownloadFarmersAndMarketPrices downloadFarmersAndMarketPrices = new DownloadFarmersAndMarketPrices(url);
-	        	downloadFarmersAndMarketPrices.downloadFarmersAndMarketPrices(district, crop);
-	        	farmers = getFarmersFromDb(district, crop);
-	        }
-	        
+	        	   
 		}
+		farmersVersionCursor.close();
 		return farmers;
     }
     
@@ -147,46 +156,52 @@ public class Repository {
 				null, null, null, null);
 		List<Buyer> buyers = new ArrayList<Buyer>();
 		
-		if (!checkDataBase("buyersVersion.db") ||null == buyersVersionCursor) {
+		if (buyersVersionCursor.getCount() == 0) {
 			DownloadBuyers downloadBuyers = new DownloadBuyers(url);
 			downloadBuyers.downloadBuyers(district, crop);
 			buyers = getBuyersFromDb(district, crop);
 		}
 		else {
 			buyersVersionCursor.moveToFirst();
-			String buyersVersion = buyersVersionCursor.getString(buyersVersionCursor.getColumnIndex(BuyersVersionProviderAPI.BuyersVersionColumns.VERSION));
-			DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-			Calendar versionDate = Calendar.getInstance();
-			Calendar todayDate = Calendar.getInstance();
-			try {
-				Date date = df.parse(buyersVersion);
-				
-				versionDate.setTime(date);
-				versionDate.add(Calendar.DATE, 7);
-				
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			buyers = getBuyersFromDb(district, crop);
-			if (buyers == null || buyers.size() == 0 || ((todayDate.getTimeInMillis() - versionDate.getTimeInMillis())/(24 * 60 * 60 * 1000)) >= 7) {
-				
-				if (((todayDate.getTimeInMillis() - versionDate.getTimeInMillis())/(24 * 60 * 60 * 1000)) >= 7) {
-					String where = BuyerProviderAPI.BuyersColumns.DISTRICT_ID + " =? " + "and " + BuyerProviderAPI.BuyersColumns.CROP_ID + " =? ";
-	        		BuyersParser buyersParser = new BuyersParser(district, crop);
-	        		String [] selectionArgs = {buyersParser.getDistrictId(), buyersParser.getCropId()};
-	        		MarketLinkApplication.getInstance().getContentResolver().delete(BuyerProviderAPI.BuyersColumns.CONTENT_URI,
-	        				where, selectionArgs);
+			if (buyersVersionCursor.getCount() > 0) { 
+				String buyersVersion = buyersVersionCursor.getString(buyersVersionCursor.getColumnIndex(BuyersVersionProviderAPI.BuyersVersionColumns.VERSION));
+				buyersVersionCursor.close();
+				DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+				Calendar versionDate = Calendar.getInstance();
+				Calendar todayDate = Calendar.getInstance();
+				try {
+					Date date = df.parse(buyersVersion);
+					
+					versionDate.setTime(date);
+					versionDate.add(Calendar.DATE, 7);
+					
+				} catch (ParseException e) {
+					e.printStackTrace();
 				}
-				Log.i("Buyers DOWNLOAD", "Buyers cache empty, downloading ...");
-				DownloadBuyers downloadBuyers = new DownloadBuyers(url);
-				downloadBuyers.downloadBuyers(district, crop);
 				buyers = getBuyersFromDb(district, crop);
+				if (buyers == null || buyers.size() == 0 || ((todayDate.getTimeInMillis() - versionDate.getTimeInMillis())/(24 * 60 * 60 * 1000)) >= 7) {
+					
+					if (((todayDate.getTimeInMillis() - versionDate.getTimeInMillis())/(24 * 60 * 60 * 1000)) >= 7) {
+						String where = BuyerProviderAPI.BuyersColumns.DISTRICT_ID + " =? " + "and " + BuyerProviderAPI.BuyersColumns.CROP_ID + " =? ";
+		        		BuyersParser buyersParser = new BuyersParser(district, crop);
+		        		String [] selectionArgs = {buyersParser.getDistrictId(), buyersParser.getCropId()};
+		        		MarketLinkApplication.getInstance().getContentResolver().delete(BuyerProviderAPI.BuyersColumns.CONTENT_URI,
+		        				where, selectionArgs);
+		        		
+		        		MarketLinkApplication.getInstance().getContentResolver().delete(BuyersVersionProviderAPI.BuyersVersionColumns.CONTENT_URI, null, null);
+		        		Log.i("Buyers DOWNLOAD", "Buyers cache empty, downloading ...");
+		    			DownloadBuyers downloadBuyers = new DownloadBuyers(url);
+		    			downloadBuyers.downloadBuyers(district, crop);
+		    			buyers = getBuyersFromDb(district, crop);
+					}	
+				}
 			}
+			
 		}
 		return buyers;
 	}
 	
-	public static List<Buyer> getBuyersFromDb(String district, String crop) {
+	private static List<Buyer> getBuyersFromDb(String district, String crop) {
 		List<Buyer> buyers =  new ArrayList<Buyer>();
 		
     	BuyersParser buyersParser = new BuyersParser(district, crop);

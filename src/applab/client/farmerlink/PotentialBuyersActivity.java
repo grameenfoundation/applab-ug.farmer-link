@@ -56,20 +56,15 @@ public class PotentialBuyersActivity extends ListActivity {
 
 		cropTextView.setText("Crop : " + crop);
 
-		if (Repository.buyersInDb(district, crop)) {
-			buyers = Repository.getBuyersFromDb(district, crop);
-			ListView listView = (ListView) findViewById(android.R.id.list);
-			registerForContextMenu(listView);
-			if(buyers.size()==0) {
-				buyers.add(new Buyer("NONE", null, null));
-			}
-			
-			setListAdapter(new BuyersAdapter());
-
-		} else {
-			new LoadBuyers().execute(getString(R.string.server) + "/" + "FarmerLink" + getString(R.string.buyers));
-			
+		//if (Repository.buyersInDb(district, crop)) {
+		new LoadBuyers().execute(getString(R.string.server) + "/" + "FarmerLink" + getString(R.string.buyers));
+		ListView listView = (ListView) findViewById(android.R.id.list);
+		registerForContextMenu(listView);
+		if(buyers.size()==0) {
+			buyers.add(new Buyer("NONE", null, null));
 		}
+		
+		setListAdapter(new BuyersAdapter());
 		
 		Log.i("BUYERCOUNT", String.valueOf(buyers.size()));
 		for (Buyer buyer : buyers) {
