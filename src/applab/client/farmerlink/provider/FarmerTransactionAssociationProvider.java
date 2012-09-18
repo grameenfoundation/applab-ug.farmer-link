@@ -191,6 +191,7 @@ public class FarmerTransactionAssociationProvider extends ContentProvider {
 		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns._ID, FarmerTransactionAssociationColumns._ID);
 		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.FARMER_QUOTA, FarmerTransactionAssociationColumns.FARMER_QUOTA);
 		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.FARMER_ID, FarmerTransactionAssociationColumns.FARMER_ID);
+		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.FARMER_NAME, FarmerTransactionAssociationColumns.FARMER_NAME);
 		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.TRANSACTION_ID, FarmerTransactionAssociationColumns.TRANSACTION_ID);
 		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.FARMER_REVENUE, FarmerTransactionAssociationColumns.FARMER_REVENUE);
 		sInstancesProjectionMap.put(FarmerTransactionAssociationColumns.TRANSACTION_FEE_QUOTA, FarmerTransactionAssociationColumns.TRANSACTION_FEE_QUOTA);
