@@ -52,6 +52,7 @@ public class FindMarketsActivity extends ListActivity {
 
 			@Override
 			public void onClick(View view) {
+				MarketSaleObject.getMarketObject().setTransactionType(MarketSaleObject.BUYERSALE);
 				Intent intent = new Intent(getApplicationContext(),
 						PotentialBuyersActivity.class);
 				startActivity(intent);
@@ -73,6 +74,7 @@ public class FindMarketsActivity extends ListActivity {
 
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 
+		MarketSaleObject.getMarketObject().setTransactionType(MarketSaleObject.MARKETSALE);
 		MarketPrices market = marketPrices.get(position);
 		if (!market.getMarketName().equalsIgnoreCase("NONE")) {
 			Intent intent = new Intent(getApplicationContext(),
