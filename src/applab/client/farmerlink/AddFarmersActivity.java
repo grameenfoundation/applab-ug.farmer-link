@@ -99,15 +99,10 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 		url = getString(R.string.server) + "/"
 				+ "FarmerLink"
 				+ getString(R.string.farmers_market_prices);
-		if (Repository.farmersInDb(district, crop)) {
-			Log.d("ADD FARMERS:", "Farmers in localdb");
-			farmerList = Repository.getFarmersFromDb(district, crop);
-		} else {
+
 			Log.d("ADD FARMERS:", "Going to download the farmers");
 			//downloadFarmers(url, district, crop);
 			new DownloadFarmers().execute(url);
-		}
-		populateFarmersList(farmerList);
 
 		/*		
 		if ((farmers == null) || (farmers.size() == 0)) {
@@ -454,6 +449,7 @@ public class AddFarmersActivity extends ListActivity implements TextWatcher {
 		@Override
 	    protected void onPostExecute(List<Farmer> farmers) {
 	    	 farmerList = farmers;
+	    	 populateFarmersList(farmers);
 	         dismissDialog(PROGRESS_DIALOG);
 	 		if ((farmers == null) || (farmers.size() == 0)) {
 	 			noFarmersFound();
