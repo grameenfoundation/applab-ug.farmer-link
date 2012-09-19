@@ -104,28 +104,7 @@ public class ProjectedSalesActivity extends ListActivity {
             		MarketLinkApplication.getInstance().getContentResolver().insert(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.CONTENT_URI, farmerTransactionValues);
             	}
             	transactionCursor.close();
-            	UploadTransactions upload = new UploadTransactions();
-            	String url = getString(R.string.server) + "/"
-        				+ "FarmerLink"
-        				+ getString(R.string.upload_url);
-            	int success = upload.uploadFarmerTransactions(url, getApplicationContext());
-            	if (success == 0) {
-            		for (Farmer farmer : farmers) {
-                		ContentValues farmerTransactionValues = new ContentValues();
-                		farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.STATUS, FarmerTransactionAssociationProviderAPI.SYNCHED);
-                		String where = FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.TRANSACTION_ID + "=?" + " AND "
-                		+ FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.FARMER_ID + "=?";
-                		String[] whereArgs = {transactionId, farmer.getId()};
-                		MarketLinkApplication.getInstance().getContentResolver().update(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.CONTENT_URI, farmerTransactionValues, where, whereArgs);
-                	}
-            		ContentValues updateValues = new ContentValues();
-            		updateValues.put(TransactionProviderAPI.TransactionColumns.STATUS, TransactionProviderAPI.SYNCHED);
-            		String where = TransactionProviderAPI.TransactionColumns._ID + "=?";
-            		String[] whereArgs = {transactionId};
-            		MarketLinkApplication.getInstance().getContentResolver().update(TransactionProviderAPI.TransactionColumns.CONTENT_URI, updateValues, where, whereArgs);
-	                Intent intent = new Intent(getApplicationContext(), FinishSellActivity.class);
-	                startActivity(intent);
-              }
+
             }
         });
         

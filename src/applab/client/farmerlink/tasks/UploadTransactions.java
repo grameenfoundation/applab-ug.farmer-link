@@ -15,6 +15,7 @@ import java.util.List;
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.StringEntity;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.telephony.TelephonyManager;
@@ -97,10 +98,25 @@ public class UploadTransactions {
 			} catch (IOException ex) {
 				Log.e("ERROR", ex.getMessage());
 			}
+			if (status == 0) {
+				for (Farmer farmer : farmers) {
+					ContentValues farmerTransactionUpdate = new ContentValues();
+					farmerTransactionUpdate.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.STATUS, FarmerTransactionAssociationProviderAPI.SYNCHED);
+					String where = FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns._ID + "=?";
+					String[] whereArgs = {farmer.farmerId};
+					MarketLinkApplication.getInstance().getContentResolver().update(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.CONTENT_URI, farmerTransactionUpdate, where, whereArgs);
+				}
+				ContentValues transactionUpdate = new ContentValues();
+				transactionUpdate.put(TransactionProviderAPI.TransactionColumns.STATUS, TransactionProviderAPI.SYNCHED);
+				String where = TransactionProviderAPI.TransactionColumns._ID + "=?";
+				String[] whereArgs = {transaction.transactionId};
+				MarketLinkApplication.getInstance().getContentResolver().update(TransactionProviderAPI.TransactionColumns.CONTENT_URI, transactionUpdate, where, whereArgs);
+			}
 		}
 		return status;
 	}
 
+	
 	private String getImei(Context context) {
 		TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getDeviceId();
