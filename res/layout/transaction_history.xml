@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                
+                <Button android:layout_height="wrap_content"
+                        android:layout_width="150dip"                         
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:text="Buying"
+                        android:id = "@+id/buying"
+                        />
+                <Button android:layout_height="wrap_content"
+                        android:layout_width="150dip"                         
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:text="Selling"
+                        android:id = "@+id/selling"
+                        />
+                <ListView android:id="@android:id/list"
+                          android:layout_width="fill_parent"
+                          android:layout_height="fill_parent"
+                          android:layout_margin="2dip"
+                          android:layout_below="@+id/selling"
+                          android:layout_above="@+id/clear"
+                          android:scrollbars="vertical"
+                          android:layout_gravity="fill_vertical"
+                          android:fadeScrollbars="false"
+                          />
+                 <Button android:layout_height="wrap_content"
+                        android:layout_width="150dip"                         
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:text="Clear"
+                        android:id = "@+id/clear"/>
+                       
+</RelativeLayout>
