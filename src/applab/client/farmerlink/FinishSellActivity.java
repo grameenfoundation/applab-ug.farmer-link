@@ -24,8 +24,8 @@ public class FinishSellActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                // TODO: Add commiting information and logging transaction
-                Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
+                // TODO: Add committing information and logging transaction
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });

@@ -123,7 +123,7 @@ public class FindFarmersActivity extends DashboardActivity implements
 
 		switch (view.getId()) {
 		case R.id.back_button:
-			Intent intent = new Intent(this, OptionsActivity.class);
+			Intent intent = new Intent(this, HomeActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.next_button:
