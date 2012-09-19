@@ -96,6 +96,6 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:text="Next"
-                        android:id = "@+id/next_finish_sell"/>
+                        android:id = "@+id/next_projected_sales"/>
 
 </RelativeLayout>

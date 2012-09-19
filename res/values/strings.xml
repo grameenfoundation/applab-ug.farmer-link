@@ -17,4 +17,5 @@
     <string name="districts_crops">/getDistrictsAndCrops</string>
     <string name="farmers_market_prices">/getFarmersAndMarketPrices</string>
     <string name="iconDescription">an icon</string>
+    <string name="upload_url">/postCompleteTransaction</string>
 </resources>

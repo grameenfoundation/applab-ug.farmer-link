@@ -8,6 +8,7 @@ public class MarketSaleObject {
     private String cropName;
     private String districtName;
     private double transportCost;
+    private double transactionFee;
     private ArrayList<Farmer> farmers;
     private MarketPrices marketPrices;
     private String selectedOption;
@@ -71,10 +72,6 @@ public class MarketSaleObject {
     public double getTotalValue() {
         return getTotalQuantity() * marketPrices.getWholesalePriceValue();
     }
-    
-    public double getTotalTransactionFee() {
-        return Math.ceil(0.1 * getTotalValue());
-    }
 
     public double getTransportCost() {
         return transportCost;
@@ -82,6 +79,14 @@ public class MarketSaleObject {
 
     public void setTransportCost(double transportCost) {
         this.transportCost = transportCost;
+    }
+
+    public double getTransactionFee() {
+        return transactionFee;
+    }
+
+    public void setTransactionFee(double transactionFee) {
+        this.transactionFee = transactionFee;
     }
 
     public String getSelectedOption() {

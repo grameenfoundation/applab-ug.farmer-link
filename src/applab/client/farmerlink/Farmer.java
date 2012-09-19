@@ -44,10 +44,6 @@ public class Farmer {
            return unitPrice * getQuantity();
     }
     
-    public double computeTransactionFee(double unitPrice) {
-        return Math.ceil(0.1 * computeRevenue(unitPrice));
-    }
-    
     @Override
     public String toString() {
         return "Farmer Name: " + getName() + "\nQuantity(kg): " + getQuantity();

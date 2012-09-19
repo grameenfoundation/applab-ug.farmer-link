@@ -86,23 +86,10 @@
                           android:layout_alignParentRight="true"
                           android:text="Transport Value"
                           />
-                <TextView android:id ="@+id/transaction_fee"
-                          android:layout_height="wrap_content"
-                          android:layout_width="wrap_content"
-                          android:layout_below="@+id/transport"
-                          android:text="Transaction Fee: "
-                          />
-                <TextView android:id ="@+id/transaction_fee_value"
-                          android:layout_height="wrap_content"
-                          android:layout_width="fill_parent"
-                          android:layout_below="@+id/transport_value"
-                          android:layout_toRightOf="@+id/transaction_fee"
-                          android:text="Transaction Fee Value"
-                          />
                 <TextView android:id ="@+id/borderline"
                           android:layout_height="1dp"
                           android:layout_width="fill_parent"
-                          android:layout_below="@+id/transaction_fee_value"
+                          android:layout_below="@+id/transport_value"
                           android:background="@color/white"
                           android:text=""
                           />
@@ -129,6 +116,6 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:text="Next"
-                        android:id = "@+id/next_finish"/>
+                        android:id = "@+id/next_transaction_fee"/>
 
 </RelativeLayout>

@@ -34,4 +34,10 @@
                   android:layout_margin="0dip"
                   android:layout_below="@+id/revenue_text"/>
                   
+        <TextView android:id ="@+id/transaction_fee_text"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:layout_margin="0dip"
+                  android:layout_below="@+id/transport_text"/>
+                  
 </RelativeLayout>
