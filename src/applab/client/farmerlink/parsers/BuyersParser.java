@@ -97,7 +97,7 @@ public class BuyersParser {
         }
         
         catch (Exception ex) {
-            Log.e(LOG_TAG, ex.getMessage());
+            Log.e(LOG_TAG, " ex"+ex.getMessage());
             ex.printStackTrace();
             return false;
         }
