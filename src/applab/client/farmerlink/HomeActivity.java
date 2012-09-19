@@ -1,9 +1,13 @@
 package applab.client.farmerlink;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 public class HomeActivity extends DashboardActivity {
-	
+    ProgressDialog progressDialog;
+    static final int PROGRESS_DIALOG = 0;
 	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -65,6 +69,29 @@ public class HomeActivity extends DashboardActivity {
 	protected void onResume ()
 	{
 	   super.onResume ();
+       try {
+       	MarketLinkApplication.createMarketLinkDirectories();
+       	String url = getString(R.string.server) + "/" + "FarmerLink"
+   				+ getString(R.string.districts_crops);
+       	if(Repository.districtsinDb()) {
+           	Repository.getDistrictsFromDb();
+       	} else {
+       		new DownloadDistricts().execute(url);
+       	}
+       	Repository.getDistricts(getString(R.string.server) + "/" + "FarmerLink"
+   				+ getString(R.string.districts_crops));
+       }
+       catch (Exception ex) {
+       	Log.e("EXCEPTION", ex.getMessage());
+       }
+       
+       if (MarketSaleObject.getMarketObject() != null) {
+       	MarketSaleObject.getMarketObject().setCropName(null);
+       	MarketSaleObject.getMarketObject().setDistrictName(null);
+       	MarketSaleObject.getMarketObject().setFarmers(null);
+       	MarketSaleObject.getMarketObject().setMarketPrices(null);
+       	MarketSaleObject.getMarketObject().setBuyer(null);
+       }
 	}
 
 	/**
@@ -93,5 +120,25 @@ public class HomeActivity extends DashboardActivity {
 	protected void onStop ()
 	{
 	   super.onStop ();
+	}
+	
+    private class DownloadDistricts extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected void onPreExecute() {
+			showDialog(PROGRESS_DIALOG);
+		}
+		@Override
+		protected Void doInBackground(String... urls) {
+			for (String url: urls) {
+				Repository.getDistricts(url);
+			}
+			return null;
+		}
+		
+		@Override
+	    protected void onPostExecute(Void ignoreReturnValue) {
+	         //dismissDialog(PROGRESS_DIALOG);
+	     }
 	}
 }
