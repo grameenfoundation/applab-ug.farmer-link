@@ -17,8 +17,7 @@ import android.widget.Toast;
 import applab.client.farmerlink.parsers.DistrictsAndCropsParser;
 import applab.client.farmerlink.tasks.DownloadDistrictsAndCrops;
 
-public class FindFarmersActivity extends DashboardActivity implements
-		OnItemSelectedListener {
+public class FindFarmersActivity extends Activity implements OnItemSelectedListener {
 
 	private String selectedDistrict;
 	private String selectedCrop;
