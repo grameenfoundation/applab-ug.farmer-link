@@ -5,9 +5,6 @@ import android.provider.BaseColumns;
 
 public final class TransactionProviderAPI {
 	public static final String AUTHORITY = "applab.client.farmerlink.provider.farmerlink.markettransactions";
-	public static final String SALE_MARKET = "saleMarket";
-	public static final String SALE_BUYER = "saleBuyer";
-	public static final String BUY = "buy";
 	public static final String SYNCHED = "synched";
 	public static final String UNSYNCHED = "unsynched";
 	private TransactionProviderAPI() {

@@ -65,15 +65,14 @@ public class ActualSalesActivity extends ListActivity {
                 Calendar today = Calendar.getInstance();
                 //save the transaction details to our database
                 ContentValues values = new ContentValues();
-                if (MarketSaleObject.getMarketObject().getTransactionType().equalsIgnoreCase(MarketSaleObject.MARKETSALE)) {
+                if (MarketSaleObject.getMarketObject().getTransactionType().equalsIgnoreCase(MarketSaleObject.MARKETSALE) || MarketSaleObject.getMarketObject().getTransactionType().equalsIgnoreCase(MarketSaleObject.BUY)) {
                     values.put(TransactionProviderAPI.TransactionColumns.BUYER_NAME, MarketSaleObject.getMarketObject().getMarketPrices().getMarketName());
                 }
                 else {
                     values.put(TransactionProviderAPI.TransactionColumns.BUYER_NAME, MarketSaleObject.getMarketObject().getBuyer().getName());
-                }
+                }              
                 
-                values.put(TransactionProviderAPI.TransactionColumns.BUYER_NAME, "market");
-                values.put(TransactionProviderAPI.TransactionColumns.TRANSACTION_TYPE, TransactionProviderAPI.SALE_MARKET);
+                values.put(TransactionProviderAPI.TransactionColumns.TRANSACTION_TYPE, MarketSaleObject.getMarketObject().getTransactionType());
                 values.put(TransactionProviderAPI.TransactionColumns.CROP, MarketSaleObject.getMarketObject().getCropName());
                 values.put(TransactionProviderAPI.TransactionColumns.DISTRICT, MarketSaleObject.getMarketObject().getDistrictName());
                 values.put(TransactionProviderAPI.TransactionColumns.STATUS, TransactionProviderAPI.UNSYNCHED);
@@ -109,6 +108,8 @@ public class ActualSalesActivity extends ListActivity {
                     MarketLinkApplication.getInstance().getContentResolver().insert(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.CONTENT_URI, farmerTransactionValues);
                 }
                 transactionCursor.close();
+                Intent intent = new Intent(getApplicationContext(), FinishSellActivity.class);
+                startActivity(intent);
             }
         });
         
@@ -117,12 +118,7 @@ public class ActualSalesActivity extends ListActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent;
-                if(source.equalsIgnoreCase("Buyer: ")) {
-                    intent = new Intent(getApplicationContext(), TransactionFeeActivity.class);
-                } else {
-                    intent = new Intent(getApplicationContext(), TransactionFeeActivity.class);
-                }
+                Intent intent = new Intent(getApplicationContext(), TransactionFeeActivity.class);
                 startActivity(intent);
             }
             

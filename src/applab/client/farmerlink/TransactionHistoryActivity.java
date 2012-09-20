@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.ListActivity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,14 +61,17 @@ public class TransactionHistoryActivity extends ListActivity {
     
     private void getTransactions(String option) {
         
-        String selection = TransactionProviderAPI.TransactionColumns.TRANSACTION_TYPE
-                + "=?";
+        String selection = "";
         String[] selectionArgs = null;
         if (option.equals(BUYING_OPTION)) {
+            selection = TransactionProviderAPI.TransactionColumns.TRANSACTION_TYPE
+                    + "=?";
             selectionArgs = new String [] { "buy" };
         }
         else {
-            selectionArgs = new String [] { "marketSale", "buyerSale" }; 
+            selection = TransactionProviderAPI.TransactionColumns.TRANSACTION_TYPE
+                    + " LIKE ?";
+            selectionArgs = new String [] { "%Sale" }; 
         }
         
         Cursor transactionCursor = MarketLinkApplication
@@ -76,7 +80,8 @@ public class TransactionHistoryActivity extends ListActivity {
                 .query(TransactionProviderAPI.TransactionColumns.CONTENT_URI,
                         null, selection, selectionArgs, null);
         transactionCursor.moveToFirst();
-        List<Transaction> transactions = new ArrayList<Transaction>();
+        transactions = new ArrayList<Transaction>();
+        Log.d("Transaction","Rows " + transactionCursor.getCount());
         for (int i = 0; i < transactionCursor.getCount(); i++) {
             Transaction transaction = new Transaction(
                     transactionCursor
