@@ -81,7 +81,7 @@ public class ActualSalesActivity extends ListActivity {
                 values.put(TransactionProviderAPI.TransactionColumns.TRANSPORT_FEE, MarketSaleObject.getMarketObject().getTransportCost());
                 values.put(TransactionProviderAPI.TransactionColumns.UNITPRICE, MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePrice());
                 values.put(TransactionProviderAPI.TransactionColumns.TRANSACTION_DATE,today.get(Calendar.YEAR) + "-" + (today.get(Calendar.MONTH) + 1) 
-                        + "-" + today.get(Calendar.DATE) + " 00:00:00");
+                        + "-" + today.get(Calendar.DATE) + " " + today.get(Calendar.HOUR_OF_DAY) + ":" + today.get(Calendar.MINUTE) + ":" + today.get(Calendar.SECOND));
                 Uri transactionUri = MarketLinkApplication.getInstance().getContentResolver().insert(TransactionProviderAPI.TransactionColumns.CONTENT_URI, values);
                 
                 String selection = TransactionProviderAPI.TransactionColumns._ID + "=?";

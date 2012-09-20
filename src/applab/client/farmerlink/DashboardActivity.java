@@ -175,7 +175,10 @@ public abstract class DashboardActivity extends Activity {
     				+ "FarmerLink"
     				+ getString(R.string.upload_url);
         	int success = upload.uploadFarmerTransactions(url, getApplicationContext());
-        	if (success == 0) {
+        	if (success == -1) {
+        		toast("You do not have any unsynched transactions");
+        	}
+        	else if (success == 0) {
         		toast("Synchronization successful");
         	}
         	else {
@@ -237,7 +240,7 @@ public abstract class DashboardActivity extends Activity {
 	 */
 
 	public void toast(String msg) {
-		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
 	} // end toast
 
 	/**
