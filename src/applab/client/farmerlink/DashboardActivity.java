@@ -184,7 +184,7 @@ public abstract class DashboardActivity extends Activity {
 			break;
 		case R.id.history:
 			startActivity(new Intent(getApplicationContext(),
-					AddFarmersActivity.class));
+					TransactionHistoryActivity.class));
 			break;
 		default:
 			break;
