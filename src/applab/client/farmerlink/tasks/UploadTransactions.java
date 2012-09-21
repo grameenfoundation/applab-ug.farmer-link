@@ -42,78 +42,83 @@ public class UploadTransactions {
 				.getContentResolver()
 				.query(TransactionProviderAPI.TransactionColumns.CONTENT_URI,
 						null, selection, selectionArgs, null);
-		transactionCursor.moveToFirst();
-		List<Transaction> transactions = new ArrayList<Transaction>();
-		for (int i = 0; i < transactionCursor.getCount(); i++) {
-			Transaction transaction = new Transaction(
-					transactionCursor
-							.getString(transactionCursor
-									.getColumnIndex(TransactionProviderAPI.TransactionColumns._ID)),
-					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.TRANSACTION_TYPE)),
-					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.TRANSACTION_DATE)),
-					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.DISTRICT)),
-					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.CROP)),
-					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.QUANTITY)),
-					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.TRANSPORT_FEE)),
-					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.TRANSACTION_FEE)),
-					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.UNITPRICE)),
-					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.BUYER_NAME)));
-
-			transactions.add(transaction);
+		if (transactionCursor.getCount() == 0) {
+			return status;
 		}
-		transactionCursor.close();
-		for (Transaction transaction : transactions) {
-			List<Farmer> farmers = getTransactionFarmers(transaction);
-			transaction.attributes = extractAttributes(transaction);
-			try {
-				int networkTimeout = 5 * 60 * 1000;
-				InputStream statusStream;
-				statusStream = HttpHelpers.postJsonRequestAndGetStream(url, (StringEntity)sendTransactionToSalesforce(transaction, farmers), networkTimeout);
-				Writer writer = new StringWriter();
-				 
-	            char[] buffer = new char[1024];
-	            try {
-	                Reader reader = new BufferedReader(
-	                        new InputStreamReader(statusStream, "UTF-8"));
-	                int n;
-	                while ((n = reader.read(buffer)) != -1) {
-	                    writer.write(buffer, 0, n);
-	                }
-	            } finally {
-	            	statusStream.close();
-	            	status = Integer.parseInt(writer.toString().trim());
-	            }
-	            Log.i("OUTPUT", " "+writer.toString());
-			} catch (UnsupportedEncodingException e) {
-				Log.e("ERROR", e.getMessage());
-			} catch (IOException ex) {
-				Log.e("ERROR", ex.getMessage());
+		else {
+			transactionCursor.moveToFirst();
+			List<Transaction> transactions = new ArrayList<Transaction>();
+			for (int i = 0; i < transactionCursor.getCount(); i++) {
+				Transaction transaction = new Transaction(
+						transactionCursor
+								.getString(transactionCursor
+										.getColumnIndex(TransactionProviderAPI.TransactionColumns._ID)),
+						transactionCursor.getString(transactionCursor
+								.getColumnIndex(TransactionProviderAPI.TransactionColumns.TRANSACTION_TYPE)),
+						transactionCursor.getString(transactionCursor
+								.getColumnIndex(TransactionProviderAPI.TransactionColumns.TRANSACTION_DATE)),
+						transactionCursor.getString(transactionCursor
+								.getColumnIndex(TransactionProviderAPI.TransactionColumns.DISTRICT)),
+						transactionCursor.getString(transactionCursor
+								.getColumnIndex(TransactionProviderAPI.TransactionColumns.CROP)),
+						transactionCursor.getString(transactionCursor
+								.getColumnIndex(TransactionProviderAPI.TransactionColumns.QUANTITY)),
+						transactionCursor.getString(transactionCursor
+								.getColumnIndex(TransactionProviderAPI.TransactionColumns.TRANSPORT_FEE)),
+						transactionCursor.getString(transactionCursor
+								.getColumnIndex(TransactionProviderAPI.TransactionColumns.TRANSACTION_FEE)),
+						transactionCursor.getString(transactionCursor
+								.getColumnIndex(TransactionProviderAPI.TransactionColumns.UNITPRICE)),
+						transactionCursor.getString(transactionCursor
+								.getColumnIndex(TransactionProviderAPI.TransactionColumns.BUYER_NAME)));
+	
+				transactions.add(transaction);
 			}
-			if (status == 0) {
-				for (Farmer farmer : farmers) {
-					ContentValues farmerTransactionUpdate = new ContentValues();
-					farmerTransactionUpdate.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.STATUS, FarmerTransactionAssociationProviderAPI.SYNCHED);
-					String where = FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns._ID + "=?";
-					String[] whereArgs = {farmer.farmerId};
-					MarketLinkApplication.getInstance().getContentResolver().update(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.CONTENT_URI, farmerTransactionUpdate, where, whereArgs);
+			transactionCursor.close();
+			for (Transaction transaction : transactions) {
+				List<Farmer> farmers = getTransactionFarmers(transaction);
+				transaction.attributes = extractAttributes(transaction);
+				try {
+					int networkTimeout = 5 * 60 * 1000;
+					InputStream statusStream;
+					statusStream = HttpHelpers.postJsonRequestAndGetStream(url, (StringEntity)sendTransactionToSalesforce(transaction, farmers), networkTimeout);
+					Writer writer = new StringWriter();
+					 
+		            char[] buffer = new char[1024];
+		            try {
+		                Reader reader = new BufferedReader(
+		                        new InputStreamReader(statusStream, "UTF-8"));
+		                int n;
+		                while ((n = reader.read(buffer)) != -1) {
+		                    writer.write(buffer, 0, n);
+		                }
+		            } finally {
+		            	statusStream.close();
+		            	status = Integer.parseInt(writer.toString().trim());
+		            }
+		            Log.i("OUTPUT", " "+writer.toString());
+				} catch (UnsupportedEncodingException e) {
+					Log.e("ERROR", e.getMessage());
+				} catch (IOException ex) {
+					Log.e("ERROR", ex.getMessage());
 				}
-				ContentValues transactionUpdate = new ContentValues();
-				transactionUpdate.put(TransactionProviderAPI.TransactionColumns.STATUS, TransactionProviderAPI.SYNCHED);
-				String where = TransactionProviderAPI.TransactionColumns._ID + "=?";
-				String[] whereArgs = {transaction.transactionId};
-				MarketLinkApplication.getInstance().getContentResolver().update(TransactionProviderAPI.TransactionColumns.CONTENT_URI, transactionUpdate, where, whereArgs);
+				if (status == 0) {
+					for (Farmer farmer : farmers) {
+						ContentValues farmerTransactionUpdate = new ContentValues();
+						farmerTransactionUpdate.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.STATUS, FarmerTransactionAssociationProviderAPI.SYNCHED);
+						String where = FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns._ID + "=?";
+						String[] whereArgs = {farmer.farmerId};
+						MarketLinkApplication.getInstance().getContentResolver().update(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.CONTENT_URI, farmerTransactionUpdate, where, whereArgs);
+					}
+					ContentValues transactionUpdate = new ContentValues();
+					transactionUpdate.put(TransactionProviderAPI.TransactionColumns.STATUS, TransactionProviderAPI.SYNCHED);
+					String where = TransactionProviderAPI.TransactionColumns._ID + "=?";
+					String[] whereArgs = {transaction.transactionId};
+					MarketLinkApplication.getInstance().getContentResolver().update(TransactionProviderAPI.TransactionColumns.CONTENT_URI, transactionUpdate, where, whereArgs);
+				}
 			}
+			return status;
 		}
-		return status;
 	}
 
 	
