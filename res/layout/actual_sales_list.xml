@@ -22,7 +22,7 @@
                   android:layout_margin="0dip"
                   android:layout_below="@+id/farmer_id_text"/>
                   
-        <TextView android:id ="@+id/revenue_text"
+        <TextView android:id ="@+id/gross_revenue_text"
                   android:layout_height="wrap_content"
                   android:layout_width="fill_parent"
                   android:layout_margin="0dip"
@@ -32,12 +32,18 @@
                   android:layout_height="wrap_content"
                   android:layout_width="fill_parent"
                   android:layout_margin="0dip"
-                  android:layout_below="@+id/revenue_text"/>
+                  android:layout_below="@+id/gross_revenue_text"/>
                   
         <TextView android:id ="@+id/transaction_fee_text"
                   android:layout_height="wrap_content"
                   android:layout_width="fill_parent"
                   android:layout_margin="0dip"
                   android:layout_below="@+id/transport_text"/>
+        
+        <TextView android:id ="@+id/net_revenue_text"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:layout_margin="0dip"
+                  android:layout_below="@+id/transaction_fee_text"/>
                   
 </RelativeLayout>

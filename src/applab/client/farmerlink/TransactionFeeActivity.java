@@ -16,6 +16,7 @@ public class TransactionFeeActivity extends Activity{
      private String crop;
      private double transactionFee;
      private EditText transactionFeeText;
+     private String source;
      
      @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class TransactionFeeActivity extends Activity{
             String displayTitle = this.getString(R.string.app_name) + " - " + crop;
             setTitle(displayTitle);
             nextButton = (Button) findViewById(R.id.next_finish_sell);
+            source = getIntent().getStringExtra("source");
             
             nextButton.setOnClickListener(new OnClickListener(){
 
@@ -38,7 +40,7 @@ public class TransactionFeeActivity extends Activity{
                         
                         // load intent and show summary activity
                         Intent intent = new Intent(getApplicationContext(), ActualSalesActivity.class);
-                        intent.putExtra("source", "Market: ");
+                        intent.putExtra("source", source);
                         startActivity(intent);
                     }
                     else {
@@ -56,6 +58,7 @@ public class TransactionFeeActivity extends Activity{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), ProjectedSalesActivity.class);
+                    intent.putExtra("source", source);
                     startActivity(intent);
                 }
             });

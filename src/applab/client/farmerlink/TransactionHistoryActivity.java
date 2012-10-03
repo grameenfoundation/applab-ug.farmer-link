@@ -24,16 +24,14 @@ public class TransactionHistoryActivity extends ListActivity {
     private Button buyingButton;
     private String selectedOption;
     private ArrayList<Transaction> transactions;
-    ArrayAdapter<Transaction> transactionAdapter;
     
     @Override
     public void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transaction_history);
-        selectedOption = BUYING_OPTION;
+        selectedOption = SELLING_OPTION;
         getTransactions(selectedOption);
-        transactionAdapter = new TransactionAdapter();
-        setListAdapter(transactionAdapter);
+        setListAdapter(new TransactionAdapter());
         
         sellingButton = (Button)findViewById(R.id.selling);
         sellingButton.setOnClickListener(new Button.OnClickListener() {
@@ -42,7 +40,7 @@ public class TransactionHistoryActivity extends ListActivity {
             public void onClick(View view) {
                 selectedOption = SELLING_OPTION;
                 getTransactions(selectedOption);
-                transactionAdapter.notifyDataSetChanged();
+                setListAdapter(new TransactionAdapter());
             }        
         });
         
@@ -53,7 +51,7 @@ public class TransactionHistoryActivity extends ListActivity {
             public void onClick(View view) {
                 selectedOption = BUYING_OPTION;
                 getTransactions(selectedOption);
-                transactionAdapter.notifyDataSetChanged();
+                setListAdapter(new TransactionAdapter());
             }            
         });
         
@@ -79,10 +77,10 @@ public class TransactionHistoryActivity extends ListActivity {
                 .getContentResolver()
                 .query(TransactionProviderAPI.TransactionColumns.CONTENT_URI,
                         null, selection, selectionArgs, null);
-        transactionCursor.moveToFirst();
         transactions = new ArrayList<Transaction>();
         Log.d("Transaction","Rows " + transactionCursor.getCount());
-        for (int i = 0; i < transactionCursor.getCount(); i++) {
+        
+        while (transactionCursor.moveToNext()) {
             Transaction transaction = new Transaction(
                     transactionCursor
                             .getString(transactionCursor
@@ -128,7 +126,7 @@ public class TransactionHistoryActivity extends ListActivity {
             View row = inflater.inflate(R.layout.transaction_history_list, parent, false);
             TextView nameTextView = (TextView)row.findViewById(R.id.name_text);
             nameTextView.setBackgroundColor(colors[colorPos]);
-            nameTextView.setText("Buyer Name : " + transactions.get(position).buyer);
+            nameTextView.setText("Name : " + transactions.get(position).buyer);
             
 
             TextView cropTextView = (TextView)row.findViewById(R.id.crop_name_text);

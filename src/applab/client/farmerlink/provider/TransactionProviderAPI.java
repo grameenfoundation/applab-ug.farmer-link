@@ -22,6 +22,7 @@ public final class TransactionProviderAPI {
         public static final String TRANSACTION_TYPE = "transactionType";
         public static final String TRANSACTION_DATE = "transactionDate";
         public static final String STATUS = "status";
+        public static final String COMPLETION_STATUS = "completionStatus";
         public static final String QUANTITY = "quantity";
         public static final String TRANSPORT_FEE = "transportFee";
         public static final String TRANSACTION_FEE = "transactionFee";

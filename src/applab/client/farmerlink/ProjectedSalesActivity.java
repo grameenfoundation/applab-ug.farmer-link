@@ -32,7 +32,6 @@ public class ProjectedSalesActivity extends ListActivity {
     private TextView quantityTextView;
     private TextView priceTextView;
     private TextView totalValueTextView;
-    private TextView transportTextView;
     private Button nextButton;
     private Button backButton;
     private String crop;
@@ -62,7 +61,7 @@ public class ProjectedSalesActivity extends ListActivity {
             public void onClick(View view) {
              // load intent and show summary activity
                 Intent intent = new Intent(getApplicationContext(), TransactionFeeActivity.class);
-                intent.putExtra("source", "Market: ");
+                intent.putExtra("source", source);
                 startActivity(intent);
             }
         });
@@ -105,8 +104,6 @@ public class ProjectedSalesActivity extends ListActivity {
         totalValueTextView = (TextView)findViewById(R.id.total_value);
         totalValueTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTotalValue()) + " Shs");
 
-        transportTextView = (TextView)findViewById(R.id.transport_value);
-        transportTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTransportCost()) + " Shs");
     }
 
     class FarmerAdapter extends ArrayAdapter<Farmer> {
@@ -145,7 +142,7 @@ public class ProjectedSalesActivity extends ListActivity {
             
             TextView transportView = (TextView)row.findViewById(R.id.transport_text);
             transportView.setBackgroundColor(colors[colorPos]);
-            transportView.setText("Transport Cost : " + PricesFormatter.formatPrice(Math.ceil(MarketSaleObject.getMarketObject().getTransportCost()/farmers.size())) + " Shs");
+            transportView.setText("Transport Cost : " + PricesFormatter.formatPrice(Math.ceil(MarketSaleObject.getMarketObject().getTransportCost()* (farmers.get(position).getQuantity() / MarketSaleObject.getMarketObject().getTotalQuantity()))) + " Shs");
             
             return row;
         }

@@ -42,9 +42,8 @@ public class UploadTransactions {
 				.getContentResolver()
 				.query(TransactionProviderAPI.TransactionColumns.CONTENT_URI,
 						null, selection, selectionArgs, null);
-		transactionCursor.moveToFirst();
 		List<Transaction> transactions = new ArrayList<Transaction>();
-		for (int i = 0; i < transactionCursor.getCount(); i++) {
+		while (transactionCursor.moveToNext()) {
 			Transaction transaction = new Transaction(
 					transactionCursor
 							.getString(transactionCursor
@@ -64,9 +63,11 @@ public class UploadTransactions {
 					transactionCursor.getString(transactionCursor
 							.getColumnIndex(TransactionProviderAPI.TransactionColumns.TRANSACTION_FEE)),
 					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.UNITPRICE)),
+							.getColumnIndex(TransactionProviderAPI.TransactionColumns.UNITPRICE)),		
 					transactionCursor.getString(transactionCursor
-							.getColumnIndex(TransactionProviderAPI.TransactionColumns.BUYER_NAME)));
+							.getColumnIndex(TransactionProviderAPI.TransactionColumns.BUYER_NAME)),
+					transactionCursor.getString(transactionCursor
+		                            .getColumnIndex(TransactionProviderAPI.TransactionColumns.COMPLETION_STATUS)));
 
 			transactions.add(transaction);
 		}
@@ -154,6 +155,7 @@ public class UploadTransactions {
 		transactionAttributes.put("transactionFee", transaction.transactionFee);
 		transactionAttributes.put("unitPrice", transaction.unitPrice);
 		transactionAttributes.put("name", transaction.buyer);
+		transactionAttributes.put("completed", transaction.completed);
 		transactionAttributes.put("transportFee", transaction.transportFee);
 		transactionAttributes.put("revenue", String.valueOf(Double.parseDouble(transaction.quantity) * Double.parseDouble(transaction.unitPrice)));
 		return transactionAttributes;
@@ -213,13 +215,14 @@ public class UploadTransactions {
 		String transactionFee;
 		String unitPrice;
 		String buyer;
+		String completed;
 
 		HashMap<String, String> attributes;
 		
 		Transaction(String transactionId, String transactionType,
 				String transactionDate, String district, String crop,
 				String quantity, String transportFee, String transactionFee,
-				String unitPrice, String buyer) {
+				String unitPrice, String buyer, String completed) {
 			this.transactionId = transactionId;
 			this.transactionType = transactionType;
 			this.transactionDate = transactionDate;
@@ -230,6 +233,7 @@ public class UploadTransactions {
 			this.transactionFee = transactionFee;
 			this.unitPrice = unitPrice;
 			this.buyer = buyer;
+			this.completed = completed;
 		}
 	}
 

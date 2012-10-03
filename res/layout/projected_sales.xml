@@ -72,24 +72,10 @@
                           android:layout_toRightOf="@+id/total"
                           android:text="Total Value"
                           />
-                <TextView android:id ="@+id/transport"
-                          android:layout_height="wrap_content"
-                          android:layout_width="wrap_content"
-                          android:layout_below="@+id/total"
-                          android:text="Transport: "
-                          />
-                <TextView android:id ="@+id/transport_value"
-                          android:layout_height="wrap_content"
-                          android:layout_width="fill_parent"
-                          android:layout_below="@+id/total_value"
-                          android:layout_toRightOf="@+id/transport"
-                          android:layout_alignParentRight="true"
-                          android:text="Transport Value"
-                          />
                 <TextView android:id ="@+id/borderline"
                           android:layout_height="1dp"
                           android:layout_width="fill_parent"
-                          android:layout_below="@+id/transport_value"
+                          android:layout_below="@+id/total_value"
                           android:background="@color/white"
                           android:text=""
                           />

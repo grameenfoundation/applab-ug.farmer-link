@@ -52,6 +52,7 @@ public class TransactionProvider extends ContentProvider {
 		               + TransactionColumns.TRANSACTION_FEE + " text not null, "
 		               + TransactionColumns.TRANSPORT_FEE + " text not null, "
 		               + TransactionColumns.UNITPRICE + " text not null, "
+		               + TransactionColumns.COMPLETION_STATUS + " text not null, "
 		               + TransactionColumns.STATUS + " text not null );");
 		}
 
@@ -201,5 +202,6 @@ public class TransactionProvider extends ContentProvider {
 		sInstancesProjectionMap.put(TransactionColumns.TRANSACTION_TYPE, TransactionColumns.TRANSACTION_TYPE);
 		sInstancesProjectionMap.put(TransactionColumns.TRANSACTION_DATE, TransactionColumns.TRANSACTION_DATE);
 		sInstancesProjectionMap.put(TransactionColumns.STATUS, TransactionColumns.STATUS);
+		sInstancesProjectionMap.put(TransactionColumns.COMPLETION_STATUS, TransactionColumns.COMPLETION_STATUS);
 	}
 }
