@@ -2,6 +2,8 @@ package applab.client.farmerlink;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -11,9 +13,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,10 +28,11 @@ public class FindSuppliersActivity extends ListActivity {
 	
 	String district;
 	String crop;
-	List<Farmer> suppliers =  new ArrayList<Farmer>();;
+	ArrayList<Farmer> suppliers =  new ArrayList<Farmer>();;
     List<Farmer> allSuppliers;
     ProgressDialog progressDialog;
     static final int PROGRESS_DIALOG = 0;
+    private static final Pattern numberPattern = Pattern.compile("^7\\d{8}$");
     
 
 	@Override
@@ -50,12 +57,11 @@ public class FindSuppliersActivity extends ListActivity {
         
 		if (Repository.farmersInDb(district, crop)) {
 			Log.d("ADD SUPPLIERS:", "Farmers in localdb");
-			allSuppliers = Repository.getFarmersFromDb(district, crop);
+			allSuppliers = Repository.getFarmersFromDbBuying(district, crop);
 	          if((allSuppliers == null) || (allSuppliers.size() == 0)) {
 					allSuppliers.add(new Farmer("NONE", null, 0.0));
 				}
 			
-		       // allSuppliers = Repository.getFarmersByDistrictAndCrop(url, district, crop);
 		        for (Farmer farmer : allSuppliers) {
 		        	if (null != farmer.getPhoneNumber() && farmer.getPhoneNumber().trim().length() > 0) {
 		        		
@@ -71,13 +77,13 @@ public class FindSuppliersActivity extends ListActivity {
 			new DownloadFarmers().execute(url);
 		}
 
-	}
-	
+	}	
     
     public void buttonClicked (View view) {
     	switch (view.getId()) {
     	case R.id.next_add_farmers:
     		Intent nextIntent = new Intent(getApplicationContext(), AddFarmersActivity.class);
+    		 MarketSaleObject.getMarketObject().setFarmers(suppliers);
     		startActivity(nextIntent);
     		break;
     	case R.id.back_find_farmers:
@@ -102,6 +108,8 @@ public class FindSuppliersActivity extends ListActivity {
 			View row = inflater.inflate(R.layout.suppliers_list, parent, false);
 			TextView telephoneView = (TextView) row.findViewById(R.id.telephone);
 			TextView supplierView = (TextView) row.findViewById(R.id.name);
+			TextView amountView = (TextView) row.findViewById(R.id.amount);
+			TextView isSelectedView = (TextView) row.findViewById(R.id.selected);
 			
 			if (suppliers.size() > 0) {
 				if( suppliers.get(position).getName().equalsIgnoreCase("NONE")) {
@@ -109,6 +117,17 @@ public class FindSuppliersActivity extends ListActivity {
 				} else {
 					supplierView.setText("Name : " +properCase(suppliers.get(position).getName()));
 					telephoneView.setText("Telephone : " + suppliers.get(position).getPhoneNumber());
+					isSelectedView.setText("Selected : " + suppliers.get(position).isSelected());					
+					
+					if (crop.equalsIgnoreCase(suppliers.get(position).getCropOne())) {
+					    amountView.setText(String.valueOf(suppliers.get(position).getAmountCropOne()) + " Kgs");
+					}
+					else if (crop.equalsIgnoreCase(suppliers.get(position).getCropTwo())) {
+                        amountView.setText(String.valueOf(suppliers.get(position).getAmountCropTwo()) + " Kgs");
+                    }
+					else if (crop.equalsIgnoreCase(suppliers.get(position).getCropThree())) {
+                        amountView.setText(String.valueOf(suppliers.get(position).getAmountCropThree()) + " Kgs");
+                    }
 				}
 			} else {
 				telephoneView.setText("No farmers found to provide " + crop + " in "+ "district");
@@ -120,9 +139,54 @@ public class FindSuppliersActivity extends ListActivity {
 	
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Farmer supplier = suppliers.get(position);
-        String url = "tel:"+supplier.getPhoneNumber();
+        String url = "tel:"+  formatNumber(supplier.getPhoneNumber());
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
         startActivity(intent);
+    }
+    
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Select option");
+        String edit = "Call supplier";
+        String delete = "Select supplier";
+        menu.add(0, v.getId(), 0, edit);
+        menu.add(0, v.getId(), 0, delete);
+    }
+    
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+        Farmer supplier = suppliers.get((int) info.id);
+        Log.d("supplier", supplier.getName());
+        if ((supplier !=null) && !(supplier.getName().equalsIgnoreCase("NONE"))) {
+        if(item.getTitle() =="Call supplier") {
+            callSupplier(info.id);
+        } else if (item.getTitle() == "Select supplier") {
+            selectSupplier(info.id);
+        } else {
+            return false;
+        }
+        } else {
+            return false;
+        }
+        return true;
+    }
+    
+    private void callSupplier(long id) {
+        Farmer supplier = suppliers.get((int) id);
+        String url = "tel:" + formatNumber(supplier.getPhoneNumber());
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+        startActivity(intent);
+        
+    }    
+    
+    private void selectSupplier(long id) {
+        Farmer supplier = suppliers.get((int) id);
+        supplier.setSelected(true);
+        
+        // reset the list adapter so the selection change is reflected
+        setListAdapter(new SuppliersAdapter());
     }
     
 	public static String properCase(String name) {
@@ -167,6 +231,14 @@ public class FindSuppliersActivity extends ListActivity {
 		}
 	}
 	
+	public String formatNumber(String telephone) {
+        Matcher numberMatcher = numberPattern.matcher(telephone);
+        if (numberMatcher.find()) {
+            telephone = "0"+telephone;
+        }
+        return telephone;
+    }
+	
     
     private class DownloadFarmers extends AsyncTask<String, Void, List<Farmer>> {
 
@@ -177,7 +249,7 @@ public class FindSuppliersActivity extends ListActivity {
 		@Override
 		protected List<Farmer> doInBackground(String... urls) {
 			for (String url: urls) {
-				return(Repository.getFarmersByDistrictAndCrop(url, district, crop));
+				return(Repository.getFarmersByDistrictAndCropBuying(url, district, crop));
 			}
 			return null;
 		}

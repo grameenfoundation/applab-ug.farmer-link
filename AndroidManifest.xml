@@ -80,6 +80,9 @@
         <activity android:name=".TransactionHistoryActivity"
                   android:label="@string/app_name">
         </activity>
+        <activity android:name=".AddBuyerActivity"
+                  android:label="@string/app_name">
+        </activity>
         <activity android:name=".FindSuppliersActivity"></activity>/
         
     </application>

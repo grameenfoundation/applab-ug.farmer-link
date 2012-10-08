@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 public class MarketSaleObject {
     
-    private static MarketSaleObject marketSaleObject = null;  
+    private static MarketSaleObject marketSaleObject = null; 
+    
+    private double quantity;
     private String cropName;
     private String districtName;
     private double transportCost;
@@ -113,5 +115,13 @@ public class MarketSaleObject {
 	public void setTransactionType(String marketSale) {
 		this.transactionType = marketSale;
 	}
+
+    public double getInitalTotalQuantity() {
+        return quantity;
+    }
+
+    public void setInitialQuantity(double quantity) {
+        this.quantity = quantity;
+    }
 
 }

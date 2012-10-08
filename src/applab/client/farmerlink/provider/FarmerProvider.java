@@ -45,6 +45,12 @@ public class FarmerProvider extends ContentProvider {
 		               + FarmerColumns.FARMER_MOBILE + " text, " 
 		               + FarmerColumns.DISTRICT_ID + " text not null, " 
 		               + FarmerColumns.CROP_ID + " text not null, " 
+		               + FarmerColumns.CROP_GROWN_ONE + " text, "
+		               + FarmerColumns.CROP_GROWN_TWO + " text, "
+		               + FarmerColumns.CROP_GROWN_THREE + " text, "
+		               + FarmerColumns.AMOUNT_CROP_GROWN_ONE + " numeric, "
+		               + FarmerColumns.AMOUNT_CROP_GROWN_TWO + " numeric, "
+		               + FarmerColumns.AMOUNT_CROP_GROWN_THREE + " numeric, "
 		               + FarmerColumns.FARMER_ID + " text not null );"); 
 		}
 
@@ -174,5 +180,11 @@ public class FarmerProvider extends ContentProvider {
         sInstancesProjectionMap.put(FarmerColumns.FARMER_ID, FarmerColumns.FARMER_ID);
         sInstancesProjectionMap.put(FarmerColumns.DISTRICT_ID, FarmerColumns.DISTRICT_ID);
         sInstancesProjectionMap.put(FarmerColumns.CROP_ID, FarmerColumns.CROP_ID);
+        sInstancesProjectionMap.put(FarmerColumns.CROP_GROWN_ONE, FarmerColumns.CROP_GROWN_ONE);
+        sInstancesProjectionMap.put(FarmerColumns.CROP_GROWN_TWO, FarmerColumns.CROP_GROWN_TWO);
+        sInstancesProjectionMap.put(FarmerColumns.CROP_GROWN_THREE, FarmerColumns.CROP_GROWN_THREE);
+        sInstancesProjectionMap.put(FarmerColumns.AMOUNT_CROP_GROWN_ONE, FarmerColumns.AMOUNT_CROP_GROWN_ONE);
+        sInstancesProjectionMap.put(FarmerColumns.AMOUNT_CROP_GROWN_TWO, FarmerColumns.AMOUNT_CROP_GROWN_TWO);
+        sInstancesProjectionMap.put(FarmerColumns.AMOUNT_CROP_GROWN_THREE, FarmerColumns.AMOUNT_CROP_GROWN_THREE);
     }
 }

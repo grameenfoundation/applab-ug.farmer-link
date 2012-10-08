@@ -82,6 +82,60 @@ public class Repository {
 		farmersVersionCursor.close();
 		return farmers;
     }
+	
+	public static List<Farmer> getFarmersByDistrictAndCropBuying(String url, String district, String crop) {
+
+        Cursor farmersVersionCursor = MarketLinkApplication.getInstance().getContentResolver().query(FarmerVersionProviderAPI.FarmerVersionsColumns.CONTENT_URI,
+                null, null, null, null);
+        List<Farmer> farmers = new ArrayList<Farmer>();
+        if (farmersVersionCursor.getCount() == 0) {
+            DownloadFarmersAndMarketPrices downloadFarmersAndMarketPrices = new DownloadFarmersAndMarketPrices(url);
+            downloadFarmersAndMarketPrices.downloadFarmersAndMarketPrices(district, crop);
+            farmers = getFarmersFromDbBuying(district, crop);
+        }
+        else {
+             farmersVersionCursor.moveToFirst();Log.i("farmerVersion DB", "DB EXISTS!!");
+             if (farmersVersionCursor.getCount() > 0) {
+                String farmersVersion = farmersVersionCursor.getString(farmersVersionCursor.getColumnIndex(FarmerVersionProviderAPI.FarmerVersionsColumns.VERSION));
+                DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+                Calendar versionDate = Calendar.getInstance();
+                Calendar todayDate = Calendar.getInstance();
+                try {
+                    Date date = df.parse(farmersVersion);
+                    
+                    versionDate.setTime(date);
+                    versionDate.add(Calendar.DATE, 7);
+                    
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                
+            
+                farmers = getFarmersFromDbBuying(district, crop);
+                if (farmers == null || farmers.size() == 0 || ((todayDate.getTimeInMillis() - versionDate.getTimeInMillis())/(24 * 60 * 60 * 1000)) >= 7) {
+                    if (((todayDate.getTimeInMillis() - versionDate.getTimeInMillis())/(24 * 60 * 60 * 1000)) >= 7) {
+                        String where = FarmerProviderAPI.FarmerColumns.DISTRICT_ID + " =? " + "and " + FarmerProviderAPI.FarmerColumns.CROP_ID + " =? ";
+                        MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
+                        String [] selectionArgs = {marketPricesParser.getDistrictId(), marketPricesParser.getCropId()};
+                        MarketLinkApplication.getInstance().getContentResolver().delete(FarmerProviderAPI.FarmerColumns.CONTENT_URI,
+                                where, selectionArgs);
+                        MarketLinkApplication.getInstance().getContentResolver().delete(MarketPricesProviderAPI.MarketPricesColumns.CONTENT_URI,
+                                where, selectionArgs);
+                        
+                        MarketLinkApplication.getInstance().getContentResolver().delete(FarmerVersionProviderAPI.FarmerVersionsColumns.CONTENT_URI, null, null);
+                        MarketLinkApplication.getInstance().getContentResolver().delete(MarketPricesVersionProviderAPI.MarketPricesVersionColumns.CONTENT_URI, null, null);
+                        Log.i("FARMERS DOWNLOAD", "Farmer cache empty, downloading ...");
+                        DownloadFarmersAndMarketPrices downloadFarmersAndMarketPrices = new DownloadFarmersAndMarketPrices(url);
+                        downloadFarmersAndMarketPrices.downloadFarmersAndMarketPrices(district, crop);
+                        farmers = getFarmersFromDbBuying(district, crop); 
+                    }
+                }
+            }
+                   
+        }
+        farmersVersionCursor.close();
+        return farmers;
+    }
     
     public static List<Farmer> getFarmersFromDb(String district, String crop) {
     	
@@ -104,6 +158,39 @@ public class Repository {
 		}
 		farmerCursor.close();
     	return farmers;
+    }
+    
+ public static List<Farmer> getFarmersFromDbBuying(String district, String crop) {
+        
+        List<Farmer> farmers = new ArrayList<Farmer>();
+        MarketPricesParser marketPricesParser = new MarketPricesParser(district, crop);
+        String cropSelector = "'" + crop.toLowerCase() + "'";
+        String selection = FarmerProviderAPI.FarmerColumns.DISTRICT_ID + "=? and "      +
+                           FarmerProviderAPI.FarmerColumns.CROP_ID + "=? and ("         +
+                           FarmerProviderAPI.FarmerColumns.CROP_GROWN_ONE + "=? or "   +
+                           FarmerProviderAPI.FarmerColumns.CROP_GROWN_TWO + "=? or "   +
+                           FarmerProviderAPI.FarmerColumns.CROP_GROWN_THREE + "=?) ";
+        String[] selectionArgs = {marketPricesParser.getDistrictId(), marketPricesParser.getCropId(), cropSelector, cropSelector, cropSelector};
+        Cursor farmerCursor = MarketLinkApplication.getInstance().getContentResolver().query(FarmerProviderAPI.FarmerColumns.CONTENT_URI, null, selection, selectionArgs, null);
+        Log.i("FARMER DB COUNT", String.valueOf(farmerCursor.getCount()));
+        farmerCursor.moveToFirst();
+        while (farmerCursor.isAfterLast() == false) 
+        {
+            Farmer farmer = new Farmer();
+            farmer.setId(farmerCursor.getString(farmerCursor.getColumnIndex(FarmerProviderAPI.FarmerColumns.FARMER_ID)));
+            farmer.setName(farmerCursor.getString(farmerCursor.getColumnIndex(FarmerProviderAPI.FarmerColumns.FARMER_NAME)));
+            farmer.setPhoneNumber(farmerCursor.getString(farmerCursor.getColumnIndex(FarmerProviderAPI.FarmerColumns.FARMER_MOBILE)));
+            farmer.setCropOne(farmerCursor.getString(farmerCursor.getColumnIndex(FarmerProviderAPI.FarmerColumns.CROP_GROWN_ONE)));
+            farmer.setCropTwo(farmerCursor.getString(farmerCursor.getColumnIndex(FarmerProviderAPI.FarmerColumns.CROP_GROWN_TWO)));
+            farmer.setCropThree(farmerCursor.getString(farmerCursor.getColumnIndex(FarmerProviderAPI.FarmerColumns.CROP_GROWN_THREE)));
+            farmer.setAmountCropOneFromString(farmerCursor.getString(farmerCursor.getColumnIndex(FarmerProviderAPI.FarmerColumns.AMOUNT_CROP_GROWN_ONE)));
+            farmer.setAmountCropTwoFromString(farmerCursor.getString(farmerCursor.getColumnIndex(FarmerProviderAPI.FarmerColumns.AMOUNT_CROP_GROWN_TWO)));
+            farmer.setAmountCropThreeFromString(farmerCursor.getString(farmerCursor.getColumnIndex(FarmerProviderAPI.FarmerColumns.AMOUNT_CROP_GROWN_THREE)));
+            farmers.add(farmer);
+            farmerCursor.moveToNext();
+        }
+        farmerCursor.close();
+        return farmers;
     }
 
     public static List<MarketPrices> getMarketPricesByDistrictAndCrop(String url, String crop, String district) {

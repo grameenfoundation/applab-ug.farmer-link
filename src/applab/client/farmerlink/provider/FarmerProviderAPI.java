@@ -21,5 +21,11 @@ public final class FarmerProviderAPI {
         public static final String FARMER_ID = "farmerId";
         public static final String DISTRICT_ID = "districtId";
         public static final String CROP_ID = "cropId";
+        public static final String CROP_GROWN_ONE = "crop1";
+        public static final String CROP_GROWN_TWO = "crop2";
+        public static final String CROP_GROWN_THREE = "crop3";
+        public static final String AMOUNT_CROP_GROWN_ONE = "amountCrop1";
+        public static final String AMOUNT_CROP_GROWN_TWO = "amountCrop2";
+        public static final String AMOUNT_CROP_GROWN_THREE = "amountCrop3";
 	}
 }

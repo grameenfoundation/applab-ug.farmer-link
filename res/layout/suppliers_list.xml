@@ -9,8 +9,19 @@
                   android:layout_width="fill_parent"
                   android:layout_alignParentTop="true"/>
                   
+        <TextView android:id ="@+id/amount"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:layout_below="@+id/name"/>
+                  
         <TextView android:id ="@+id/telephone"
                   android:layout_height="wrap_content"
                   android:layout_width="fill_parent"                  
-                  android:layout_below="@+id/name"/>
+                  android:layout_below="@+id/amount"/>
+                  
+        <TextView android:id ="@+id/selected"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"                  
+                  android:layout_below="@+id/telephone"/>
+
 </RelativeLayout>

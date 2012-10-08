@@ -170,7 +170,16 @@ public class MarketPricesParser {
         @Override
         public boolean primitive(Object value) throws ParseException, IOException {
         	if (key != null) {
-        		if (key.equalsIgnoreCase("Name") || (key.equalsIgnoreCase("MobileNumber")) || (key.equalsIgnoreCase("Id"))) {
+        		if (key.equalsIgnoreCase("Name")              || 
+        		    key.equalsIgnoreCase("MobileNumber")      || 
+        		    key.equalsIgnoreCase("Id")                ||
+        		    key.equalsIgnoreCase("CropGrown3")        ||
+        		    key.equalsIgnoreCase("CropGrown2")        ||
+        		    key.equalsIgnoreCase("CropGrown1")        ||
+        		    key.equalsIgnoreCase("AmountCropGrown3")  ||
+        		    key.equalsIgnoreCase("AmountCropGrown2")  ||
+        		    key.equalsIgnoreCase("AmountCropGrown1")) {
+        		    
         			if (key.equalsIgnoreCase("Name")) {
         				farmer = new Farmer();
         				farmer.setName(value.toString());
@@ -180,6 +189,24 @@ public class MarketPricesParser {
         			}
         			else if (key.equalsIgnoreCase("Id")) {
         				farmer.setId(value.toString());
+        			}
+        			else if (key.equalsIgnoreCase("CropGrown3")) {
+                        farmer.setCropOne(value == null ? "" : value.toString().toLowerCase());
+                    }
+        			else if (key.equalsIgnoreCase("CropGrown2")) {
+                        farmer.setCropTwo(value == null ? "" : value.toString().toLowerCase());
+                    }
+        			else if (key.equalsIgnoreCase("CropGrown1")) {
+                        farmer.setCropThree(value == null ? "" : value.toString().toLowerCase());
+                    }
+        			else if (key.equalsIgnoreCase("AmountCropGrown3")) {
+                        farmer.setAmountCropThree(value == null || value.toString().equalsIgnoreCase("null") ? 0 : Double.valueOf(value.toString()));
+                    }
+        			else if (key.equalsIgnoreCase("AmountCropGrown2")) {
+                        farmer.setAmountCropTwo(value == null || value.toString().equalsIgnoreCase("null") ? 0 : Double.valueOf(value.toString()));
+                    }
+        			else if (key.equalsIgnoreCase("AmountCropGrown1")) {
+                        farmer.setAmountCropOne(value == null || value.toString().equalsIgnoreCase("null") ? 0 : Double.valueOf(value.toString()));                    
         				farmers.add(farmer);
         				ContentValues values = new ContentValues();
         				values.put(FarmerProviderAPI.FarmerColumns.FARMER_NAME, farmer.getName());
@@ -187,9 +214,14 @@ public class MarketPricesParser {
         				values.put(FarmerProviderAPI.FarmerColumns.FARMER_ID, farmer.getId());
         				values.put(FarmerProviderAPI.FarmerColumns.DISTRICT_ID, districtId);
         				values.put(FarmerProviderAPI.FarmerColumns.CROP_ID, cropId);
+        				values.put(FarmerProviderAPI.FarmerColumns.CROP_GROWN_ONE, farmer.getCropOne());
+        				values.put(FarmerProviderAPI.FarmerColumns.CROP_GROWN_TWO, farmer.getCropTwo());
+        				values.put(FarmerProviderAPI.FarmerColumns.CROP_GROWN_THREE, farmer.getCropThree());
+        				values.put(FarmerProviderAPI.FarmerColumns.AMOUNT_CROP_GROWN_ONE, farmer.getAmountCropOne());
+        				values.put(FarmerProviderAPI.FarmerColumns.AMOUNT_CROP_GROWN_TWO, farmer.getAmountCropTwo());
+        				values.put(FarmerProviderAPI.FarmerColumns.AMOUNT_CROP_GROWN_THREE, farmer.getAmountCropThree());
         				MarketLinkApplication.getInstance().getContentResolver().insert(FarmerProviderAPI.FarmerColumns.CONTENT_URI, values);
-        			}
-        			
+        			}        			
         		}
         		else if (key.equalsIgnoreCase("WholesalePrice") || key.equalsIgnoreCase("RetailPrice") || key.equalsIgnoreCase("MarketName")) {
         			if (key.equalsIgnoreCase("WholesalePrice")) {

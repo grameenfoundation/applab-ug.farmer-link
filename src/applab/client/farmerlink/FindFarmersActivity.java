@@ -154,7 +154,7 @@ public class FindFarmersActivity extends Activity implements OnItemSelectedListe
 			} 
 			else if (selectedOption.equalsIgnoreCase("buying") && (!selectedCrop.equalsIgnoreCase("Select Crop") && (!selectedDistrict.equalsIgnoreCase("Select District")))) {
 				Intent buyingIntent = new Intent(this,
-						FindSuppliersActivity.class);
+						AddBuyerActivity.class);
 				MarketSaleObject.getMarketObject().setCropName(selectedCrop);
 				MarketSaleObject.getMarketObject().setDistrictName(
 						selectedDistrict);
