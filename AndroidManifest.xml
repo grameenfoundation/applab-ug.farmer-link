@@ -83,6 +83,18 @@
         <activity android:name=".AddBuyerActivity"
                   android:label="@string/app_name">
         </activity>
+        <activity android:name=".ActualSalesBuyingActivity"
+                  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".ProjectedSalesBuyingActivity"
+                  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".TransactionFeeBuyingActivity"
+                  android:label="@string/app_name">
+        </activity>
+         <activity android:name=".TransportEstimatorBuyingActivity"
+                  android:label="@string/app_name">
+        </activity>       
         <activity android:name=".FindSuppliersActivity"></activity>/
         
     </application>

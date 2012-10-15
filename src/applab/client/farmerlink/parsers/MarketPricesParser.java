@@ -191,13 +191,13 @@ public class MarketPricesParser {
         				farmer.setId(value.toString());
         			}
         			else if (key.equalsIgnoreCase("CropGrown3")) {
-                        farmer.setCropOne(value == null ? "" : value.toString().toLowerCase());
+                        farmer.setCropThree(value == null ? "" : value.toString().toLowerCase());
                     }
         			else if (key.equalsIgnoreCase("CropGrown2")) {
                         farmer.setCropTwo(value == null ? "" : value.toString().toLowerCase());
                     }
         			else if (key.equalsIgnoreCase("CropGrown1")) {
-                        farmer.setCropThree(value == null ? "" : value.toString().toLowerCase());
+                        farmer.setCropOne(value == null ? "" : value.toString().toLowerCase());
                     }
         			else if (key.equalsIgnoreCase("AmountCropGrown3")) {
                         farmer.setAmountCropThree(value == null || value.toString().equalsIgnoreCase("null") ? 0 : Double.valueOf(value.toString()));

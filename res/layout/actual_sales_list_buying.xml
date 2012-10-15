@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="2dip"
+>
+        <TextView android:id ="@+id/farmer_name_text"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:layout_margin="0dip"
+                  />
+                  
+        <TextView android:id ="@+id/farmer_id_text"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:layout_margin="0dip"
+                  android:layout_below="@+id/farmer_name_text"/>
+                  
+        <TextView android:id ="@+id/quantity_text"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:layout_margin="0dip"
+                  android:layout_below="@+id/farmer_id_text"/>  
+        
+        <TextView android:id ="@+id/revenue_text"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:layout_margin="0dip"
+                  android:layout_below="@+id/quantity_text"/>
+                  
+</RelativeLayout>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                
+                <TextView android:id ="@+id/transport2"
+                          android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:layout_alignParentTop="true"
+                          android:layout_centerHorizontal="true"
+                          android:text="Transport Estimates"
+                          android:layout_marginBottom="10dip"
+                          />
+                
+                <TextView android:id ="@+id/commodity"
+                    	  android:layout_below="@+id/transport2"
+                          android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:layout_marginBottom="10dip"
+                          android:layout_marginTop="10dip"
+                          android:text="Crop: "
+                          />
+                <TextView android:id ="@+id/commodity_name"
+                    	  android:layout_toRightOf="@+id/commodity"
+                    	  android:layout_alignParentRight="true"
+                    	  android:layout_below="@+id/transport2"
+                          android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:layout_marginBottom="10dip"
+                          android:layout_marginTop="10dip"
+                          android:text="Crop Name"
+                          />
+                <TextView android:id ="@+id/quantity"
+                    	  android:layout_below="@+id/commodity_name"
+                          android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:layout_marginBottom="10dip"
+                          android:layout_marginTop="10dip"
+                          android:text="Quantity: "
+                          />
+                <TextView android:id ="@+id/quantity_amount"
+                     	  android:layout_toRightOf="@+id/quantity"
+                     	  android:layout_below="@+id/commodity_name"
+                          android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:layout_marginBottom="10dip"
+                          android:layout_marginTop="10dip"
+                          android:text="amount here"
+                          />
+               
+                 <TextView android:id ="@+id/transport"
+                     	  android:layout_below="@+id/quantity_amount"
+                          android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:layout_marginBottom="10dip"
+                          android:layout_marginTop="10dip"
+                          android:text="Transport: "
+                          />
+                <EditText android:id ="@+id/transport_cost"
+                    	  android:layout_toRightOf="@+id/transport"
+                    	  android:layout_below="@+id/quantity_amount"
+                          android:layout_height="wrap_content"
+                          android:layout_width="180dip"
+                          android:layout_alignParentRight="true"
+                          android:layout_margin="1dip"
+                          android:text=""
+                          android:inputType="phone"
+                          />
+                <Button android:layout_height="wrap_content"
+                        android:layout_width="150dip"                         
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:text="Back"
+                        android:id = "@+id/back_find_markets"
+                        />
+                 <Button android:layout_height="wrap_content"
+                 		android:layout_toRightOf="@+id/back_find_markets"
+                        android:layout_width="150dip" 
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:text="Next"
+                        android:id = "@+id/next_projected_sales"/>
+
+</RelativeLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                
+                <TextView android:id ="@+id/transport1"
+                          android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:layout_alignParentTop="true"
+                          android:layout_centerHorizontal="true"
+                          android:text="Transaction Fee"
+                          android:layout_marginBottom="10dip"
+                          />
+                <TextView android:id ="@+id/market"
+                    	  android:layout_below="@+id/transport1"                    	  
+                          android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:layout_marginBottom="10dip"
+                          android:layout_marginTop="10dip"
+                          android:text="Please enter the trasaction fee received from the buyer "
+                          />
+                <EditText android:id ="@+id/transaction_fee"
+                    	  android:layout_below="@+id/market"
+                          android:layout_height="wrap_content"
+                          android:layout_width="230dip"
+                          android:layout_margin="1dip"
+                          android:layout_centerHorizontal="true"
+                          android:text=""
+                          android:inputType="phone"
+                          />
+                <TextView android:id ="@+id/ugx"
+                    	  android:layout_below="@+id/market"                    	  
+                          android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:layout_margin="1dip"
+                          android:layout_marginTop="5dip"
+                          android:layout_toRightOf="@+id/transaction_fee"
+                          android:text="   UGX"
+                          />
+                <Button android:layout_height="wrap_content"
+                        android:layout_width="150dip"                         
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:text="Back"
+                        android:id = "@+id/back_projected_sales"
+                        />
+                 <Button android:layout_height="wrap_content"
+                 		android:layout_toRightOf="@+id/back_projected_sales"
+                        android:layout_width="150dip" 
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:text="Next"
+                        android:id = "@+id/next_finish_sell"/>
+
+</RelativeLayout>

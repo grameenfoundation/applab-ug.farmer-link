@@ -27,12 +27,15 @@ import applab.client.farmerlink.provider.TransactionProviderAPI;
 import applab.client.farmerlink.tasks.UploadTransactions;
 import applab.client.farmerlink.utilities.PricesFormatter;
 
-public class ActualSalesActivity extends ListActivity {
+public class ActualSalesBuyingActivity extends ListActivity {
     private TextView marketTextView;
     private TextView cropTextView;
     private TextView quantityTextView;
     private TextView priceTextView;
-    private TextView grossValueTextView;
+    private TextView transportCostView;
+    private TextView transactionFeeView;
+    private TextView commodityExpenseView;
+    private TextView totalExpenseView;
     private Button nextButton;
     private Button backButton;
     private String crop;
@@ -45,7 +48,7 @@ public class ActualSalesActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.actual_sales);
+        setContentView(R.layout.actual_sales_buying);
         setTextViews();
         crop = MarketSaleObject.getMarketObject().getCropName();
         source = getIntent().getStringExtra("source");
@@ -74,10 +77,9 @@ public class ActualSalesActivity extends ListActivity {
                 }
                 else {
                     values.put(TransactionProviderAPI.TransactionColumns.BUYER_NAME, MarketSaleObject.getMarketObject().getBuyer().getName());
-                }
-                
+                }              
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String currentVersion = dateFormat.format(new Date()); 
+                String currentVersion = dateFormat.format(new Date());
                 
                 values.put(TransactionProviderAPI.TransactionColumns.TRANSACTION_TYPE, MarketSaleObject.getMarketObject().getTransactionType());
                 values.put(TransactionProviderAPI.TransactionColumns.CROP, MarketSaleObject.getMarketObject().getCropName());
@@ -100,17 +102,14 @@ public class ActualSalesActivity extends ListActivity {
                 for (Farmer farmer : farmers) {
                     ContentValues farmerTransactionValues = new ContentValues();
                     
-                    double revenue = farmer.computeRevenue(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue());
-                    double transactionFee = Math.ceil(MarketSaleObject.getMarketObject().getTransactionFee()/farmers.size());
-                    double transportCost = Math.ceil(MarketSaleObject.getMarketObject().getTransportCost()/farmers.size());
-                    
+                    double revenue = farmer.computeRevenue(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue());                    
                     farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.FARMER_ID, farmer.getId());
                     farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.FARMER_QUOTA, farmer.getQuantity());
                     farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.TRANSACTION_ID, transactionId);
                     farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.STATUS, FarmerTransactionAssociationProviderAPI.UNSYNCHED);
-                    farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.FARMER_REVENUE, revenue-  (transactionFee + transportCost));
-                    farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.TRANSACTION_FEE_QUOTA, transactionFee);
-                    farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.TRANSPORT_FEE_QUOTA, transportCost);
+                    farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.FARMER_REVENUE, revenue);
+                    farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.TRANSACTION_FEE_QUOTA, 0);
+                    farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.TRANSPORT_FEE_QUOTA, 0);
                     farmerTransactionValues.put(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.FARMER_NAME, farmer.getName());
                     MarketLinkApplication.getInstance().getContentResolver().insert(FarmerTransactionAssociationProviderAPI.FarmerTransactionAssociationColumns.CONTENT_URI, farmerTransactionValues);
                 }
@@ -125,7 +124,7 @@ public class ActualSalesActivity extends ListActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), TransactionFeeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), TransactionFeeBuyingActivity.class);
                 intent.putExtra("source", source);
                 startActivity(intent);
             }
@@ -152,8 +151,17 @@ public class ActualSalesActivity extends ListActivity {
         priceTextView = (TextView)findViewById(R.id.kg_price_value);
         priceTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue()) + " Shs");
 
-        grossValueTextView = (TextView)findViewById(R.id.total_value);
-        grossValueTextView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTotalValue()) + " Shs");
+        commodityExpenseView = (TextView)findViewById(R.id.commodity_cost_value);
+        commodityExpenseView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTotalValue()) + " Shs");
+        
+        transportCostView = (TextView)findViewById(R.id.transport_cost_value);
+        transportCostView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTransportCost()) + " Shs");
+        
+        transactionFeeView = (TextView)findViewById(R.id.transaction_fee_value);
+        transactionFeeView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTransactionFee()) + " Shs");
+        
+        totalExpenseView = (TextView)findViewById(R.id.total_cost_value);
+        totalExpenseView.setText(PricesFormatter.formatPrice(MarketSaleObject.getMarketObject().getTotalValue() + MarketSaleObject.getMarketObject().getTransactionFee() + MarketSaleObject.getMarketObject().getTransportCost()) + " Shs");
     }
 
     class FarmerAdapter extends ArrayAdapter<Farmer> {
@@ -162,7 +170,7 @@ public class ActualSalesActivity extends ListActivity {
 
         FarmerAdapter() {
             
-            super(ActualSalesActivity.this, R.layout.actual_sales_list, R.id.farmer_name_text, farmers);
+            super(ActualSalesBuyingActivity.this, R.layout.actual_sales_list, R.id.farmer_name_text, farmers);
         }
 
         @Override
@@ -170,9 +178,6 @@ public class ActualSalesActivity extends ListActivity {
             LayoutInflater inflater = getLayoutInflater();
 
             double revenue = farmers.get(position).computeRevenue(MarketSaleObject.getMarketObject().getMarketPrices().getWholesalePriceValue());            
-            double transactionFee = Math.ceil(MarketSaleObject.getMarketObject().getTransactionFee() * (farmers.get(position).getQuantity() / MarketSaleObject.getMarketObject().getTotalQuantity()));
-            double transportCost = Math.ceil(MarketSaleObject.getMarketObject().getTransportCost() * (farmers.get(position).getQuantity() / MarketSaleObject.getMarketObject().getTotalQuantity()));
-            
             int colorPos = position % colors.length;
             
             
@@ -193,7 +198,7 @@ public class ActualSalesActivity extends ListActivity {
             grossRevenueView.setBackgroundColor(colors[colorPos]);
             grossRevenueView.setText("Gross Revenue : " + PricesFormatter.formatPrice(revenue) + " Shs");
             
-            TextView transportView = (TextView)row.findViewById(R.id.transport_text);
+            /*TextView transportView = (TextView)row.findViewById(R.id.transport_text);
             transportView.setBackgroundColor(colors[colorPos]);
             transportView.setText("Less Transport Cost : " + PricesFormatter.formatPrice(transportCost) + " Shs");
             
@@ -204,7 +209,7 @@ public class ActualSalesActivity extends ListActivity {
             TextView netRevenueView = (TextView)row.findViewById(R.id.net_revenue_text);
             netRevenueView.setBackgroundColor(colors[colorPos]);
             netRevenueView.setText("Net Revenue : " + PricesFormatter.formatPrice(revenue - (transactionFee + transportCost)) + " Shs");
-
+            */
             return row;
         }
     }

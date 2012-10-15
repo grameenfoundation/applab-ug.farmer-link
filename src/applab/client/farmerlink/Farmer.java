@@ -12,18 +12,25 @@ public class Farmer {
     private double amountCropTwo;
     private double amountCropThree;
     private boolean isSelected;
-    private double amountToBeSupplied;
+    private double preferredPrice;
     
     
     public Farmer(String id, String name, double quantity) {
         setId(id);
         setName(name);
         setQuantity(quantity);
-        setSelected(false);
+        presetValues();
     }
     
     public Farmer() {
+        presetValues();
+    }
+    
+    private void presetValues() {
         setSelected(false);
+        setCropOne("");
+        setCropTwo("");
+        setCropThree("");
     }
     
     public String getName() {
@@ -57,23 +64,6 @@ public class Farmer {
     @Override
     public String toString() {
         return "Farmer Name: " + getName() + "\nQuantity(kg): " + getQuantity();
-    }
-    
-    @Override
-    public boolean equals(Object object) {
-    	if (object == null) {
-    		return false;
-    	}
-    	
-    	if (getClass() != object.getClass()) {
-    		return false;
-    	}
-    	
-    	if (getName().equalsIgnoreCase(((Farmer)object).getName())) {
-    		return true;
-    	}
-    	return false;
-    	
     }
 
 	public void setPhoneNumber(String phoneNumber) {
@@ -139,7 +129,7 @@ public class Farmer {
     public void setAmountCropOneFromString(String amountCropOneString) {
         if (null != amountCropOneString) {
             this.amountCropOne = Double.valueOf(amountCropOneString);
-        }        
+        }      
     }
     
     public void setAmountCropTwoFromString(String amountCropTwoString) {
@@ -162,11 +152,32 @@ public class Farmer {
         this.isSelected = isSelected;
     }
 
-    public double getAmountToBeSupplied() {
-        return amountToBeSupplied;
+    public double getPreferredPrice() {
+        return preferredPrice;
     }
 
-    public void setAmountToBeSupplied(double amountToBeSupplied) {
-        this.amountToBeSupplied = amountToBeSupplied;
+    public void setPreferredPrice(double preferredPrice) {
+        this.preferredPrice = preferredPrice;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        
+        if (object == null) {
+            return false;
+        }
+        
+        if (getClass() != object.getClass()) {
+            return false;
+        }
+        
+        if (getName().equalsIgnoreCase(((Farmer)object).getName())) {
+            return true;
+        }
+        return false;
+        
     }
 }
